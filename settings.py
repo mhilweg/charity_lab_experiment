@@ -4,7 +4,7 @@ SESSION_CONFIGS = [
     {
         'name': 'main_experiment',
         'display_name': 'Main Experiment with Consent and Task Instructions',
-        'num_demo_participants': 4,  # Set this to the desired number of participants
+        'num_demo_participants': 2,  # Set this to the desired number of participants
         'app_sequence': ['disclaimer_consent', 'task_instructions', 'task', 'bonus_app'],
         'level_1_treatment': 'Anonymity',
     },

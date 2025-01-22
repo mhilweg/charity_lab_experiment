@@ -85,8 +85,8 @@ class Constants(BaseConstants):
     hard_correct_responses = [9, 9, 9, 4, 1, 1, 1, 9, 4, 4]
     sample_easy_sequences = SAMPLE_EASY_SEQUENCES
     sample_hard_sequences = SAMPLE_HARD_SEQUENCES
-    total_time_seconds = 30  # 2 minutes per difficulty level
-    freeze_time_seconds = 10  # Freeze time duration
+    total_time_seconds = 120  # 2 minutes per difficulty level
+    freeze_time_seconds = 30  # Freeze time duration
 
     task_instructions = """
     <h1>Welcome to the task! </h1>

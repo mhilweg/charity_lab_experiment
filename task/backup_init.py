@@ -81,31 +81,35 @@ class Constants(BaseConstants):
     num_rounds = len(EASY_SEQUENCES) + len(HARD_SEQUENCES)
     easy_sequences = EASY_SEQUENCES
     hard_sequences = HARD_SEQUENCES
-    easy_correct_responses = [1, 4, 9, 1, 4, 9, 1, 4, 9, 1]
+    easy_correct_responses = [1, 4, 9, 1, 4, 9, 1, 4, 9, 1] # only seventh responses in here.
     hard_correct_responses = [9, 9, 9, 4, 1, 1, 1, 9, 4, 4]
     sample_easy_sequences = SAMPLE_EASY_SEQUENCES
     sample_hard_sequences = SAMPLE_HARD_SEQUENCES
     total_time_seconds = 30  # 2 minutes per difficulty level
+    freeze_time_seconds = 10  # Freeze time duration
 
     task_instructions = """
-    <p>Welcome to the task! In this real-effort task, you will be given a sequence of eight numbers.</p>
-                <p>Your goal is to apply specific rules to compute the response for the seventh step. 
-                While you are free to input values into response boxes 1 to 6 as well, you must enter a value for the seventh response box, which is mandatory. This is the only response upon which we will determine whether you solved the task correctly. 
-                Please pay attention to the rules, as they determine your task performance.</p>
-                <p>The rules are as follows:</p>
-                <ol>
-                    <li>Only the numbers 1, 4, and 9 feature in the sequences and the responses.</li>
-                    <li>If the two numbers that you have to compare are the same, the response is that same number.</li>
-                    <li>If the two numbers are different, the response is the third number of the three numbers 1, 4, and 9.</li>
-                </ol>
-                <p>While there are multiple ways to solve this task, we will demonstrate only one method. You are free to use this method or any other: only the correctness of your final answer determines your bonus payment of Z.XY€ per correct response.
-                <p><strong>Method</strong></p>
-                <ol>
-                    <li>To compute the first response, you have to compare the first two numbers of the sequence. If they are identical, the correct response is the very same number again. If they are different, you have to input the one of the three numbers that is not present, i.e. if you compare '1' and '4', the correct response is '9'.</li>
-                    <li>For the second response, you have to compare the first response with the third number of the sequence; response 3 then is based on the comparison of response 2 and the fourth number of the sequence, and so on.</li>
-                </ol>
-                <p>Below you find a sample sequence with the corresponding responses that underscores this method.</p>
-    """
+    <h1>Welcome to the task! </h1>
+    <p>In this real-effort task, you will be given a sequence of eight numbers.</p>
+    <p>Your goal is to apply specific rules to compute the response for the seventh step. 
+    While you are free to input values into response boxes 1 to 6 as well, you must enter a value for <strong>the seventh response box</strong>, which is mandatory. This is the only response upon which we will determine whether you solved the task correctly. 
+    Please pay attention to the rules, as they determine your task performance.</p>
+    <div style="margin-top: 20px; padding: 15px; border: 1px solid #d0e7ff; border-radius: 8px; background-color: #f5fff0;">
+        <h3 style="color: #0056b3;">📋 Rules</h3>
+        <ul style="list-style: none; padding: 0;">
+            <li>✅ Only the numbers <strong>1</strong>, <strong>4</strong>, and <strong>9</strong> feature in the sequences and the responses.</li>
+            <li>✅ If the two numbers that you have to compare are the same, the response is that same number.</li>
+            <li>✅ If the two numbers are different, the response is the third number of the three numbers <strong>1</strong>, <strong>4</strong>, and <strong>9</strong>.</li>
+        </ul>
+    </div>
+    <div style="margin-top: 20px; padding: 15px; border: 1px solid #ffe082; border-radius: 8px; background-color: #f5fff0;">
+        <h3 style="color: #cc8c00;">🛠 Method</h3>
+        <ul style="list-style: none; padding: 0;">
+            <li>🔍 To compute the first response, compare the first two numbers of the sequence. If they are identical, the correct response is the very same number again. If they are different, input the one of the three numbers that is not present. For example, if you compare '1' and '4', the correct response is '9'.</li>
+            <li>🔍 For the second response, compare the first response with the third number of the sequence. The third response is based on the comparison of the second response and the fourth number of the sequence, and so on.</li>
+        </ul>
+    </div>
+"""
 
 class Subsession(BaseSubsession):
     def creating_session(self):
@@ -117,6 +121,10 @@ class Subsession(BaseSubsession):
             
             if 'in_task2_phase' not in participant.vars:
                 participant.vars['in_task2_phase'] = False
+
+            participant.vars['final_round_correctness'] = {}  # Stores results from Task1
+            participant.vars['final_round_correctness_task2'] = {}  # Stores results from Task2
+
 
            
 
@@ -135,9 +143,6 @@ class Player(BasePlayer):
     response_5 = models.IntegerField(blank=True)
     response_6 = models.IntegerField(blank=True)
     response_7 = models.IntegerField(blank=False)  # Mandatory
-
-    task1_responses = models.LongStringField(initial=json.dumps({}))  # Stores Task 1 responses
-    task2_responses = models.LongStringField(initial=json.dumps({}))  # Stores Task 2 responses
 
     answers_dict = models.LongStringField(initial="{}")  # Stores responses as a JSON string
     timestamps_dict = models.LongStringField(initial="{}")  # Stores timestamps as a JSON string
@@ -159,11 +164,22 @@ class SequenceExample(Page):
     @staticmethod
     def vars_for_template(player: Player):
         participant = player.participant
+        level_3_treatment = participant.vars.get('level_3_treatment', 'Freeze')
+        freeze_enabled = participant.vars.get('level_3_treatment') == 'Freeze'
+
         show_popups = participant.vars.get("show_popups", {"instructions": True, "examples": False})
         # Initialize difficulty level
         if 'difficulty_level' not in participant.vars:
             import random
             participant.vars['difficulty_level'] = random.choice(['easy', 'hard'])
+
+        # Fill the difficulty order dictionary
+        if 'difficulty_order' not in participant.vars:
+            participant.vars['difficulty_order'] = {
+                1: participant.vars['difficulty_level'],
+                2: 'hard' if participant.vars['difficulty_level'] == 'easy' else 'easy',
+            }
+
         sample_sequences = (
             Constants.sample_easy_sequences if participant.vars['difficulty_level'] == "easy" else Constants.sample_hard_sequences
         )
@@ -180,15 +196,30 @@ class SequenceExample(Page):
                 "responses": responses,
             })
 
+        # Split samples into two columns
+        left_column = formatted_samples[:3]  # First three examples
+        right_column = [
+            {"sequence": sample["sequence"], "responses": sample["responses"], "index": idx + 4}
+            for idx, sample in enumerate(formatted_samples[3:])
+        ]  # Add index offset for right column
+
         # Initialize timer
         if 'expiry' not in participant.vars:
             participant.vars['expiry'] = time.time() + Constants.total_time_seconds
 
         remaining_time = max(participant.vars['expiry'] - time.time(), 0)
+        remaining_time = Constants.total_time_seconds
+
+        print(f"Remaining time passed to template: {remaining_time}")
 
         return {
-            'example_samples': formatted_samples,  # Pass structured sequences and responses
-            'remaining_time': remaining_time,  # Remaining time in seconds
+            #'example_samples': formatted_samples,  # Pass structured sequences and responses
+            'left_column': left_column,
+            'right_column': right_column,
+            'freeze_enabled': 'true' if freeze_enabled else 'false',
+            'freeze_message': "You can proceed to playing the task after 30 seconds. Use the time to find a pattern in the data that may make it easier for you to solve the subsequent exercises." if level_3_treatment == 'Freeze' else "",
+            'remaining_time': remaining_time,
+            'freeze_time': Constants.freeze_time_seconds,
             'show_popups': show_popups["instructions"] or show_popups["examples"],
 
             # Pass Constants explicitly to ensure templates have access
@@ -350,15 +381,24 @@ class Task(Page):
         player.answers_dict = json.dumps(answers)
         player.timestamps_dict = json.dumps(timestamps)
 
+        #if player.round_number == participant.vars['count_rounds_task1']:
+         #   participant.vars['final_round_correctness'] = json.loads(player.round_correctness)
+          #  print(f"Task 1 - final round correctness: {participant.vars['final_round_correctness']}")
+        
         last_task = player.round_number == participant.vars['count_rounds_task1']  # Check if this is the last task
         timer_expired = time.time() >= participant.vars.get('expiry', 0)
 
         if last_task or timer_expired:
             participant.vars['show_transition'] = True  # Flag to show Transition page
             participant.vars['completed_rounds_in_task1'] = player.round_number
+            participant.vars['final_round_correctness'] = json.dumps(correctness_dict)
+            print(f"Final round_correctness (Task 1): {participant.vars['final_round_correctness']}")
             print(f"Task - Completed Rounds in Task1: {participant.vars['completed_rounds_in_task1']}")
         else:
             participant.vars['show_transition'] = False
+        
+        print(f"Task - Player round_number: {player.round_number}, count_rounds_task1: {participant.vars['count_rounds_task1']}")
+
       
 
 class Transition(Page):
@@ -442,6 +482,9 @@ class SequenceExample2(Page):
         participant = player.participant
         print(f"Start of SE2: Show_transition:{participant.vars['show_transition']}, in_task2_phase:{participant.vars['in_task2_phase']}")
 
+        level_3_treatment = participant.vars.get('level_3_treatment', 'No freeze')
+        freeze_enabled = participant.vars.get('level_3_treatment') == 'Freeze'
+
         sample_sequences = (
             Constants.sample_hard_sequences
             if participant.vars.get('difficulty_level') == 'hard'
@@ -459,15 +502,27 @@ class SequenceExample2(Page):
                 "responses": responses,
             })
 
+        # Split samples into two columns
+        left_column = formatted_samples[:3]  # First three examples
+        right_column = [
+            {"sequence": sample["sequence"], "responses": sample["responses"], "index": idx + 4}
+            for idx, sample in enumerate(formatted_samples[3:])
+        ]  # Add index offset for the right column
+
         # Calculate remaining time
         remaining_time = max(participant.vars['expiry'] - time.time(), 0)
+        remaining_time = Constants.total_time_seconds
 
         show_popups = participant.vars.get("show_popups", {"instructions": True, "examples": True})
         sequence_index = 1
 
         return {
-            'example_samples': formatted_samples,
-            'remaining_time': remaining_time,  # Pass the calculated remaining time
+            'left_column': left_column,
+            'right_column': right_column,
+            'freeze_enabled': 'true' if freeze_enabled else 'false',
+            'freeze_message': "You can proceed to playing the task after 30 seconds. Use the time to find a pattern in the data that may make it easier for you to solve the subsequent exercises." if level_3_treatment == 'Freeze' else "",
+            'remaining_time': Constants.total_time_seconds,
+            'freeze_time': Constants.freeze_time_seconds,
             'show_popups': show_popups,
             'Constants': Constants,
             'sequence_index': sequence_index,
@@ -624,13 +679,16 @@ class Task2(Page):
         # Check correctness
         is_correct = 1 if player.response_7 == correct_response else 0
 
-        if 'round_correctness_task2' not in participant.vars:
-            participant.vars['round_correctness_task2'] = json.dumps({})  # Initialize if not already set
+        if player.round_number > completed_rounds_task1:  # Only applicable for rounds beyond the first in Task2
+            previous_player = player.in_round(player.round_number - 1)
+            previous_correctness = json.loads(previous_player.round_correctness_task2 or "{}")
+        else:
+            previous_correctness = {}
 
-        correctness_dict = json.loads(participant.vars.get('round_correctness_task2', '{}'))
-        correctness_dict[task2_round_number] = is_correct
-        participant.vars['round_correctness_task2'] = json.dumps(correctness_dict)
-        print(f"Updated round_correctness_task2: {participant.vars['round_correctness_task2']}")
+        # Update the dictionary with the current round's result
+        previous_correctness[task2_round_number] = is_correct
+        player.round_correctness_task2 = json.dumps(previous_correctness)
+        
 
         # Save back JSON fields
         player.answers_dict = json.dumps(json.loads(player.answers_dict))
@@ -641,12 +699,22 @@ class Task2(Page):
 
         participant.vars['sequence_count'] = participant.vars.get('sequence_count', 0) + 1
 
-
+        #if task2_round_number == participant.vars['count_rounds_task2']:
+         #   participant.vars['final_round_correctness_task2'] = json.loads(participant.vars['round_correctness_task2'])
+          #  print(f"Task 2 - final round correctness: {participant.vars['final_round_correctness_task2']}")
+        
         print(f"Player.round_number:{player.round_number}, Sum of count rounds: {participant.vars['completed_rounds_in_task1'] + participant.vars['count_rounds_task2']} ")
         max_rounds_reached = participant.vars['sequence_count'] >= participant.vars['count_rounds_task2']
 
+        player.num_attempted += 1
+
+        print(f"Task2 - Player round_number: {player.round_number}, count_rounds_task2: {participant.vars['count_rounds_task2']}")
+
+
         # Handle app transition
         if timer_expired or max_rounds_reached:
+            participant.vars['final_round_correctness_task2'] = json.dumps(previous_correctness)
+            print(f"Final round_correctness_task2 (Task 2): {participant.vars['final_round_correctness_task2']}")
             print(f"Transitioning to the next app. Timer expired: {timer_expired}, Max rounds reached: {max_rounds_reached}")
             participant.vars['next_app'] = True
             return
