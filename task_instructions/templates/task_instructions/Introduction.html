@@ -1,0 +1,123 @@
+
+{% block content %}
+<style>
+    /* Main container styling */
+    .main-container {
+        background-color: #f7f7f7; /* Light grey background */
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .main-container h1 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .main-container p.welcome-message {
+        font-size: 1.2rem;
+        color: #555;
+        margin-bottom: 30px;
+    }
+
+    .section-box {
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .section-box:hover {
+        transform: scale(1.02);
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Task Overview Section */
+    .task-section {
+        background-color: #f0f8ff; /* Light blue */
+        border: 1px solid #d0e7ff;
+    }
+
+    /* Earnings Section */
+    .earnings-section {
+        background-color:#fff8e1 ; /* Light yellow */
+        border: 1px solid #ffe082;
+    }
+
+    /* Charity Section */
+    .charity-section {
+        background-color: #f5fff0; /* Light green */
+        border: 1px solid #d8ffd0;
+    }
+
+    /* Icon styling */
+    .icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .btn-container {
+        margin-top: 30px;
+    }
+
+    .btn-container button {
+        font-size: 1.2rem;
+        padding: 10px 20px;
+    }
+
+    /* Button customization */
+    .btn-primary {
+    background-color: #89CFF0; /* Light blue */
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    }
+
+    .btn-primary:hover {
+        background-color: #6DB8E6; /* Slightly darker blue on hover */
+    }
+</style>
+
+<div class="main-container">
+    <h1>Welcome to the Experiment</h1>
+    <p class="welcome-message">Thank you for participating in our study! Below, you'll find all the information you need to get started.</p>
+
+    <!-- Task Overview Section -->
+    <div class="section-box task-section">
+        <div class="icon">📝</div>
+        <h2>Task Overview</h2>
+        <p>You will complete a task in different variations. Your performance will determine a bonus payment based on accuracy and effort.</p>
+        <p><em>More information on the task and how to play it will follow on the subsequent page.</em></p>
+    </div>
+
+    <!-- Earnings and Taxes Section -->
+    <div class="section-box earnings-section">
+        <div class="icon">💰</div>
+        <h2>Earnings and Taxes</h2>
+        <p>Your total earnings consist of:</p>
+        <ul style="list-style: none; padding: 0;">
+            <li><strong>Base Payment:</strong> {{ base_pay }} EUR (guaranteed for participation)</li>
+            <li><strong>Bonus Payment:</strong> Up to {{ max_bonus }} EUR (based on task performance)</li>
+        </ul>
+        <p>All earnings, including the base and bonus payments, are subject to a flat tax rate of <strong>{{ tax_rate }}%</strong>.</p>
+        <p>The pooled tax payments will be redistributed equally among all participants at the end of the experiment.</p>
+    </div>
+
+    <!-- Charity Section -->
+    <div class="section-box charity-section">
+        <div class="icon">🌍</div>
+        <h2>Donation Opportunity</h2>
+        <p>After completing the task, you will have the option to donate a portion of your earnings to a charity focused on {{ charity_focus }}.</p>
+    </div>
+
+    <!-- Button to Start the Experiment -->
+    <div class="btn-container">
+        <button class="btn btn-primary btn-lg" onclick="window.location.href='/Next'">Start the Experiment</button>
+    </div>
+</div>
+{% endblock %}

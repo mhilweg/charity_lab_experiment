@@ -1,0 +1,120 @@
+
+{% block content %}
+<style>
+    /* Main container for instructions */
+    .instruction-container {
+        background-color: #f7f7f7; /* Light grey background */
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .instruction-container h1 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .instruction-container p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #555;
+    }
+
+    /* Rules and Method Boxes */
+    .section-box {
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .section-box:hover {
+        transform: scale(1.02);
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .rules-box {
+        background-color: #f0f8ff; /* Light blue */
+        border: 1px solid #d0e7ff;
+    }
+
+    .rules-box h3 {
+        color: #0056b3; /* Dark blue */
+    }
+
+    .method-box {
+        background-color: #fff8e1; /* Light yellow */
+        border: 1px solid #ffe082;
+    }
+
+    .method-box h3 {
+        color: #cc8c00; /* Orange */
+    }
+
+    /* Sample Sequence Section */
+    .instruction-image {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .instruction-image img {
+        max-width: 70%;
+        height: auto;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Continue button styling */
+    .btn-container {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .btn-container button {
+        font-size: 1.2rem;
+        padding: 10px 20px;
+    }
+
+    .btn-container button:hover {
+        background-color: #0056b3;
+        border-color: #004494;
+        color: white;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Button customization */
+    .btn-primary {
+    background-color: #89CFF0; /* Light blue */
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    }
+
+    .btn-primary:hover {
+        background-color: #6DB8E6; /* Slightly darker blue on hover */
+    }
+</style>
+
+<div class="instruction-container">
+    <!-- Rules and Method Section -->
+    <div class="section-box rules-box">
+        {{ instructions|safe }}
+    </div>
+    <div class="instruction-image">
+        <img src="/static/images/sample_sequence.png" alt="Task Instructions Illustration">
+    </div>
+    
+    <div class="btn-container">
+        <form method="post">
+            <button class="btn btn-primary" type="submit">Continue</button>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}

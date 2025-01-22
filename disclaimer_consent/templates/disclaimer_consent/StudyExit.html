@@ -1,0 +1,53 @@
+{% block title %}
+Exit Page
+{% endblock %}
+
+{% block content %}
+<div class="container main-container text-center">
+    <h2 class="thank-you-header">Thank You</h2>
+    <p class="info-text">{{ exit_message }}</p>
+    <p class="info-text">
+        If you have any questions or concerns about the study, feel free to contact us at
+        <a href="mailto:michael.hilweg@uni-mannheim.de">michael.hilweg@uni-mannheim.de</a>.
+    </p>
+    <p class="info-text">
+        We appreciate your interest in participating and hope you have a great day!
+    </p>
+</div>
+
+<style>
+    /* Main container styling */
+    .main-container {
+        background-color: #f7f7f7; /* Light gray background */
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 800px;
+        margin: 0 auto; /* Center the container */
+    }
+
+    /* Header styling */
+    .thank-you-header {
+        color: #4CAF50; /* Green to convey positivity */
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    /* Paragraph text styling */
+    .info-text {
+        font-size: 16px;
+        color: #333; /* Dark gray for readability */
+        margin-bottom: 15px;
+        line-height: 1.6; /* Improve readability for longer paragraphs */
+    }
+
+    /* Link styling */
+    a {
+        color: #1E90FF; /* Dodger blue for visibility */
+        text-decoration: none; /* Remove underline */
+    }
+
+    a:hover {
+        text-decoration: underline; /* Add underline on hover */
+    }
+</style>
+{% endblock %}

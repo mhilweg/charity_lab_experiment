@@ -1,0 +1,31 @@
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Bonus Calculation</h2>
+    <hr>
+    <p class="text-center">
+        You answered <strong>{{ total_correct }}</strong> tasks correctly.
+    </p>
+    <p class="text-center">
+        Your bonus earnings before tax: <strong>${{ bonus_before_tax }}</strong>.
+    </p>
+    <p class="text-center">
+        Tax applied: <strong>${{ tax_amount }}</strong> (30% flat rate).
+    </p>
+    <p class="text-center">
+        Your net earnings after tax: <strong>${{ net_earnings_after_tax }}</strong>.
+    </p>
+    <hr>
+    <p class="text-center">
+        Would you like to donate a portion of your net earnings to charity? Enter the amount below.
+    </p>
+    <form method="post">
+        <div class="form-group text-center">
+            <label for="id_donated_amount">Donation Amount:</label>
+            <input type="number" step="0.01" class="form-control d-inline w-auto" id="id_donated_amount" name="donated_amount", value="{{ donated_amount }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    </form>
+</div>
+{% endblock %}
+
+🌾 

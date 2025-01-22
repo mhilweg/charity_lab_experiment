@@ -1,0 +1,140 @@
+{% extends "otree/Page.html" %}
+{% load otree static %}
+
+{% block global_styles  %}
+{% endblock %}
+
+{% block global_scripts  %}
+{% endblock %}
+
+<head>
+    <link href="{% static 'global/global.css' %}" rel="stylesheet">
+    <!--Global template for all html files that feature both popups (instructions, example sequences)-->
+</head>
+<body>
+    {% block content %}{% endblock %}
+    {% if show_popups %}
+<div style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
+    <button type="button" class="popup-button" onclick="openModal('instructionsModal')">Task Instructions</button>
+    <button type="button" class="popup-button" onclick="openModal('examplesModal')">Example Sequences</button>
+</div>
+{% endif %}
+
+<!-- Instructions Modal -->
+<div id="instructionsModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('instructionsModal')">&times;</span>
+        <h3>Task Instructions</h3>
+        <p>{{ Constants.task_instructions }}</p>
+    </div>
+</div>
+
+<!-- Example Sequences Modal -->
+<div id="examplesModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('examplesModal')">&times;</span>
+        <h3>Example Sequences ({{ difficulty_level }})</h3>
+        <div class="sequence-container">
+            {% for sample in example_samples %}
+                <div class="sequence-group">
+                    <div class="sequence-boxes">
+                        {% for num in sample.sequence.split(",") %}
+                            {% if num.strip != "" %}
+                                <div class="box">{{ num.strip }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="response-boxes">
+                        <div class="box" style="visibility: hidden;"></div>
+                        {% for response in sample.responses %}
+                            <div class="box {% if response.highlight %}highlight{% endif %}" style="background-color: {% if not response.highlight %}#cce3ff{% endif %};">
+                                {{ response.value }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+</body>
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+    
+    .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 600px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .sequence-boxes, .response-boxes {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 10px;
+    }
+
+    .box {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+        min-width: 30px;
+        background-color: #f9f9f9;
+    }
+
+    .box.highlight {
+        background-color: #d4edda;
+        font-weight: bold;
+    }
+    </style>
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+        
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            });
+        };
+    </script>
+        
+    

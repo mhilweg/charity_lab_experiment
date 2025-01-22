@@ -1,0 +1,185 @@
+{% extends "global/Page.html" %}
+{% block content %}
+
+<div class="container main-container">
+    <h1 class="page-title">Sequence Examples Part 2</h1>
+    <p class="info-text">
+        Please review the following example sequences and their corresponding responses. The seventh response is highlighted as it is especially important for solving the task.
+    </p>
+    <p class="info-text">
+        Note that the underlying patterns may be different from the first set of sequences that you worked on.
+    </p>
+
+    {% if freeze_enabled %}
+    <div class="alert alert-warning">
+        <p>{{ freeze_message }}</p>
+    </div>
+    {% endif %}
+
+    <div class="alert alert-info">
+        <strong>Time Remaining:</strong>
+        <span id="timer"></span>
+    </div>
+
+    <div class="row">
+        <!-- Left Column -->
+        <div class="col sequence-column">
+            {% for sample in left_column %}
+                <div class="sequence-group">
+                    <div class="sequence-label"><strong>Sequence {{ forloop.counter }}:</strong></div>
+                    <div class="sequence-boxes">
+                        {% for num in sample.sequence.split(",") %}
+                            <div class="box">{{ num.strip }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="response-boxes">
+                        <div class="box invisible"></div> <!-- Placeholder for alignment -->
+                        {% for response in sample.responses %}
+                            <div class="box {% if response.highlight %}highlight{% endif %}" style="background-color: {% if not response.highlight %}#cce3ff{% endif %}">
+                                {{ response.value }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Right Column -->
+        <div class="col sequence-column">
+            {% for sample in right_column %}
+                <div class="sequence-group">
+                    <div class="sequence-label"><strong>Sequence {{ sample.index }}:</strong></div>
+                    <div class="sequence-boxes">
+                        {% for num in sample.sequence.split(",") %}
+                            <div class="box">{{ num.strip }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="response-boxes">
+                        <div class="box invisible"></div> <!-- Placeholder for alignment -->
+                        {% for response in sample.responses %}
+                            <div class="box {% if response.highlight %}highlight{% endif %}" style="background-color: {% if not response.highlight %}#cce3ff{% endif %}">
+                                {{ response.value }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+            <form method="post">
+                {{ form }}
+                <button type="submit" class="btn btn-primary mt-3" id="next-button">Start Task</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Form placed outside columns for consistency -->
+
+</div>
+
+<script>
+    // Timer logic
+    var remainingTime = parseInt("{{ remaining_time }}", 10);
+    var timerElement = document.getElementById("timer");
+
+    // Freeze logic
+    var freezeTime = parseInt("{{ freeze_time }}", 10);
+    var nextButton = document.getElementById("next-button");
+
+    function updateTimer() {
+        console.log("Updating timer, remaining time:", remainingTime);
+        if (remainingTime > 0) {
+            var minutes = Math.floor(remainingTime / 60);
+            var seconds = remainingTime % 60;
+            timerElement.textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+            remainingTime--;
+        } else {
+            timerElement.textContent = "Time is up!";
+            clearInterval(timerInterval);
+        }
+    }
+
+    {% if freeze_enabled %}
+    nextButton.disabled = true;
+    setTimeout(function() {
+        nextButton.disabled = false; // Enable after freeze time
+    }, freezeTime * 1000);
+    {% endif %}
+
+    updateTimer();
+    var timerInterval = setInterval(updateTimer, 1000);
+</script>
+
+<style>
+    .main-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .row {
+        display: flex;
+        gap: 20px;
+    }
+
+    .col {
+        flex: 1;
+    }
+
+    .sequence-column {
+        padding: 10px;
+    }
+
+    .sequence-group {
+        margin-bottom: 20px;
+    }
+
+    .sequence-boxes, .response-boxes {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 10px;
+    }
+
+    .box {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+        min-width: 30px;
+        background-color: #f9f9f9;
+    }
+
+    .box.highlight {
+        background-color: #d4edda;
+        color: #155724;
+        font-weight: bold;
+    }
+
+    .box.invisible {
+        visibility: hidden;
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+
+    .btn-primary {
+        background-color: #89CFF0;
+        border: none;
+        color: white;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    .btn-primary:hover {
+        background-color: #6DB8E6;
+    }
+
+    .btn-primary:disabled {
+    background-color: #d6d6d6; /* Gray background */
+    color: #888; /* Faded text */
+    cursor: not-allowed; /* Not-allowed cursor */
+    }
+</style>
+
+{% endblock %}

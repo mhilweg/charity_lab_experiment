@@ -1,0 +1,195 @@
+{% extends "global/Page2.html" %}
+{% block content %}
+
+<div class="container main-container">
+    <h2 class="page-title">Task: {{ difficulty_level }} Difficulty</h2>
+    <p class="info-text">Sequence {{ sequence_index }}:</p>
+
+    <div class="row">
+        <!-- Sequence and Response Section -->
+        <div class="col sequence-container">
+            <div class="sequence-group">
+                <div class="sequence-boxes">
+                    {% for num in sequence %}
+                        <div class="box">{{ num }}</div>
+                    {% endfor %}
+                </div>
+                <div class="response-boxes">
+                    <div class="box invisible"></div> <!-- Placeholder for alignment -->
+                    {% for i in range(1, 8) %}
+                        <div class="box">
+                            <input type="number" name="response_{{ i }}" id="response_{{ i }}" 
+                                   {% if i == 7 %}required{% endif %}>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <form method="post" class="mt-4">
+                <input type="hidden" name="answers_dict" id="answers_dict" value="{{ player.answers_dict }}">
+                <input type="hidden" name="timestamps_dict" id="timestamps_dict" value="{{ player.timestamps_dict }}">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+
+        <!-- History Section -->
+        <div class="col history-container task-section">
+            <h4 class="history-title">History</h4>
+            {% for item in history %}
+                <div class="history-item">
+                    <div class="history-sequence">
+                        <div class="history-sequence-boxes">
+                            {% for num in item.sequence %}
+                                <div class="box">{{ num }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="history-responses">
+                        <div class="history-response-boxes">
+                            <div class="box invisible"></div> <!-- Placeholder for alignment -->
+                            {% for response in item.responses %}
+                                <div class="box" 
+                                     style="background-color: {% if forloop.counter < 7 %}#cce3ff{% elif forloop.counter == 7 and response.is_correct %}#d4edda{% else %}#f8d7da{% endif %};">
+                                    {{ response.value }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .main-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .row {
+        display: flex;
+        gap: 20px;
+    }
+
+    .col {
+        flex: 1;
+    }
+
+    .sequence-container {
+        padding: 10px;
+    }
+
+    .sequence-group {
+        margin-bottom: 20px;
+    }
+
+    .sequence-boxes, .response-boxes {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 10px;
+        max-width: 5px;
+    }
+
+    .box {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+        min-width: 30px;
+        background-color: #f9f9f9;
+    }
+
+    .response-boxes .box {
+        background-color: #cce3ff;
+    }
+
+    .response-boxes .box input {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        border: none;
+        background: transparent;
+        text-align: center;
+        font-size: inherit;
+        outline: none;
+    }
+
+    .history-container {
+        background-color: #f5fff0; /* Light green for the outer container */
+        border: 1px solid #d8ffd0;
+        padding: 15px;
+        border-radius: 5px;
+        max-width: 400px;
+    }
+
+    .history-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .history-item {
+        margin-bottom: 15px;
+    }
+
+    .history-sequence-boxes, .history-response-boxes {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 10px;
+    }
+
+    .history-response-boxes .box {
+        min-width: 30px;
+    }
+
+    .box.invisible {
+        visibility: hidden;
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+
+    .btn-primary {
+        background-color: #89CFF0;
+        border: none;
+        color: white;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    .btn-primary:hover {
+        background-color: #6DB8E6;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const inputs = document.querySelectorAll('[id^="response_"]');
+        const answersField = document.getElementById("answers_dict");
+        const timestampsField = document.getElementById("timestamps_dict");
+
+        inputs.forEach(input => {
+            input.addEventListener("input", (event) => {
+                const questionId = parseInt(event.target.id.split("_")[1]);
+                const value = event.target.value || "NaN";
+                const timestamp = Math.floor(Date.now() / 1000);
+
+                const answers = JSON.parse(answersField.value || '{}');
+                const timestamps = JSON.parse(timestampsField.value || '{}');
+
+                answers[questionId] = value;
+                timestamps[questionId] = timestamp;
+
+                answersField.value = JSON.stringify(answers);
+                timestampsField.value = JSON.stringify(timestamps);
+            });
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% block title %}
+Legal Disclaimer and Consent
+{% endblock %}
+
+{% block content %}
+<div class="container main-container">
+    <p class="info-text">
+        This study is conducted by the University of Mannheim. All data collected will be anonymized
+        and used exclusively for research purposes. Your participation is entirely voluntary, and you
+        may withdraw at any time without penalty.
+    </p>
+    <p class="info-text">
+        By proceeding, you indicate that you have read and understood the above information and agree
+        to participate in the study.
+    </p>
+    <form method="post">
+        {{ formfields }}
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+</div>
+
+<style>
+    /* Main container styling */
+    .main-container {
+        background-color: #f7f7f7; /* Light gray background */
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    /* Text styling for the consent information */
+    .info-text {
+        font-size: 16px;
+        color: #333; /* Dark gray text for readability */
+        margin-bottom: 15px;
+        line-height: 1.6; /* Improve text readability */
+    }
+
+    /* Button customization */
+    .btn-primary {
+        background-color: #89CFF0; /* Light blue */
+        border: none;
+        color: #fff;
+        font-weight: bold;
+        padding: 10px 20px; /* Adjust padding for larger click area */
+        border-radius: 5px;
+    }
+
+    .btn-primary:hover {
+        background-color: #6DB8E6; /* Slightly darker blue on hover */
+    }
+</style>
+{% endblock %}

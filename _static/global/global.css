@@ -1,0 +1,45 @@
+.popup-button {
+    background-color: #cce3ff; /* Light blue background */
+    border: 0px solid #aaa;    /* Optional: Add a border for better visibility */
+    color: #000;              /* Optional: Set text color to black for readability */
+    padding: 10px 15px;       /* Add padding for consistent button size */
+    border-radius: 5px;       /* Optional: Add rounded corners */
+    font-size: 14px;          /* Ensure a consistent font size */
+}
+
+.popup-button:hover {
+    background-color: #b3d9ff; /* Slightly darker shade on hover */
+    cursor: pointer;          /* Show pointer cursor on hover */
+}
+
+.question-spacing {
+    margin-bottom: 20px; /* Add space below each question block */
+}
+
+/* Button customization */
+.btn-primary {
+    background-color: #89CFF0; /* Light blue */
+    border: none;
+    color: #fff;
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background-color: #6DB8E6; /* Slightly darker blue on hover */
+}
+
+/* Main container */
+.main-container {
+    background-color: #f7f7f7; /* Consistent main container background */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Task section */
+.task-section {
+    background-color: #f0f8ff; /* Light blue */
+    border: 1px solid #d0e7ff;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}

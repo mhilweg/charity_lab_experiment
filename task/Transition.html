@@ -1,0 +1,65 @@
+{% extends "global/Page.html" %}
+{% block content %}
+
+<div class="container main-container">
+    <h2 class="page-title text-center">Transition to the Next Level</h2>
+    <hr>
+    <p class="info-text text-center">
+        You have successfully completed all tasks for the <strong>{{ current_difficulty }}</strong> difficulty level.
+    </p>
+    <p class="info-text text-center">
+        Next, you will move on to the <strong>{{ next_difficulty }}</strong> difficulty level.
+    </p>
+    <p class="info-text text-center">
+        This next sequence will follow the same rules but may feel slightly different.
+    </p>
+    <p class="info-text text-center">
+        Please take a moment to prepare yourself. When you are ready, click the button below to continue.
+    </p>
+    <div class="text-center mt-4">
+        <form method="post">
+            <button type="submit" class="btn btn-primary btn-lg">
+                Proceed to {{ next_difficulty }} tasks
+            </button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .main-container {
+        background-color: #f7f7f7; /* Light gray background */
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 800px; /* Narrower width for better focus */
+        margin: 40px auto; /* Center vertically and horizontally */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for emphasis */
+    }
+
+    .page-title {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .info-text {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 15px;
+        line-height: 1.6;
+    }
+
+    .btn-primary {
+        background-color: #89CFF0; /* Light blue */
+        border: none;
+        color: white;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    .btn-primary:hover {
+        background-color: #6DB8E6; /* Slightly darker blue */
+    }
+</style>
+
+{% endblock %}

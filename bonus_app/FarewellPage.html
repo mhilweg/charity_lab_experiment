@@ -1,0 +1,67 @@
+{% block content %}
+
+<div class="container main-container">
+    <h2 class="page-title text-center">Experiment Concluded</h2>
+    <hr>
+    <p class="info-text text-center">
+        Thank you for participating in our experiment! We greatly appreciate your time and effort.
+    </p>
+    <p class="info-text text-center">
+        The experiment is now concluded. Your payment will be processed once the overall experiment is finished, 
+        which will occur within this or the next week.
+    </p>
+    <p class="info-text text-center">
+        If you have any questions or concerns, please feel free to reach out to us at 
+        <a href="mailto:michael.hilweg@uni-mannheim.de">michael.hilweg@uni-mannheim.de</a>.
+    </p>
+    <div class="text-center mt-4">
+        <p class="thank-you-text"><strong>Thank you once again, and we hope you have a wonderful day!</strong></p>
+    </div>
+</div>
+
+<style>
+    .main-container {
+        background-color: #f7f7f7;
+        padding: 30px;
+        border-radius: 10px;
+        max-width: 800px;
+        margin: 50px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for emphasis */
+    }
+
+    .page-title {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .info-text {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 15px;
+        line-height: 1.6;
+    }
+
+    .thank-you-text {
+        font-size: 18px;
+        color: #155724; /* Green for positive tone */
+    }
+
+    hr {
+        border: none;
+        border-top: 1px solid #ddd;
+        margin: 20px 0;
+    }
+
+    a {
+        color: #89CFF0;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #6DB8E6;
+        text-decoration: underline;
+    }
+</style>
+
+{% endblock %}
