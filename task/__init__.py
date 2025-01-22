@@ -81,7 +81,7 @@ class Constants(BaseConstants):
     num_rounds = len(EASY_SEQUENCES) + len(HARD_SEQUENCES)
     easy_sequences = EASY_SEQUENCES
     hard_sequences = HARD_SEQUENCES
-    easy_correct_responses = [1, 4, 9, 1, 4, 9, 1, 4, 9, 1]
+    easy_correct_responses = [1, 4, 9, 1, 4, 9, 1, 4, 9, 1] # only seventh responses in here.
     hard_correct_responses = [9, 9, 9, 4, 1, 1, 1, 9, 4, 4]
     sample_easy_sequences = SAMPLE_EASY_SEQUENCES
     sample_hard_sequences = SAMPLE_HARD_SEQUENCES
