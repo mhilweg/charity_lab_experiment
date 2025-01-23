@@ -5,17 +5,13 @@ Legal Disclaimer and Consent
 {% block content %}
 <div class="container main-container">
     <p class="info-text">
-        This study is conducted by the University of Mannheim. All data collected will be anonymized
-        and used exclusively for research purposes. Your participation is entirely voluntary, and you
-        may withdraw at any time without penalty.
+        {{ disclaimer_message }}
     </p>
     <p class="info-text">
-        By proceeding, you indicate that you have read and understood the above information and agree
-        to participate in the study.
+        {{ consent_message }}
     </p>
     <form method="post">
-        {{ formfields }}
-        <button class="btn btn-primary" type="submit">Submit</button>
+        <button class="btn btn-primary" type="submit">Next</button>
     </form>
 </div>
 

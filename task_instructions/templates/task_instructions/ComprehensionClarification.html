@@ -1,0 +1,58 @@
+{% extends "global/Page.html" %}
+
+{% block content %}
+<div class="container main-container">
+    <h1 class="page-title">Comprehension Clarification</h1>
+    <p>Below are the correct answers to the comprehension questions:</p>
+    <form method="post">
+        {% for question in questions %}
+            <div class="form-group question-spacing task-section">
+                <label>{{ question.question }}</label>
+                <ul>
+                    {% for choice in question.choices %}
+                        <li
+                            {% if choice == question.highlighted_correct %}
+                                style="color: green; font-weight: bold;"
+                            {% endif %}
+                        >
+                            {{ choice }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+        <button class="btn btn-primary mt-3" type="submit">Continue</button>
+    </form>
+</div>
+
+<style>
+    .question-spacing {
+        margin-bottom: 20px;
+    }
+
+    .main-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .task-section {
+        background-color: #f0f8ff;
+        border: 1px solid #d0e7ff;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+    }
+
+    .btn-primary {
+        background-color: #89CFF0;
+        border: none;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    .btn-primary:hover {
+        background-color: #6DB8E6;
+    }
+</style>
+{% endblock %}

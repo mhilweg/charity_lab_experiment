@@ -6,7 +6,7 @@ SESSION_CONFIGS = [
         'display_name': 'Main Experiment with Consent and Task Instructions',
         'num_demo_participants': 2,  # Set this to the desired number of participants
         'app_sequence': ['disclaimer_consent', 'task_instructions', 'task', 'bonus_app'],
-        'level_1_treatment': 'Anonymity',
+        'level_1_treatment': 'Observability',
     },
 ]
 
@@ -32,7 +32,7 @@ SESSION_FIELDS = []
 LANGUAGE_CODE = 'en'
 
 # e.g. EUR, GBP, CNY, JPY
-REAL_WORLD_CURRENCY_CODE = 'USD'
+REAL_WORLD_CURRENCY_CODE = 'EUR'
 USE_POINTS = True
 
 ADMIN_USERNAME = 'admin'

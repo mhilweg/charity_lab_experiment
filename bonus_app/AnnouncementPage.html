@@ -1,9 +1,94 @@
 {% block content %}
-<h1>Important Announcement</h1>
+<style>
+  /* General Section Styling */
+  .section-box {
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+      border: 1px solid #ddd;
+  }
 
-<p>{{ extra_content|safe }}</p>
+  /* Announcement Section */
+  .announcement-section {
+      background-color: #fff8e1; /* Light yellow */
+      border: 1px solid #ffe082;
+  }
 
-<!-- Temporary Next Button -->
+  /* Observability Text Section */
+  .observability-section {
+      background-color: #f0f8ff; /* Light blue */
+  }
+
+  /* Moral Message Section */
+  .moral-message-section {
+      background-color: #e9f7ef; /* Very light green */
+  }
+
+  /* Button Styling (consistent with Bootstrap but more specific) */
+  .btn-primary {
+        background-color: #89CFF0;
+        border: none;
+        color: #fff;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    .btn-primary {
+        background-color: #6DB8E6;
+    }
+
+  /* Container for page layout */
+  .container {
+      max-width: 800px; /* Adjust as needed */
+      margin: 20px auto;
+      padding: 0 15px;
+  }
+
+  /* Text Styling */
+  h1, h2 {
+      text-align: center;
+      margin-bottom: 20px;
+  }
+
+  p {
+      text-align: left;
+      margin-bottom: 15px;
+  }
+</style>
+
+<div class="container mt-5">
+  <!-- Announcement Section -->
+  <div class="section-box announcement-section">
+    <h1>📢 Important Announcement</h1>
+    <p>This is the final page you will see on this terminal.</p>
+    <p>To conclude the experiment, please proceed to the adjacent room when it is your turn. In the adjacent room, you will make a final decision about whether to claim a deduction for your donation and input your IBAN credentials.</p>
+    <p>As a participant, you have the option to deduct your donation from the tax pool. Here's how it works:</p>
+    <span class="icon">💰</span> <strong>Reimbursement Rate:</strong> You can recover 30% of your donation as a reimbursement.<br>
+    <span class="icon">🏦</span> <strong>Tax Pool Contribution:</strong> The reimbursement is funded by contributions to the tax pool from all participants.<br>
+    <span class="icon">🤝</span> <strong>Voluntary Choice:</strong> Deciding to claim the deduction is entirely your choice and does not affect your donation amount.
+  </div>
+
+  <!-- Observability Section -->
+  {% if observability_text %}
+    <div class="observability-section section-box">
+        <h2>🔍 Some more information</h2>
+        <p>{{ observability_text }}</p>
+    </div>
+  {% endif %}
+
+  <!-- Moral Message Section -->
+  {% if moral_message %}
+    <div class="moral-message-section section-box">
+        <h2>💡 Before you move on</h2>
+        <p>{{ moral_message }}</p>
+    </div>
+  {% endif %}
+</div>
 <form method="post">
     <button type="submit" class="btn btn-primary">Next</button>
 </form>

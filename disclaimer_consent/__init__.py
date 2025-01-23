@@ -17,12 +17,6 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    consent_given = models.BooleanField(
-        label="I consent to participate in this study.",
-        choices=[(True, 'Yes'), (False, 'No')],
-        widget=widgets.RadioSelect
-    )
-
     gender = models.StringField(
         label="What is your gender at birth?",
         choices=["Male", "Female"],
@@ -36,23 +30,17 @@ class Player(BasePlayer):
 
 
 class Disclaimer(Page):
-    form_model = 'player'
-    form_fields = ['consent_given']
-
-    def before_next_page(player, timeout_happened):
-        # If participant does not consent, mark them for study exit.
-        if not player.consent_given:
-            player.participant.vars['study_exit'] = True
-
-
-class StudyExit(Page):
-    def is_displayed(player):
-        # Display this page only if participant did not consent.
-        return player.participant.vars.get('study_exit', False)
-
     def vars_for_template(player):
         return {
-            'exit_message': "Thank you for your interest in the study. Since you did not consent to participate, the experiment will now end."
+            'disclaimer_message': (
+                "This study is conducted by the University of Mannheim. All data collected will "
+                "be anonymized and used exclusively for research purposes. Your participation is "
+                "entirely voluntary, and you may withdraw at any time without penalty."
+            ),
+            'consent_message': (
+                "By clicking 'Next,' you indicate that you have read and understood the above "
+                "information and agree to participate in the study."
+            ),
         }
 
 
@@ -60,8 +48,10 @@ class Demographics(Page):
     form_model = 'player'
     form_fields = ['gender', 'field_of_studies']
 
+
 class RandomizationWaitPage(WaitPage):
     after_all_players_arrive = 'assign_treatments'
+
 
 def assign_treatments(subsession):
     session = subsession.session
@@ -91,7 +81,7 @@ def assign_treatments(subsession):
         for treatment in ['Moral message', 'No message']:
             subgroup = [p for p in group if p.participant.vars['level_2_treatment'] == treatment]
             for p in subgroup:
-                level_3_treatment = 'No freeze' if random.random() < 0.1 else 'Freeze'
+                level_3_treatment = 'No freeze' if random.random() < 0.9 else 'Freeze'
                 p.participant.vars['level_3_treatment'] = level_3_treatment
 
     # --- Debugging: Print Assignments ---
@@ -104,4 +94,5 @@ def assign_treatments(subsession):
     print("\nLevel 3 Assignments:")
     print([(p.id_in_group, p.participant.vars['level_3_treatment']) for p in participants])
 
-page_sequence = [Disclaimer, StudyExit, Demographics, RandomizationWaitPage]
+
+page_sequence = [Disclaimer, Demographics, RandomizationWaitPage]

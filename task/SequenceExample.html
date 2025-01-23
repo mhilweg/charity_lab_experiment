@@ -7,7 +7,7 @@
         Please review the following example sequences and their corresponding responses. The seventh response is highlighted as it is especially important for solving the task.
     </p>
 
-    {% if freeze_enabled %}
+    {% if freeze_enabled and freeze_message %}
     <div class="alert alert-warning">
         <p>{{ freeze_message }}</p>
     </div>
@@ -97,14 +97,17 @@
         }
     }
     console.log("Freeze logic enabled:", {{ freeze_enabled }});
-    {% if freeze_enabled %}
-    console.log("Next button disabled initially:", nextButton.disabled);
-    nextButton.disabled = true;
-    setTimeout(function() {
-        nextButton.disabled = false; // Enable after freeze time
-        console.log("Next button enabled after freeze.");
-    }, freezeTime * 1000);
-    {% endif %}
+    if ({{ freeze_enabled }}) {
+        console.log("Next button will be disabled temporarily.");
+        nextButton.disabled = true; // Disable the button initially
+        setTimeout(function() {
+            nextButton.disabled = false; // Enable the button after freeze time
+            console.log("Next button enabled after freeze time.");
+        }, freezeTime * 1000);
+    } else {
+        console.log("No freeze enabled. Button remains active.");
+        nextButton.disabled = false; // Ensure the button stays enabled
+    }
 
     updateTimer();
     var timerInterval = setInterval(updateTimer, 1000);

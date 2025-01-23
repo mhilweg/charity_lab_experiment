@@ -20,16 +20,16 @@ class Constants(BaseConstants):
         {
             'question': "What is the goal of the task?",
             'choices': [
-                "To calculate the correct response for the seventh step",
+                "To enter the correct value into the seventh response box",
                 "To calculate the sum of all eight numbers",
-                "To identify patterns in the sequence"
+                "To identify the most frequent number in the sequence"
             ],
-            'correct': "To calculate the correct response for the seventh step"
+            'correct': "To enter the correct value into the seventh response box"
         }
     ]
     task_instructions = """
     <h1>Welcome to the task! </h1>
-    <p>In this real-effort task, you will be given a sequence of eight numbers.</p>
+    <p>In this task, you will be given a sequence of eight numbers.</p>
     <p>Your goal is to apply specific rules to compute the response for the seventh step. 
     While you are free to input values into response boxes 1 to 6 as well, you must enter a value for <strong>the seventh response box</strong>, which is mandatory. This is the only response upon which we will determine whether you solved the task correctly. 
     Please pay attention to the rules, as they determine your task performance.</p>
@@ -171,24 +171,34 @@ class ComprehensionQuestions2(Page):
                 all_correct = False
 
         if not all_correct:
-            player.participant.vars['failed_comprehension'] = True
+            player.participant.vars['redirect_to_clarification'] = True
         else:
-            player.participant.vars['failed_comprehension'] = False
+            player.participant.vars['redirect_to_clarification'] = False
 
     def is_displayed(player):
         return player.failed_attempts == 1
 
 
-class ComprehensionFailure(Page):
-    def is_displayed(player):
-        return player.participant.vars.get('failed_comprehension', False)
-
+class ComprehensionClarification(Page):
+    @staticmethod
     def vars_for_template(player):
+        participant = player.participant
+        show_popups = participant.vars.get("show_popups", {"instructions": True, "examples": False})
+        questions = []
+        for question in Constants.comprehension_questions:
+            question_data = question.copy()
+            question_data['highlighted_correct'] = question['correct']
+            questions.append(question_data)
+
         return {
-            'failure_message': "You have used up all attempts for the comprehension questions. "
-                               "Unfortunately, you cannot proceed further."
-        }
+            'questions': questions,
+            'show_popups': show_popups,
+            }
+
+    @staticmethod
+    def is_displayed(player):
+        return player.participant.vars.get('redirect_to_clarification', False)
 
 
 page_sequence = [Introduction, TaskInstructions, ComprehensionQuestions1, ComprehensionQuestions2,
-                 ComprehensionFailure]
+                 ComprehensionClarification]

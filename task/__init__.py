@@ -85,12 +85,12 @@ class Constants(BaseConstants):
     hard_correct_responses = [9, 9, 9, 4, 1, 1, 1, 9, 4, 4]
     sample_easy_sequences = SAMPLE_EASY_SEQUENCES
     sample_hard_sequences = SAMPLE_HARD_SEQUENCES
-    total_time_seconds = 120  # 2 minutes per difficulty level
-    freeze_time_seconds = 30  # Freeze time duration
+    total_time_seconds = 30  # 2 minutes per difficulty level
+    freeze_time_seconds = 10  # Freeze time duration
 
     task_instructions = """
     <h1>Welcome to the task! </h1>
-    <p>In this real-effort task, you will be given a sequence of eight numbers.</p>
+    <p>In this task, you will be given a sequence of eight numbers.</p>
     <p>Your goal is to apply specific rules to compute the response for the seventh step. 
     While you are free to input values into response boxes 1 to 6 as well, you must enter a value for <strong>the seventh response box</strong>, which is mandatory. This is the only response upon which we will determine whether you solved the task correctly. 
     Please pay attention to the rules, as they determine your task performance.</p>
@@ -154,6 +154,35 @@ def get_timeout_seconds(player: Player):
 def is_displayed(player: Player):
     return get_timeout_seconds(player) > 0
 
+class InterimInstructions(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.round_number == 1  # Only display in the first round
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        participant = player.participant
+        show_popups = participant.vars.get("show_popups", {"instructions": True, "examples": False})
+        total_time_minutes = Constants.total_time_seconds // 60 # make sure this is an integer value
+        return {
+            'total_time_minutes': total_time_minutes,
+            'instruction_points': [
+                "There may be some hidden patterns in the sequences that can be used to determine the correct seventh response more quickly.",
+                "On the next page, you will see a set of sample sequences that follow the same logic as the ones you will have to solve. Use them to detect any patterns.",
+                f"You have a total time budget of {total_time_minutes} minutes for looking at the sample sequences and solving the actual tasks.",
+                "When moving forward to playing the tasks, you can always inspect the sample sequences again through a pop-up button.",
+                "The time starts to tick down once you click 'Next' on this page and move on to the sequence examples."
+            ],
+            'show_popups': show_popups,
+        }
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        # Start the timer for the total task time
+        participant = player.participant
+        if 'expiry' not in participant.vars:
+            participant.vars['expiry'] = time.time() + Constants.total_time_seconds
+
 class SequenceExample(Page):
     timer_text = "Time remaining:"
 
@@ -164,8 +193,9 @@ class SequenceExample(Page):
     @staticmethod
     def vars_for_template(player: Player):
         participant = player.participant
-        level_3_treatment = participant.vars.get('level_3_treatment', 'Freeze')
-        freeze_enabled = participant.vars.get('level_3_treatment') == 'Freeze'
+        
+        level_3_treatment = participant.vars.get('level_3_treatment', 'No freeze')
+        freeze_enabled = level_3_treatment == 'Freeze'
 
         show_popups = participant.vars.get("show_popups", {"instructions": True, "examples": False})
         # Initialize difficulty level
@@ -208,8 +238,6 @@ class SequenceExample(Page):
             participant.vars['expiry'] = time.time() + Constants.total_time_seconds
 
         remaining_time = max(participant.vars['expiry'] - time.time(), 0)
-        remaining_time = Constants.total_time_seconds
-
         print(f"Remaining time passed to template: {remaining_time}")
 
         return {
@@ -217,7 +245,9 @@ class SequenceExample(Page):
             'left_column': left_column,
             'right_column': right_column,
             'freeze_enabled': 'true' if freeze_enabled else 'false',
-            'freeze_message': "You can proceed to playing the task after 30 seconds. Use the time to find a pattern in the data that may make it easier for you to solve the subsequent exercises." if level_3_treatment == 'Freeze' else "",
+            'freeze_message': f"You can proceed to playing the task after {Constants.freeze_time_seconds} seconds. "
+            "Use the time to find a pattern in the data that may make it easier for you to solve the subsequent exercises."
+             if freeze_enabled else "",
             'remaining_time': remaining_time,
             'freeze_time': Constants.freeze_time_seconds,
             'show_popups': show_popups["instructions"] or show_popups["examples"],
@@ -511,7 +541,6 @@ class SequenceExample2(Page):
 
         # Calculate remaining time
         remaining_time = max(participant.vars['expiry'] - time.time(), 0)
-        remaining_time = Constants.total_time_seconds
 
         show_popups = participant.vars.get("show_popups", {"instructions": True, "examples": True})
         sequence_index = 1
@@ -520,7 +549,7 @@ class SequenceExample2(Page):
             'left_column': left_column,
             'right_column': right_column,
             'freeze_enabled': 'true' if freeze_enabled else 'false',
-            'freeze_message': "You can proceed to playing the task after 30 seconds. Use the time to find a pattern in the data that may make it easier for you to solve the subsequent exercises." if level_3_treatment == 'Freeze' else "",
+            'freeze_message': f"You can proceed to playing the task after {Constants.freeze_time_seconds} seconds. Use the time to find a pattern in the data that may make it easier for you to solve the subsequent exercises." if level_3_treatment == 'Freeze' else "",
             'remaining_time': Constants.total_time_seconds,
             'freeze_time': Constants.freeze_time_seconds,
             'show_popups': show_popups,
@@ -719,4 +748,4 @@ class Task2(Page):
             participant.vars['next_app'] = True
             return
 
-page_sequence = [SequenceExample, Task, Transition, SequenceExample2, Task2]
+page_sequence = [InterimInstructions, SequenceExample, Task, Transition, SequenceExample2, Task2]
