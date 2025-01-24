@@ -24,7 +24,7 @@ class Player(BasePlayer):
     )
 
     field_of_studies = models.StringField(
-        label="What is your field of studies?",
+        label="(If you are a student) What is your field of studies?",
         blank=True
     )
 
