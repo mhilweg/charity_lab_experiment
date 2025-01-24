@@ -85,8 +85,8 @@ class Constants(BaseConstants):
     hard_correct_responses = [9, 9, 9, 4, 1, 1, 1, 9, 4, 4]
     sample_easy_sequences = SAMPLE_EASY_SEQUENCES
     sample_hard_sequences = SAMPLE_HARD_SEQUENCES
-    total_time_seconds = 30  # 2 minutes per difficulty level
-    freeze_time_seconds = 10  # Freeze time duration
+    total_time_seconds = 360  # 6 minutes per difficulty level
+    freeze_time_seconds = 90  # Freeze time duration
 
     task_instructions = """
     <h1>Welcome to the task! </h1>
@@ -167,7 +167,7 @@ class InterimInstructions(Page):
         return {
             'total_time_minutes': total_time_minutes,
             'instruction_points': [
-                "There may be some hidden patterns in the sequences that can be used to determine the correct seventh response more quickly.",
+                "There are some hidden patterns in the sequences that can be used to determine the correct seventh response more quickly.",
                 "On the next page, you will see a set of sample sequences that follow the same logic as the ones you will have to solve. Use them to detect any patterns.",
                 f"You have a total time budget of {total_time_minutes} minutes for looking at the sample sequences and solving the actual tasks.",
                 "When moving forward to playing the tasks, you can always inspect the sample sequences again through a pop-up button.",

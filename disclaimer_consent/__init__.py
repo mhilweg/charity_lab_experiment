@@ -28,12 +28,23 @@ class Player(BasePlayer):
         blank=True
     )
 
+    age = models.StringField(
+        label="How old are you?",
+        blank=True
+    )
+
+    degree = models.StringField(
+        label="Which degree are you currently enrolled in?",
+        choices=["Bachelors", "Masters", "PhD", "Other"],
+        widget=widgets.RadioSelect
+    )
+
 
 class Disclaimer(Page):
     def vars_for_template(player):
         return {
             'disclaimer_message': (
-                "This study is conducted by the University of Mannheim. All data collected will "
+                "This study is conducted by the University of Mannheim and Masaryk University. All data collected will "
                 "be anonymized and used exclusively for research purposes. Your participation is "
                 "entirely voluntary, and you may withdraw at any time without penalty."
             ),
@@ -46,7 +57,7 @@ class Disclaimer(Page):
 
 class Demographics(Page):
     form_model = 'player'
-    form_fields = ['gender', 'field_of_studies']
+    form_fields = ['gender', 'field_of_studies', 'age', 'degree']
 
 
 class RandomizationWaitPage(WaitPage):

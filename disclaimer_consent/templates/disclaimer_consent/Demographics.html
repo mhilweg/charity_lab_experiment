@@ -6,17 +6,32 @@ Demographics
 <div class="container main-container">
     <p class="info-text">Please answer the following questions.</p>
     <form method="post">
-        <!-- Gender Question -->
-        <div class="form-group task-section">
-            <label for="id_gender">What was your gender at birth?</label>
-            {{ form.gender }}
-        </div>
 
         <!-- Field of Studies Question -->
         <div class="form-group task-section">
             <label for="id_field_of_studies">What is your field of studies?</label>
             {{ form.field_of_studies }}
         </div>
+
+        <!-- Degree -->
+        <div class="form-group task-section">
+            <label for="id_degree">Which degree are you currently enrolled in?</label>
+            {{ form.degree }}
+        </div>
+
+        <!-- Age -->
+        <div class="form-group task-section">
+            <label for="id_age">How old are you?</label>
+            {{ form.age }}
+        </div>
+
+        <!-- Gender Question -->
+        <div class="form-group task-section">
+            <label for="id_gender">What was your gender at birth?</label>
+            {{ form.gender }}
+        </div>
+
+        
 
         <button class="btn btn-primary mt-3" type="submit">Continue</button>
     </form>

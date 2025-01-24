@@ -20,9 +20,9 @@ class Constants(BaseConstants):
         {
             'question': "What is the goal of the task?",
             'choices': [
+                "To enter all correct values into all seven boxes",
                 "To enter the correct value into the seventh response box",
-                "To calculate the sum of all eight numbers",
-                "To identify the most frequent number in the sequence"
+                "To calculate the sum of all eight numbers"
             ],
             'correct': "To enter the correct value into the seventh response box"
         }
