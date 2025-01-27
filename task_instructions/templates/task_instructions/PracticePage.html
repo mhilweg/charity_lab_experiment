@@ -115,6 +115,7 @@
         </div>
         {% for i in range(1, 4) %}
             <div class="error-message" id="error_1_{{ i }}"></div>
+            <div class="success-message" id="success_1_{{ i }}" style="color: green; display: none;"></div>
         {% endfor %}
     </div>
 
@@ -138,23 +139,23 @@
         </div>
         {% for i in range(1, 4) %}
             <div class="error-message" id="error_2_{{ i }}"></div>
+            <div class="success-message" id="success_2_{{ i }}" style="color: green; display: none;"></div>
         {% endfor %}
     </div>
 
+
     <div class="text-center mt-4">
-        <button class="btn btn-primary">Finish Practice</button>
+        <button id="finish-practice-btn" class="btn btn-primary" disabled>Finish Practice</button>
     </div>
 </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        // Correct responses for the practice sequences
         const correctResponses = {
             1: [9, 9, 4], // For Sequence 1
             2: [4, 1, 1]  // For Sequence 2
         };
 
-        // Specific error messages for each response
         const errorMessages = {
             1: [
                 "Wrong. Remember that you are comparing '1' and '4'.",
@@ -168,25 +169,59 @@
             ]
         };
 
+        const finishPracticeButton = document.getElementById("finish-practice-btn");
+
+        // Function to validate all responses for enabling/disabling the button
+        const validateAllResponses = () => {
+            let allCorrect = true;
+
+            for (let seq = 1; seq <= 2; seq++) {
+                for (let idx = 0; idx < correctResponses[seq].length; idx++) {
+                    const input = document.querySelector(`input[data-sequence='${seq}'][data-index='${idx + 1}']`);
+                    const value = parseInt(input.value);
+
+                    // If any input is incorrect or empty, mark the entire form as incorrect
+                    if (value !== correctResponses[seq][idx]) {
+                        allCorrect = false;
+                    }
+                }
+            }
+
+            // Enable or disable the "Finish Practice" button based on correctness
+            finishPracticeButton.disabled = !allCorrect;
+        };
+
         // Attach input listeners to all response boxes
         document.querySelectorAll("input[type='number']").forEach(input => {
             input.addEventListener("input", (event) => {
-                const sequence = parseInt(input.dataset.sequence); // Sequence ID (1 or 2)
-                const index = parseInt(input.dataset.index) - 1;  // Index in the sequence (0-based)
+                const sequence = parseInt(input.dataset.sequence); // Get sequence ID
+                const index = parseInt(input.dataset.index) - 1;  // Get 0-based index
                 const value = parseInt(input.value);
 
                 const errorDiv = document.getElementById(`error_${sequence}_${index + 1}`);
+                const successDiv = document.getElementById(`success_${sequence}_${index + 1}`);
 
-                // Check if the input matches the correct response
-                if (value === correctResponses[sequence][index]) {
-                    errorDiv.style.display = "none"; // Hide error message
-                    errorDiv.textContent = ""; // Clear the error text
-                } else {
+                // Handle incorrect input
+                if (isNaN(value) || value !== correctResponses[sequence][index]) {
                     errorDiv.style.display = "block"; // Show error message
-                    errorDiv.textContent = errorMessages[sequence][index]; // Set specific error message
+                    errorDiv.textContent = errorMessages[sequence][index];
+                    successDiv.style.display = "none"; // Hide success message
+                    successDiv.textContent = ""; // Clear success text
+                } else {
+                    // Handle correct input
+                    errorDiv.style.display = "none"; // Hide error message
+                    errorDiv.textContent = ""; // Clear error text
+                    successDiv.style.display = "block"; // Show success message
+                    successDiv.textContent = `Box ${index + 1} correct!`; // Show success text
                 }
+
+                // Check all responses to determine the state of the button
+                validateAllResponses();
             });
         });
     });
 </script>
+
+
+
 {% endblock %}
