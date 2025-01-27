@@ -24,6 +24,7 @@ class Player(BasePlayer):
     net_earnings_after_donation = models.FloatField(initial=0.0)
     deduct_donation = models.BooleanField()  # Whether the participant wants to deduct the donation
     button_pressed = models.StringField(choices=["Proceed without Donating", "Donate"], blank=True)
+    entered_password = models.StringField(blank=True)  # Stores the password entered by the participant
 
 
 
@@ -101,6 +102,9 @@ class BonusPage(Page):
         print(f"Donation: {player.donated_amount}, Reimbursement: {player.reimbursement_amount}")
 
 class AnnouncementPage(Page):
+    form_model = 'player'
+    form_fields = ['entered_password']
+    
     @staticmethod
     def vars_for_template(player: Player):
         level_1_treatment = player.participant.vars.get('level_1_treatment', 'Anonymity')
@@ -130,7 +134,17 @@ class AnnouncementPage(Page):
             'moral_message': moral_message,
 
         }
+    
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        valid_passwords = ["Victoria", "Michael"]
+        entered_password = player.field_maybe_none('entered_password')  # Safely access the field
 
+        print(f"DEBUG: Entered password: {entered_password}")  # Debugging print
+
+        if not entered_password or entered_password not in valid_passwords:
+            raise ValueError("Invalid password entered!")  # Prevent navigation
+        print(f"DEBUG: Valid password entered: {entered_password}")
 
 class PaymentInfoDeductionPage(Page):
     form_model = 'player'

@@ -28,9 +28,10 @@ class Player(BasePlayer):
         blank=True
     )
 
-    age = models.StringField(
+    age = models.IntegerField(
         label="How old are you?",
-        blank=True
+        min=18,  # Minimum age (optional)
+        max=99,  # Maximum age (optional)
     )
 
     degree = models.StringField(
@@ -68,32 +69,47 @@ def assign_treatments(subsession):
     session = subsession.session
     participants = subsession.get_players()
 
-    # --- Manual or Default Level 1 Assignment ---
-    if 'level_1_treatment' in session.config:
-        level_1_treatment = session.config['level_1_treatment']
-    else:
-        level_1_treatment = 'Anonymity'  # Default fallback
-
-    for p in participants:
-        p.participant.vars['level_1_treatment'] = level_1_treatment
-
-    # --- Level 2 Assignment (Stratified by Gender and Level 1) ---
+    # --- Stratified Level-1 Assignment (Anonymity/Observability) ---
     males = [p for p in participants if p.gender == 'Male']
     females = [p for p in participants if p.gender == 'Female']
 
+    # Randomize treatment within gender groups
     for group in [males, females]:
-        random.shuffle(group)  # Shuffle within each gender group
+        random.shuffle(group)  # Shuffle participants
+        half = len(group) // 2
+        for i, p in enumerate(group):
+            if i < half:
+                p.participant.vars['level_1_treatment'] = 'Anonymity'
+            else:
+                p.participant.vars['level_1_treatment'] = 'Observability'
+
+    # --- Stratified Level-2 Assignment (Moral Message/No Message, Based on Gender and Level-1) ---
+    subgroups = {
+        ('Male', 'Anonymity'): [p for p in males if p.participant.vars['level_1_treatment'] == 'Anonymity'],
+        ('Male', 'Observability'): [p for p in males if p.participant.vars['level_1_treatment'] == 'Observability'],
+        ('Female', 'Anonymity'): [p for p in females if p.participant.vars['level_1_treatment'] == 'Anonymity'],
+        ('Female', 'Observability'): [p for p in females if p.participant.vars['level_1_treatment'] == 'Observability'],
+    }
+
+    for key, group in subgroups.items():
+        random.shuffle(group)
         half = len(group) // 2
         for i, p in enumerate(group):
             p.participant.vars['level_2_treatment'] = 'Moral message' if i < half else 'No message'
 
-    # --- Level 3 Assignment (Probability-Based, Stratified by Gender and Level 2) ---
-    for group in [males, females]:
-        for treatment in ['Moral message', 'No message']:
-            subgroup = [p for p in group if p.participant.vars['level_2_treatment'] == treatment]
-            for p in subgroup:
-                level_3_treatment = 'No freeze' if random.random() < 0.9 else 'Freeze'
-                p.participant.vars['level_3_treatment'] = level_3_treatment
+    # --- Stratified Level-3 Assignment (Freeze/No Freeze, Based on Gender and Level-2) ---
+    # Create subgroups for level-3 randomization
+    level_3_subgroups = {
+        ('Male', 'Moral message'): [p for p in males if p.participant.vars['level_2_treatment'] == 'Moral message'],
+        ('Male', 'No message'): [p for p in males if p.participant.vars['level_2_treatment'] == 'No message'],
+        ('Female', 'Moral message'): [p for p in females if p.participant.vars['level_2_treatment'] == 'Moral message'],
+        ('Female', 'No message'): [p for p in females if p.participant.vars['level_2_treatment'] == 'No message'],
+    }
+
+    for key, group in level_3_subgroups.items():
+        for p in group:
+            level_3_treatment = 'No freeze' if random.random() < 0.9 else 'Freeze'
+            p.participant.vars['level_3_treatment'] = level_3_treatment
 
     # --- Debugging: Print Assignments ---
     print("\nLevel 1 Assignments:")

@@ -1,0 +1,192 @@
+{% extends "global/Page.html" %}
+{% block content %}
+<style>
+    /* Main container styling */
+    .main-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .sequence-group {
+        margin-bottom: 30px;
+        text-align: center; /* Center sequence groups */
+    }
+
+    .sequence-container {
+        display: flex;
+        flex-direction: column; /* Stack sequence and response rows */
+        align-items: center;
+        gap: 10px;
+    }
+
+    .sequence-boxes, .response-boxes {
+        display: flex;
+        gap: 10px;
+        justify-content: center; /* Center boxes */
+        margin-bottom: 10px;
+    }
+
+    .box {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+        width: 50px; /* Fixed width for consistent size */
+        height: 50px; /* Fixed height to match width */
+        background-color: #f9f9f9;
+    }
+
+    .box.invisible {
+        visibility: hidden;
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+
+    .response-boxes .box {
+        background-color: #cce3ff; /* Light blue background for response boxes */
+    }
+
+    .response-boxes .box input {
+        width: 100%; /* Fill the parent box */
+        height: 100%; /* Match the parent box's height */
+        padding: 0;
+        border: none;
+        background: transparent;
+        text-align: center;
+        font-size: inherit;
+        outline: none;
+    }
+
+    /* Highlight the third input box */
+    .response-boxes .box.highlight {
+        background-color: #99b8e6; /* Darker shade of #cce3ff */
+        border-color: #6d98cc;    /* Slightly darker border for emphasis */
+    }
+
+    .error-message {
+        color: red;
+        font-size: 0.9rem;
+        display: none;
+        text-align: center;
+        margin-top: -5px;
+        margin-bottom: 10px;
+    }
+
+    .btn-primary {
+        background-color: #89CFF0;
+        border: none;
+        color: white;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    .btn-primary:hover {
+        background-color: #6DB8E6;
+    }
+</style>
+
+<div class="container main-container">
+    <h2 class="page-title text-center">Practice the Rules</h2>
+    <p class="info-text text-center">Below are two sequences for practice. Enter your responses in the boxes and get instant feedback on your answers.</p>
+    <p class="info-text text-center"><em>These sequences are of length four for your convenience. The actual task sequences will be of length eight.</em></p>
+    
+    <!-- First Sequence -->
+    <div class="sequence-group">
+        <div class="sequence-container">
+            <div class="sequence-boxes">
+                <div class="box">1</div>
+                <div class="box">4</div>
+                <div class="box">9</div>
+                <div class="box">1</div>
+            </div>
+            <div class="response-boxes">
+                <div class="box invisible"></div> <!-- Invisible placeholder for alignment -->
+                {% for i in range(1, 4) %}
+                    <div class="box {% if i == 3 %}highlight{% endif %}">
+                        <input type="number" id="response_1_{{ i }}" data-sequence="1" data-index="{{ i }}">
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% for i in range(1, 4) %}
+            <div class="error-message" id="error_1_{{ i }}"></div>
+        {% endfor %}
+    </div>
+
+    <!-- Second Sequence -->
+    <div class="sequence-group">
+        <div class="sequence-container">
+            <div class="sequence-boxes">
+                <div class="box">4</div>
+                <div class="box">4</div>
+                <div class="box">9</div>
+                <div class="box">1</div>
+            </div>
+            <div class="response-boxes">
+                <div class="box invisible"></div> <!-- Invisible placeholder for alignment -->
+                {% for i in range(1, 4) %}
+                    <div class="box {% if i == 3 %}highlight{% endif %}">
+                        <input type="number" id="response_2_{{ i }}" data-sequence="2" data-index="{{ i }}">
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% for i in range(1, 4) %}
+            <div class="error-message" id="error_2_{{ i }}"></div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-4">
+        <button class="btn btn-primary">Finish Practice</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Correct responses for the practice sequences
+        const correctResponses = {
+            1: [9, 9, 4], // For Sequence 1
+            2: [4, 1, 1]  // For Sequence 2
+        };
+
+        // Specific error messages for each response
+        const errorMessages = {
+            1: [
+                "Remember that you are comparing '1' and '4'.",
+                "Remember that you are comparing the first response and '9'.",
+                "Remember that you are comparing the second response and '1'."
+            ],
+            2: [
+                "Remember that you are comparing '4' and '4'.",
+                "Remember that you are comparing the first response and '9'.",
+                "Remember that you are comparing the second response and '1'."
+            ]
+        };
+
+        // Attach input listeners to all response boxes
+        document.querySelectorAll("input[type='number']").forEach(input => {
+            input.addEventListener("input", (event) => {
+                const sequence = parseInt(input.dataset.sequence); // Sequence ID (1 or 2)
+                const index = parseInt(input.dataset.index) - 1;  // Index in the sequence (0-based)
+                const value = parseInt(input.value);
+
+                const errorDiv = document.getElementById(`error_${sequence}_${index + 1}`);
+
+                // Check if the input matches the correct response
+                if (value === correctResponses[sequence][index]) {
+                    errorDiv.style.display = "none"; // Hide error message
+                    errorDiv.textContent = ""; // Clear the error text
+                } else {
+                    errorDiv.style.display = "block"; // Show error message
+                    errorDiv.textContent = errorMessages[sequence][index]; // Set specific error message
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

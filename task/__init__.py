@@ -3,7 +3,7 @@ import time, json
 
 
 
-EASY_SEQUENCES = [
+EASY_SEQUENCES_OLD = [
     [1, 1, 4, 9, 1, 4, 9, 1],
     [4, 4, 9, 1, 4, 9, 1, 4],
     [9, 9, 1, 4, 9, 1, 4, 9],
@@ -16,7 +16,36 @@ EASY_SEQUENCES = [
     [1, 1, 9, 4, 1, 9, 4, 1],
 ]
 
-HARD_SEQUENCES = [
+EASY_SEQUENCES = [
+    [1, 4, 9, 4, 4, 9, 1, 4],
+    [1, 4, 1, 1, 1, 4, 9, 1],
+    [9, 9, 4, 9, 4, 4, 1, 9],
+    [9, 4, 1, 4, 4, 4, 9, 1],
+    [9, 1, 1, 4, 1, 4, 1, 9],
+    [1, 9, 4, 9, 1, 9, 9, 4],
+    [4, 1, 4, 9, 1, 1, 4, 4],
+    [4, 1, 1, 1, 1, 4, 4, 9],
+    [9, 4, 4, 1, 9, 9, 4, 4],
+    [1, 9, 9, 1, 9, 9, 1, 4],
+    [4, 1, 1, 1, 1, 4, 9, 1],
+    [1, 4, 9, 4, 4, 4, 1, 9],
+    [4, 9, 9, 4, 9, 1, 9, 1],
+    [9, 4, 1, 4, 4, 1, 9, 4],
+    [4, 9, 1, 9, 4, 9, 9, 1],
+    [4, 9, 4, 4, 1, 1, 9, 4],
+    [1, 9, 9, 1, 1, 1, 9, 4],
+    [1, 9, 9, 1, 9, 4, 9, 4],
+    [1, 9, 1, 4, 1, 4, 1, 9],
+    [4, 9, 1, 4, 4, 4, 9, 1],
+    [4, 9, 9, 1, 9, 9, 4, 4],
+    [4, 1, 1, 1, 1, 4, 4, 9],
+    [1, 4, 4, 9, 1, 1, 4, 4],
+    [9, 9, 1, 9, 1, 1, 4, 9],
+    [9, 1, 1, 1, 1, 9, 9, 4],
+    [9, 9, 9, 9, 1, 4, 4, 1],
+]
+
+HARD_SEQUENCES_OLD = [
     [1, 4, 9, 1, 4, 9, 1, 4],
     [1, 1, 4, 4, 9, 4, 9, 4],
     [9, 1, 1, 1, 4, 9, 9, 1],
@@ -29,7 +58,36 @@ HARD_SEQUENCES = [
     [1, 4, 1, 4, 1, 1, 4, 4],
 ]
 
-SAMPLE_EASY_SEQUENCES = [
+HARD_SEQUENCES = [
+    [4, 4, 4, 9, 1, 1, 4, 1],
+    [9, 4, 4, 1, 4, 9, 9, 1],
+    [4, 9, 1, 4, 1, 4, 9, 1],
+    [1, 4, 1, 4, 1, 1, 4, 4],
+    [4, 9, 4, 9, 4, 1, 4, 9],
+    [4, 4, 9, 9, 1, 1, 4, 9],
+    [1, 1, 9, 4, 4, 1, 9, 1],
+    [1, 4, 9, 9, 1, 9, 4, 9],
+    [4, 1, 9, 1, 4, 4, 9, 4],
+    [1, 4, 9, 4, 1, 1, 9, 1],
+    [9, 1, 1, 4, 1, 9, 9, 4],
+    [9, 1, 4, 9, 4, 4, 1, 9],
+    [1, 9, 4, 1, 4, 4, 9, 1],
+    [9, 9, 4, 4, 1, 1, 9, 4],
+    [4, 9, 1, 1, 9, 4, 4, 9],
+    [1, 9, 1, 4, 1, 4, 9, 4],
+    [1, 4, 1, 9, 1, 9, 4, 9],
+    [9, 4, 9, 4, 9, 9, 4, 4],
+    [1, 9, 1, 9, 1, 4, 1, 9],
+    [9, 4, 1, 9, 1, 9, 4, 1],
+    [9, 4, 1, 1, 4, 9, 9, 4],
+    [4, 4, 4, 1, 9, 9, 4, 9],
+    [9, 9, 4, 9, 4, 9, 1, 1],
+    [4, 1, 9, 9, 4, 9, 1, 9],
+    [9, 9, 1, 4, 4, 9, 1, 9],
+    [4, 4, 1, 4, 4, 9, 9, 9],
+]
+
+SAMPLE_EASY_SEQUENCES_OLD = [
     {
         "sequence": [1, 1, 4, 9, 1, 4, 9, 1],
         "responses": [1, 9, 9, 4, 4, 1, 1],
@@ -49,6 +107,29 @@ SAMPLE_EASY_SEQUENCES = [
     {
         "sequence": [4, 4, 1, 9, 4, 1, 9, 4],
         "responses": [4, 9, 9, 1, 1, 4, 4],
+    },
+]
+
+SAMPLE_EASY_SEQUENCES = [
+    {
+        "sequence": [1, 9, 9, 4, 9, 9, 1, 1],
+        "responses": [4, 1, 9, 9, 9, 4, 9],
+    },
+    {
+        "sequence": [9, 4, 4, 1, 9, 9, 4, 4],
+        "responses": [1, 9, 4, 1, 4, 4, 4],
+    },
+    {
+        "sequence": [1, 4, 4, 1, 1, 1, 9, 9],
+        "responses": [9, 1, 1, 1, 1, 4, 1],
+    },
+    {
+        "sequence": [9, 9, 1, 9, 1, 4, 9, 9],
+        "responses": [9, 4, 1, 1, 9, 9, 9],
+    },
+    {
+        "sequence": [4, 4, 4, 9, 1, 4, 4, 9],
+        "responses": [4, 4, 1, 1, 9, 1, 4],
     },
 ]
 
@@ -81,12 +162,14 @@ class Constants(BaseConstants):
     num_rounds = len(EASY_SEQUENCES) + len(HARD_SEQUENCES)
     easy_sequences = EASY_SEQUENCES
     hard_sequences = HARD_SEQUENCES
-    easy_correct_responses = [1, 4, 9, 1, 4, 9, 1, 4, 9, 1] # only seventh responses in here.
-    hard_correct_responses = [9, 9, 9, 4, 1, 1, 1, 9, 4, 4]
+    easy_correct_responses_OLD = [1, 4, 9, 1, 4, 9, 1, 4, 9, 1] # only seventh responses in here.
+    easy_correct_responses = [4, 1, 9, 4, 1, 9, 4, 1, 4, 9, 1, 4, 9, 4, 9, 4, 1, 9, 1, 4, 9, 1, 4, 9, 1, 9] # one extra sequence for storing reasons
+    hard_correct_responses_OLD = [9, 9, 9, 4, 1, 1, 1, 9, 4, 4]
+    hard_correct_responses = [4, 9, 1, 4, 9, 1, 4, 9, 9, 9, 9, 4, 4, 1, 1, 1, 1, 4, 9, 1, 1, 4, 1, 9, 4, 9]
     sample_easy_sequences = SAMPLE_EASY_SEQUENCES
     sample_hard_sequences = SAMPLE_HARD_SEQUENCES
     total_time_seconds = 360  # 6 minutes per difficulty level
-    freeze_time_seconds = 90  # Freeze time duration
+    freeze_time_seconds = 90  # 90 seconds freeze time duration
 
     task_instructions = """
     <h1>Welcome to the task! </h1>
@@ -168,8 +251,8 @@ class InterimInstructions(Page):
             'total_time_minutes': total_time_minutes,
             'instruction_points': [
                 "There are some hidden patterns in the sequences that can be used to determine the correct seventh response more quickly.",
-                "On the next page, you will see a set of sample sequences that follow the same logic as the ones you will have to solve. Use them to detect any patterns.",
-                f"You have a total time budget of {total_time_minutes} minutes for looking at the sample sequences and solving the actual tasks.",
+                "On the next page, you will see a set of sample sequences that follow the same logic as the ones you will have to solve. Use them to detect these patterns.",
+                f"You have a total time budget of {total_time_minutes} minutes for looking at the sample sequences and solving <strong>25 actual tasks</strong> for each of the two versions.",
                 "When moving forward to playing the tasks, you can always inspect the sample sequences again through a pop-up button.",
                 "The time starts to tick down once you click 'Next' on this page and move on to the sequence examples."
             ],
@@ -347,13 +430,16 @@ class Task(Page):
                 "responses": responses,
             })
 
+        # Turn history upside down to display the most recent entry on top
+        reversed_history = history[::-1]
+
         remaining_time = max(participant.vars['expiry'] - time.time(), 0)
 
         return {
             'sequence': sequence,
             'sequence_index': player.round_number,
             'difficulty_level': participant.vars['difficulty_level'],
-            'history': history,
+            'history': reversed_history,
             'remaining_time': remaining_time,  # Remaining time in seconds
             'example_samples': formatted_samples,
             'show_popups': show_popups["instructions"] or show_popups["examples"],
@@ -411,11 +497,7 @@ class Task(Page):
         player.answers_dict = json.dumps(answers)
         player.timestamps_dict = json.dumps(timestamps)
 
-        #if player.round_number == participant.vars['count_rounds_task1']:
-         #   participant.vars['final_round_correctness'] = json.loads(player.round_correctness)
-          #  print(f"Task 1 - final round correctness: {participant.vars['final_round_correctness']}")
-        
-        last_task = player.round_number == participant.vars['count_rounds_task1']  # Check if this is the last task
+        last_task = player.round_number == (participant.vars['count_rounds_task1'] - 1)  # Check if this is the last task
         timer_expired = time.time() >= participant.vars.get('expiry', 0)
 
         if last_task or timer_expired:
@@ -663,6 +745,7 @@ class Task2(Page):
 
         remaining_time = max(participant.vars['expiry'] - time.time(), 0)
         show_popups = participant.vars.get("show_popups", {"instructions": True, "examples": True})
+        reversed_history = history[::-1]
 
         return {
             'sequence': sequence,
@@ -670,7 +753,7 @@ class Task2(Page):
             'answers': json.loads(player.answers_dict),
             'timestamps': json.loads(player.timestamps_dict),
             'example_samples': formatted_samples,
-            'history': history,
+            'history': reversed_history,
             'difficulty_level': participant.vars['difficulty_level'],
             'remaining_time': remaining_time,
             'show_popups': show_popups,
@@ -733,7 +816,7 @@ class Task2(Page):
           #  print(f"Task 2 - final round correctness: {participant.vars['final_round_correctness_task2']}")
         
         print(f"Player.round_number:{player.round_number}, Sum of count rounds: {participant.vars['completed_rounds_in_task1'] + participant.vars['count_rounds_task2']} ")
-        max_rounds_reached = participant.vars['sequence_count'] >= participant.vars['count_rounds_task2']
+        max_rounds_reached = participant.vars['sequence_count'] >= (participant.vars['count_rounds_task2'] - 1)
 
         player.num_attempted += 1
 

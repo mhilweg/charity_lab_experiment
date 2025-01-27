@@ -9,14 +9,12 @@
 
 <head>
     <link href="{% static 'global/global.css' %}" rel="stylesheet">
-    <!--Global template for all html files that feature both popups (instructions, example sequences)-->
 </head>
 <body>
     {% block content %}{% endblock %}
     {% if show_popups %}
 <div style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
     <button type="button" class="popup-button" onclick="openModal('instructionsModal')">Task Instructions</button>
-    <button type="button" class="popup-button" onclick="openModal('examplesModal')">Example Sequences</button>
 </div>
 {% endif %}
 
@@ -29,34 +27,7 @@
     </div>
 </div>
 
-<!-- Example Sequences Modal -->
-<div id="examplesModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('examplesModal')">&times;</span>
-        <h3>Example Sequences </h3>
-        <div class="sequence-container">
-            {% for sample in example_samples %}
-                <div class="sequence-group">
-                    <div class="sequence-boxes">
-                        {% for num in sample.sequence.split(",") %}
-                            {% if num.strip != "" %}
-                                <div class="box">{{ num.strip }}</div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    <div class="response-boxes">
-                        <div class="box" style="visibility: hidden;"></div>
-                        {% for response in sample.responses %}
-                            <div class="box {% if response.highlight %}highlight{% endif %}" style="background-color: {% if not response.highlight %}#cce3ff{% endif %};">
-                                {{ response.value }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-</div>
+
 
 </body>
 <style>
@@ -96,26 +67,6 @@
         color: black;
         text-decoration: none;
         cursor: pointer;
-    }
-
-    .sequence-boxes, .response-boxes {
-        display: flex;
-        gap: 5px;
-        margin-bottom: 10px;
-    }
-
-    .box {
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        text-align: center;
-        min-width: 30px;
-        background-color: #f9f9f9;
-    }
-
-    .box.highlight {
-        background-color: #d4edda;
-        font-weight: bold;
     }
     </style>
     <script>

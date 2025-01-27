@@ -2,7 +2,7 @@
 {% block content %}
 
 <div class="container main-container">
-    <h2 class="page-title">Task: {{ difficulty_level }} Difficulty</h2>
+    <h2 class="page-title">Task: version 2</h2>
     <p class="info-text">Sequence {{ sequence_count }}:</p>
 
     <div class="row">
@@ -17,7 +17,7 @@
                 <div class="response-boxes">
                     <div class="box invisible"></div> <!-- Placeholder for alignment -->
                     {% for i in range(1, 8) %}
-                        <div class="box">
+                        <div class="box {% if i == 7 %}highlight{% endif %}">
                             <input type="number" name="response_{{ i }}" id="response_{{ i }}" 
                                    {% if i == 7 %}required{% endif %}>
                         </div>
@@ -116,6 +116,12 @@
         text-align: center;
         font-size: inherit;
         outline: none;
+    }
+
+    /* Highlight the seventh input box */
+    .response-boxes .box.highlight {
+        background-color: #99b8e6; /* Darker shade of #cce3ff */
+        border-color: #6d98cc;    /* Slightly darker border for emphasis */
     }
 
     .history-container {
