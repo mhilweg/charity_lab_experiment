@@ -168,15 +168,30 @@ class Constants(BaseConstants):
     hard_correct_responses = [4, 9, 1, 4, 9, 1, 4, 9, 9, 9, 9, 4, 4, 1, 1, 1, 1, 4, 9, 1, 1, 4, 1, 9, 4, 9]
     sample_easy_sequences = SAMPLE_EASY_SEQUENCES
     sample_hard_sequences = SAMPLE_HARD_SEQUENCES
-    total_time_seconds = 360  # 6 minutes per difficulty level
-    freeze_time_seconds = 90  # 90 seconds freeze time duration
+    total_time_seconds = 30  # 6 minutes per difficulty level
+    freeze_time_seconds = 10  # 90 seconds freeze time duration
+    bonus_per_correct_answer = 0.15
 
-    task_instructions = """
+    task_instructions = f"""
     <h1>Welcome to the task! </h1>
-    <p>In this task, you will be given a sequence of eight numbers.</p>
-    <p>Your goal is to apply specific rules to compute the response for the seventh step. 
-    While you are free to input values into response boxes 1 to 6 as well, you must enter a value for <strong>the seventh response box</strong>, which is mandatory. This is the only response upon which we will determine whether you solved the task correctly. 
-    Please pay attention to the rules, as they determine your task performance.</p>
+    <p>
+    In this task, you will work with sequences of eight numbers, which can be either <strong>1, 4, or 9</strong>. 
+    Your goal is to apply specific rules to compute the <strong>final response for the seventh step</strong> of each sequence.
+    While you are free to input values into response boxes <strong>1 to 6</strong>, you must enter a value for the 
+    <strong>seventh response box</strong>, which is <strong>mandatory</strong>. This is the <strong>only response</strong> upon which we will determine 
+    whether you solved the task correctly.
+    </p>
+    <p>
+    Below, we teach you one method for solving this task, but it is just <strong>one of many possible ways</strong>. 
+    <strong>You are free to use this method or any other</strong>, as only the correctness of your <strong>final answer</strong> determines your 
+    bonus payment of <strong>{ bonus_per_correct_answer }€</strong> per correct response. Please pay close attention to the rules, as they 
+    will guide you in solving the task.
+    </p>
+    <!-- Sample Sequence Image -->
+    <div style="text-align: center; margin: 20px 0;">
+        <img src="/static/images/sample_sequence.png" alt="Task Instructions Illustration" style="max-width: 70%; height: auto; border: 2px solid #ddd; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+    </div>
+
     <div style="margin-top: 20px; padding: 15px; border: 1px solid #d0e7ff; border-radius: 8px; background-color: #f5fff0;">
         <h3 style="color: #0056b3;">📋 Rules</h3>
         <ul style="list-style: none; padding: 0;">
@@ -186,13 +201,13 @@ class Constants(BaseConstants):
         </ul>
     </div>
     <div style="margin-top: 20px; padding: 15px; border: 1px solid #ffe082; border-radius: 8px; background-color: #f5fff0;">
-        <h3 style="color: #cc8c00;">🛠 Method</h3>
+        <h3 style="color: #cc8c00;">🛠 Method #1</h3>
         <ul style="list-style: none; padding: 0;">
             <li>🔍 To compute the first response, compare the first two numbers of the sequence. If they are identical, the correct response is the very same number again. If they are different, input the one of the three numbers that is not present. For example, if you compare '1' and '4', the correct response is '9'.</li>
             <li>🔍 For the second response, compare the first response with the third number of the sequence. The third response is based on the comparison of the second response and the fourth number of the sequence, and so on.</li>
         </ul>
     </div>
-"""
+     """
 
 class Subsession(BaseSubsession):
     def creating_session(self):
