@@ -10,6 +10,8 @@ ALLOWED_HOSTS = ['charity-lab-9f7c7b493bc8.herokuapp.com']
 
 DEBUG = False
 
+OTREE_DEFAULT_SESSION = 'main_experiment'
+
 
 SESSION_CONFIGS = [
     {
@@ -53,7 +55,7 @@ ADMIN_USERNAME = 'admin'
 # for security, best to set admin password in an environment variable
 ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD')
 
-DEMO_PAGE_INTRO_HTML = """ """
+DEMO_PAGE_INTRO_HTML = ""
 
 SECRET_KEY = '2020228032173'
 
