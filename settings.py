@@ -11,16 +11,21 @@ ALLOWED_HOSTS = ['charity-lab-9f7c7b493bc8.herokuapp.com']
 DEBUG = False
 
 OTREE_DEFAULT_SESSION = 'main_experiment'
+OTREE_AUTH_LEVEL = 'STUDY'
 
 
 SESSION_CONFIGS = [
     {
         'name': 'main_experiment',
-        'display_name': 'Main Experiment with Consent and Task Instructions',
+        'display_name': 'Study',
         'num_demo_participants': 2,  # Set this to the desired number of participants
         'app_sequence': ['disclaimer_consent', 'task_instructions', 'task', 'bonus_app'],
         'level_1_treatment': 'Observability',
     },
+]
+
+ROOMS = [
+    dict( name = 'Study', display_name = 'Study'),
 ]
 
 INSTALLED_APPS = [
@@ -53,9 +58,9 @@ USE_POINTS = True
 
 ADMIN_USERNAME = 'admin'
 # for security, best to set admin password in an environment variable
-ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD')
+ADMIN_PASSWORD = 'ADMIN_PASSWORD_MARGUN'
 
 DEMO_PAGE_INTRO_HTML = ""
 
-SECRET_KEY = '2020228032173'
+SECRET_KEY = 'SECRET_KEY_MARGUN'
 
