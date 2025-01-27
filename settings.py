@@ -6,7 +6,10 @@ DATABASES = {
 }
 
 # Allow Heroku to serve your app
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['charity-lab-9f7c7b493bc8.herokuapp.com']
+
+DEBUG = False
+
 
 SESSION_CONFIGS = [
     {
@@ -21,6 +24,9 @@ SESSION_CONFIGS = [
 INSTALLED_APPS = [
     'otree',
     'disclaimer_consent',
+    'task_instructions',
+    'task',
+    'bonus_app',
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
