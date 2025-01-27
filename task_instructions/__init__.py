@@ -38,7 +38,7 @@ class Constants(BaseConstants):
     whether you solved the task correctly.
     </p>
     <p>
-    We will teach you one method for solving this task, but it is just <strong>one of many possible ways</strong>. 
+    Below, we teach you one method for solving this task, but it is just <strong>one of many possible ways</strong>. 
     <strong>You are free to use this method or any other</strong>, as only the correctness of your <strong>final answer</strong> determines your 
     bonus payment of <strong>{ bonus_per_correct_answer }€</strong> per correct response. Please pay close attention to the rules, as they 
     will guide you in solving the task.
@@ -57,7 +57,7 @@ class Constants(BaseConstants):
         </ul>
     </div>
     <div style="margin-top: 20px; padding: 15px; border: 1px solid #ffe082; border-radius: 8px; background-color: #f5fff0;">
-        <h3 style="color: #cc8c00;">🛠 Method</h3>
+        <h3 style="color: #cc8c00;">🛠 Method #1</h3>
         <ul style="list-style: none; padding: 0;">
             <li>🔍 To compute the first response, compare the first two numbers of the sequence. If they are identical, the correct response is the very same number again. If they are different, input the one of the three numbers that is not present. For example, if you compare '1' and '4', the correct response is '9'.</li>
             <li>🔍 For the second response, compare the first response with the third number of the sequence. The third response is based on the comparison of the second response and the fourth number of the sequence, and so on.</li>
