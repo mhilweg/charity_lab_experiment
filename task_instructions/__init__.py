@@ -32,15 +32,23 @@ class Constants(BaseConstants):
     <h1>Welcome to the task! </h1>
     <p>
     In this task, you will work with sequences of eight numbers, which can be either <strong>1, 4, or 9</strong>. 
-    Your goal is to apply specific rules to compute the <strong>final response for the seventh step</strong> of each sequence.
-    While you are free to input values into response boxes <strong>1 to 6</strong>, you must enter a value for the 
+    To facilitate your understanding, consider the sample picture below. The sequence of eight numbers is displayed with white boxes. 
+    Below it, there are <strong>seven response boxes</strong>, with the first six being blue and the seventh one being green.
+    </p>
+    <p>
+    Your goal is to apply specific rules to compute the <strong>final response for the seventh step</strong> of each sequence. 
+    While you are free to input values into response boxes <strong>1 to 6</strong> as well, you must enter a value for the
     <strong>seventh response box</strong>, which is <strong>mandatory</strong>. This is the <strong>only response</strong> upon which we will determine 
-    whether you solved the task correctly.
+    whether you solved the task correctly. In the given example, the seventh response was correctly computed and thus is displayed in green.
     </p>
     <p>
     Below, we teach you one method for solving this task, but it is just <strong>one of many possible ways</strong>. 
     <strong>You are free to use this method or any other</strong>, as only the correctness of your <strong>final answer</strong> determines your 
-    bonus payment of <strong>{ bonus_per_correct_answer }€</strong> per correct response. Please pay close attention to the rules, as they 
+    bonus payment of <strong>{ bonus_per_correct_answer }€</strong> per correct response. 
+    </p>
+    <p>
+    You will play two versions of this task. Each version
+    has a <strong>maximum of 25 sequences</strong>. Thus, you can earn a total bonus payment of <strong>up to 7.50€</strong>. Please pay close attention to the rules, as they 
     will guide you in solving the task.
     </p>
     <!-- Sample Sequence Image -->
