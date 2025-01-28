@@ -112,16 +112,16 @@ SAMPLE_EASY_SEQUENCES_OLD = [
 
 SAMPLE_EASY_SEQUENCES = [
     {
-        "sequence": [1, 9, 9, 4, 9, 9, 1, 1],
-        "responses": [4, 1, 9, 9, 9, 4, 9],
+        "sequence": [1, 9, 9, 4, 9, 9, 9, 9],
+        "responses": [4, 1, 9, 9, 9, 9, 9],
     },
     {
-        "sequence": [9, 4, 4, 1, 9, 9, 4, 4],
-        "responses": [1, 9, 4, 1, 4, 4, 4],
+        "sequence": [9, 4, 4, 4, 9, 4, 4, 4],
+        "responses": [1, 9, 1, 4, 4, 4, 4],
     },
     {
-        "sequence": [1, 4, 4, 1, 1, 1, 9, 9],
-        "responses": [9, 1, 1, 1, 1, 4, 1],
+        "sequence": [1, 1, 1, 1, 1, 1, 9, 9],
+        "responses": [1, 1, 1, 1, 1, 4, 1],
     },
     {
         "sequence": [9, 9, 1, 9, 1, 4, 9, 9],
@@ -168,12 +168,12 @@ class Constants(BaseConstants):
     hard_correct_responses = [4, 9, 1, 4, 9, 1, 4, 9, 9, 9, 9, 4, 4, 1, 1, 1, 1, 4, 9, 1, 1, 4, 1, 9, 4, 9]
     sample_easy_sequences = SAMPLE_EASY_SEQUENCES
     sample_hard_sequences = SAMPLE_HARD_SEQUENCES
-    total_time_seconds = 300  # 6 minutes per difficulty level
-    freeze_time_seconds = 10  # 90 seconds freeze time duration
+    total_time_seconds = 360  # 6 minutes per difficulty level
+    freeze_time_seconds = 90  # 90 seconds freeze time duration
     bonus_per_correct_answer = 0.15
 
     task_instructions = f"""
-    <h1>Welcome to the task! </h1>
+       <h1>Welcome to the task! </h1>
     <p>
     In this task, you will work with sequences of eight numbers, which can be either <strong>1, 4, or 9</strong>. 
     To facilitate your understanding, consider the sample picture below. The sequence of eight numbers is displayed with white boxes. 
@@ -188,7 +188,8 @@ class Constants(BaseConstants):
     <p>
     Below, we teach you one method for solving this task, but it is just <strong>one of many possible ways</strong>. 
     <strong>You are free to use this method or any other</strong>, as only the correctness of your <strong>final answer</strong> determines your 
-    bonus payment of <strong>{ bonus_per_correct_answer }€</strong> per correct response. 
+    bonus payment of <strong>{ bonus_per_correct_answer }€</strong> per correct response. There are <strong>hidden patterns</strong> to discover in the sequences that
+    make it easier to find the correct seventh response.  
     </p>
     <p>
     You will play two versions of this task. Each version
@@ -273,8 +274,8 @@ class InterimInstructions(Page):
         return {
             'total_time_minutes': total_time_minutes,
             'instruction_points': [
-                "There are some hidden patterns in the sequences that can be used to determine the correct seventh response more quickly.",
-                "On the next page, you will see a set of sample sequences that follow the same logic as the ones you will have to solve. Use them to detect these patterns.",
+                "There are some <strong>hidden patterns</strong> in the sequences that can be used to determine the correct seventh response more quickly.",
+                "On the next page, you will see a set of sample sequences that follow the same logic as the ones you will have to solve. Use them to <strong>detect these patterns</strong>.",
                 f"You have a total time budget of {total_time_minutes} minutes for looking at the sample sequences and solving <strong>25 actual tasks</strong> for each of the two versions.",
                 "When moving forward to playing the tasks, you can always inspect the sample sequences again through a pop-up button. In addition, you can always see <strong>all previously played sequences</strong>.",
                 "The time starts to tick down once you click 'Next' on this page and move on to the sequence examples."

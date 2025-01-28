@@ -44,7 +44,8 @@ class Constants(BaseConstants):
     <p>
     Below, we teach you one method for solving this task, but it is just <strong>one of many possible ways</strong>. 
     <strong>You are free to use this method or any other</strong>, as only the correctness of your <strong>final answer</strong> determines your 
-    bonus payment of <strong>{ bonus_per_correct_answer }€</strong> per correct response. 
+    bonus payment of <strong>{ bonus_per_correct_answer }€</strong> per correct response. There are <strong>hidden patterns</strong> to discover in the sequences that
+    make it easier to find the correct seventh response.  
     </p>
     <p>
     You will play two versions of this task. Each version
