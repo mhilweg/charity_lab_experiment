@@ -123,7 +123,7 @@ class AnnouncementPage(Page):
 
         # Conditional content based on Level 2 treatment
         if level_2_treatment == 'Moral message':
-            moral_message = """ <p>Did you know? In a recent survey conducted in Austria, over 80% of participants indicated that they believe it is morally appropriate to tax-deduct charitable donations.</p>
+            moral_message = """ <p>Did you know? In a recent survey conducted in Austria <em>(Aman Hild & Hilweg-Waldeck, 2025)</em>, over <strong>80% of respondents</strong> indicated that they consider it morally appropriate to tax-deduct charitable donations.</p>
             """
 
 

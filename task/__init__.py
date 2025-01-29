@@ -17,32 +17,37 @@ EASY_SEQUENCES_OLD = [
 ]
 
 EASY_SEQUENCES = [
-    [1, 4, 9, 4, 4, 9, 1, 4],
     [1, 4, 1, 1, 1, 4, 9, 1],
-    [9, 9, 4, 9, 4, 4, 1, 9],
-    [9, 4, 1, 4, 4, 4, 9, 1],
-    [9, 1, 1, 4, 1, 4, 1, 9],
-    [1, 9, 4, 9, 1, 9, 9, 4],
-    [4, 1, 4, 9, 1, 1, 4, 4],
-    [4, 1, 1, 1, 1, 4, 4, 9],
-    [9, 4, 4, 1, 9, 9, 4, 4],
-    [1, 9, 9, 1, 9, 9, 1, 4],
+    [1, 4, 9, 4, 4, 4, 9, 4],
+    [9, 9, 9, 9, 1, 4, 1, 9],
+    [1, 1, 4, 9, 1, 9, 1, 1],
+    [9, 9, 1, 9, 9, 9, 4, 9],
+    [1, 4, 4, 4, 4, 4, 9, 1],
+    [1, 1, 1, 4, 1, 1, 9, 4],
+    [4, 4, 4, 1, 4, 1, 4, 1],
     [4, 1, 1, 1, 1, 4, 9, 1],
-    [1, 4, 9, 4, 4, 4, 1, 9],
-    [4, 9, 9, 4, 9, 1, 9, 1],
-    [9, 4, 1, 4, 4, 1, 9, 4],
-    [4, 9, 1, 9, 4, 9, 9, 1],
-    [4, 9, 4, 4, 1, 1, 9, 4],
-    [1, 9, 9, 1, 1, 1, 4, 4], #17
-    [1, 9, 9, 1, 9, 4, 9, 4], # 18
-    [1, 9, 1, 4, 1, 4, 1, 9],
-    [4, 9, 1, 4, 4, 4, 9, 1],
-    [4, 9, 9, 1, 9, 9, 4, 4],
-    [4, 1, 1, 1, 1, 4, 4, 9],
-    [1, 4, 4, 9, 1, 1, 4, 4],
-    [9, 9, 1, 9, 1, 1, 4, 9],
-    [9, 1, 1, 1, 1, 9, 9, 4],
-    [9, 9, 9, 9, 1, 4, 4, 1],
+    [9, 9, 1, 9, 1, 9, 9, 4],
+    [1, 9, 9, 1, 9, 9, 9, 1],
+    [4, 1, 4, 4, 9, 1, 4, 4],
+    [1, 9, 1, 1, 1, 9, 4, 1],
+    [4, 9, 9, 4, 9, 9, 9, 4],
+    [9, 4, 1, 4, 4, 4, 1, 4],
+    [4, 4, 1, 4, 4, 4, 1, 9],
+    [1, 1, 1, 9, 1, 1, 4, 9],
+    [4, 4, 9, 9, 9, 9, 1, 9],
+    [4, 1, 9, 1, 1, 1, 1, 4],
+    [1, 4, 9, 9, 9, 1, 9, 4],
+    [1, 1, 9, 4, 1, 4, 1, 1],
+    [4, 4, 9, 4, 4, 4, 9, 1],
+    [4, 9, 4, 4, 1, 9, 4, 4],
+    [1, 1, 9, 9, 9, 9, 4, 9],
+    [9, 1, 4, 1, 1, 1, 1, 9],
+    [4, 4, 4, 9, 4, 9, 4, 9],
+    [9, 1, 9, 1, 9, 9, 9, 1],
+    [1, 1, 4, 4, 4, 4, 4, 1],
+    [9, 9, 1, 1, 1, 1, 1, 9],
+    [9, 4, 9, 4, 9, 9, 9, 4],
+    [1, 1, 9, 1, 1, 1, 9, 4],
 ]
 
 HARD_SEQUENCES_OLD = [
@@ -59,32 +64,37 @@ HARD_SEQUENCES_OLD = [
 ]
 
 HARD_SEQUENCES = [
-    [4, 4, 4, 9, 1, 1, 4, 1],
-    [9, 4, 4, 1, 4, 9, 9, 1],
-    [4, 9, 1, 4, 1, 4, 9, 1],
-    [1, 4, 1, 4, 1, 1, 4, 4],
-    [4, 9, 4, 9, 4, 1, 4, 9],
-    [4, 4, 9, 9, 1, 1, 4, 9],
-    [1, 1, 9, 4, 4, 1, 9, 1],
-    [1, 4, 9, 9, 1, 9, 4, 9],
-    [4, 1, 9, 1, 4, 4, 9, 4],
-    [1, 4, 9, 4, 1, 1, 9, 1],
-    [9, 1, 1, 4, 1, 9, 9, 4],
-    [9, 1, 4, 9, 4, 4, 1, 9],
-    [1, 9, 4, 1, 4, 4, 9, 1],
-    [9, 9, 4, 4, 1, 1, 9, 4],
-    [4, 9, 1, 1, 9, 4, 4, 9],
-    [1, 9, 1, 4, 1, 4, 9, 4],
-    [1, 4, 1, 9, 1, 9, 4, 9],
-    [9, 4, 9, 4, 9, 9, 4, 4],
-    [1, 9, 1, 9, 1, 4, 1, 9],
-    [9, 4, 1, 9, 1, 9, 4, 1],
-    [9, 4, 1, 1, 4, 9, 9, 4],
-    [4, 4, 4, 1, 9, 9, 4, 9],
-    [9, 9, 4, 9, 4, 9, 1, 1],
-    [4, 1, 9, 9, 4, 9, 1, 9],
-    [9, 9, 1, 4, 4, 9, 1, 9],
-    [4, 4, 1, 4, 4, 9, 9, 9],
+    [4, 9, 1, 9, 4, 9, 4, 4],
+    [1, 4, 9, 1, 4, 9, 1, 4],
+    [4, 4, 1, 1, 9, 1, 4, 1],
+    [4, 1, 4, 1, 9, 9, 1, 4],
+    [1, 1, 1, 4, 9, 4, 9, 9],
+    [1, 9, 4, 9, 1, 9, 1, 1],
+    [9, 9, 9, 1, 4, 1, 1, 1],
+    [4, 9, 9, 1, 4, 1, 9, 9],
+    [1, 9, 9, 4, 1, 1, 1, 4],
+    [1, 4, 1, 1, 9, 4, 4, 9],
+    [9, 1, 9, 1, 9, 4, 1, 1],
+    [9, 9, 4, 9, 1, 1, 4, 1],
+    [9, 4, 4, 1, 9, 4, 1, 9],
+    [4, 4, 4, 9, 1, 9, 1, 1],
+    [4, 1, 9, 9, 1, 4, 9, 4],
+    [1, 1, 9, 4, 4, 9, 9, 9],
+    [4, 1, 4, 4, 9, 1, 1, 9],
+    [4, 4, 4, 1, 9, 1, 9, 9],
+    [9, 9, 9, 4, 1, 4, 4, 4],
+    [9, 4, 4, 1, 9, 1, 4, 4],
+    [9, 9, 1, 9, 4, 4, 1, 4],
+    [4, 4, 9, 9, 1, 9, 4, 9],
+    [1, 1, 4, 9, 9, 4, 4, 4],
+    [4, 1, 9, 4, 1, 9, 4, 1],
+    [1, 1, 1, 9, 4, 9, 4, 4],
+    [4, 9, 9, 1, 4, 9, 1, 4],
+    [1, 9, 1, 9, 1, 4, 9, 9],
+    [9, 4, 1, 4, 9, 4, 9, 9],
+    [9, 1, 4, 1, 9, 1, 9, 9],
+    [9, 1, 1, 4, 9, 9, 9, 4],
+    [1, 4, 9, 9, 4, 1, 9, 1],
 ]
 
 SAMPLE_EASY_SEQUENCES_OLD = [
@@ -135,24 +145,24 @@ SAMPLE_EASY_SEQUENCES = [
 
 SAMPLE_HARD_SEQUENCES = [
     {
-        "sequence": [1, 4, 9, 1, 4, 9, 1, 4],
-        "responses": [9, 9, 4, 4, 1, 1, 9],
+        "sequence": [1, 4, 1, 4, 4, 9, 9, 1],
+        "responses": [9, 4, 4, 4, 1, 4, 9],
     },
     {
-        "sequence": [1, 1, 4, 4, 9, 4, 9, 4],
-        "responses": [1, 9, 1, 4, 4, 1, 9],
+        "sequence": [4, 1, 1, 4, 9, 9, 1, 4],
+        "responses": [9, 9, 1, 4, 1, 1, 9],
     },
     {
-        "sequence": [9, 1, 1, 1, 4, 9, 9, 1],
-        "responses": [4, 9, 4, 4, 1, 4, 9],
+        "sequence": [9, 9, 1, 1, 4, 4, 1, 1],
+        "responses": [9, 4, 9, 1, 9, 4, 9],
     },
     {
-        "sequence": [4, 9, 9, 9, 1, 1, 4, 1],
-        "responses": [1, 4, 1, 1, 1, 9, 4],
+        "sequence": [9, 1, 9, 9, 1, 4, 4, 1],
+        "responses": [4, 1, 4, 9, 1, 9, 4],
     },
     {
-        "sequence": [1, 4, 4, 4, 9, 4, 9, 9],
-        "responses": [9, 1, 9, 9, 1, 4, 1],
+        "sequence": [1, 1, 4, 4, 9, 9, 4, 4],
+        "responses": [1, 9, 1, 4, 1, 9, 1],
     },
 ]
 
@@ -163,14 +173,15 @@ class Constants(BaseConstants):
     easy_sequences = EASY_SEQUENCES
     hard_sequences = HARD_SEQUENCES
     easy_correct_responses_OLD = [1, 4, 9, 1, 4, 9, 1, 4, 9, 1] # only seventh responses in here.
-    easy_correct_responses = [4, 1, 9, 4, 1, 9, 4, 1, 4, 9, 1, 4, 9, 4, 9, 4, 1, 9, 1, 4, 9, 1, 4, 9, 1, 9] # one extra sequence for storing reasons
+    easy_correct_responses = [1, 4, 9, 1, 9, 4, 1, 4, 1, 9, 9, 4, 1, 9, 4, 4, 1, 9, 1, 9, 1, 4, 4, 9, 1, 4, 9, 4, 1, 9, 1] # one extra sequence for storing reasons
     hard_correct_responses_OLD = [9, 9, 9, 4, 1, 1, 1, 9, 4, 4]
-    hard_correct_responses = [4, 9, 1, 4, 9, 1, 4, 9, 9, 9, 9, 4, 4, 1, 1, 1, 1, 4, 9, 1, 1, 4, 1, 9, 4, 9]
+    hard_correct_responses = [1, 9, 4, 9, 1, 4, 9, 1, 4, 9, 4, 9, 1, 4, 9, 1, 9, 4, 9, 1, 9, 4, 1, 9, 1, 1, 4, 1, 4, 4, 9]
     sample_easy_sequences = SAMPLE_EASY_SEQUENCES
     sample_hard_sequences = SAMPLE_HARD_SEQUENCES
     total_time_seconds = 360  # 6 minutes per difficulty level
     freeze_time_seconds = 90  # 90 seconds freeze time duration
     bonus_per_correct_answer = 0.15
+    number_of_tasks = 30
 
     task_instructions = f"""
        <h1>Welcome to the task! </h1>
@@ -193,7 +204,7 @@ class Constants(BaseConstants):
     </p>
     <p>
     You will play two versions of this task. Each version
-    has a <strong>maximum of 25 sequences</strong>. Thus, you can earn a total bonus payment of <strong>up to 7.50€</strong>. Please pay close attention to the rules, as they 
+    has a <strong>maximum of { number_of_tasks } sequences</strong>. Thus, you can earn a total bonus payment of <strong>up to 7.50€</strong>. Please pay close attention to the rules, as they 
     will guide you in solving the task.
     </p>
     <!-- Sample Sequence Image -->
@@ -271,12 +282,13 @@ class InterimInstructions(Page):
         participant = player.participant
         show_popups = participant.vars.get("show_popups", {"instructions": True, "examples": False})
         total_time_minutes = Constants.total_time_seconds // 60 # make sure this is an integer value
+        number_of_tasks = Constants.number_of_tasks
         return {
             'total_time_minutes': total_time_minutes,
             'instruction_points': [
                 "There are some <strong>hidden patterns</strong> in the sequences that can be used to determine the correct seventh response more quickly.",
                 "On the next page, you will see a set of sample sequences that follow the same logic as the ones you will have to solve. Use them to <strong>detect these patterns</strong>.",
-                f"You have a total time budget of {total_time_minutes} minutes for looking at the sample sequences and solving <strong>25 actual tasks</strong> for each of the two versions.",
+                f"You have a total time budget of {total_time_minutes} minutes for looking at the sample sequences and solving <strong>{number_of_tasks} actual tasks</strong> for each of the two versions.",
                 "When moving forward to playing the tasks, you can always inspect the sample sequences again through a pop-up button. In addition, you can always see <strong>all previously played sequences</strong>.",
                 "The time starts to tick down once you click 'Next' on this page and move on to the sequence examples."
             ],
@@ -462,6 +474,7 @@ class Task(Page):
         return {
             'sequence': sequence,
             'sequence_index': player.round_number,
+            'number_of_tasks': Constants.number_of_tasks,
             'difficulty_level': participant.vars['difficulty_level'],
             'history': reversed_history,
             'remaining_time': remaining_time,  # Remaining time in seconds
@@ -774,6 +787,7 @@ class Task2(Page):
         return {
             'sequence': sequence,
             'sequence_count': sequence_count + 1,
+            'number_of_tasks': Constants.number_of_tasks,
             'answers': json.loads(player.answers_dict),
             'timestamps': json.loads(player.timestamps_dict),
             'example_samples': formatted_samples,

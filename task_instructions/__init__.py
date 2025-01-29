@@ -6,6 +6,7 @@ class Constants(BaseConstants):
     players_per_group = None  
     num_rounds = 1  
     bonus_per_correct_answer = 0.15
+    number_of_tasks = 30
 
     comprehension_questions = [
         {
@@ -49,7 +50,7 @@ class Constants(BaseConstants):
     </p>
     <p>
     You will play two versions of this task. Each version
-    has a <strong>maximum of 25 sequences</strong>. Thus, you can earn a total bonus payment of <strong>up to 7.50€</strong>. Please pay close attention to the rules, as they 
+    has a <strong>maximum of { number_of_tasks } sequences</strong>. Thus, you can earn a total bonus payment of <strong>up to 7.50€</strong>. Please pay close attention to the rules, as they 
     will guide you in solving the task.
     </p>
     <!-- Sample Sequence Image -->
