@@ -184,34 +184,34 @@ class Constants(BaseConstants):
     number_of_tasks = 30
 
     task_instructions = f"""
-       <h1>Welcome to the task! </h1>
+    <h1>Welcome to the task! </h1>
     <p>
-    In this task, you will work with sequences of eight numbers, which can be either <strong>1, 4, or 9</strong>. 
+    In this task, you will work with sequences of eight numbers, which can be either 1, 4, or 9. 
     To facilitate your understanding, consider the sample picture below. The sequence of eight numbers is displayed with white boxes. 
-    Below it, there are <strong>seven response boxes</strong>, with the first six being blue and the seventh one being green.
+    Below it, there are seven response boxes, with the first six being blue and the seventh one being green.
     </p>
     <p>
     Your goal is to apply specific rules to compute the <strong>final response for the seventh step</strong> of each sequence. 
-    While you are free to input values into response boxes <strong>1 to 6</strong> as well, you must enter a value for the
-    <strong>seventh response box</strong>, which is <strong>mandatory</strong>. This is the <strong>only response</strong> upon which we will determine 
-    whether you solved the task correctly. In the given example, the seventh response was correctly computed and thus is displayed in green.
+    While you are free to input values into response boxes 1 to 6 as well, you must enter a value for the
+    <strong>seventh response box</strong>, which is mandatory. This is the <strong>only response</strong> upon which we will determine 
+    whether you solved the task correctly.
     </p>
     <p>
-    Below, we teach you one method for solving this task, but it is just <strong>one of many possible ways</strong>. 
-    <strong>You are free to use this method or any other</strong>, as only the correctness of your <strong>final answer</strong> determines your 
+    Below, we teach you one method for solving this task, but it is just one of many possible ways. 
+    <strong>You are free to use this method or any other</strong>, as only the correctness of your final answer determines your 
     bonus payment of <strong>{ bonus_per_correct_answer }€</strong> per correct response. There are <strong>hidden patterns</strong> to discover in the sequences that
     make it easier to find the correct seventh response.  
     </p>
-    <p>
-    You will play two versions of this task. Each version
-    has a <strong>maximum of { number_of_tasks } sequences</strong>. Thus, you can earn a total bonus payment of <strong>up to 7.50€</strong>. Please pay close attention to the rules, as they 
-    will guide you in solving the task.
-    </p>
-    <!-- Sample Sequence Image -->
+     <!-- Sample Sequence Image -->
     <div style="text-align: center; margin: 20px 0;">
         <img src="/static/images/sample_sequence.png" alt="Task Instructions Illustration" style="max-width: 70%; height: auto; border: 2px solid #ddd; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
     </div>
 
+    <p>
+    You will play two versions of this task. Each version
+    has a <strong>maximum of { number_of_tasks } sequences</strong>. Thus, you can earn a total bonus payment of up to 9.00€</. Please pay close attention to the rules, as they 
+    will guide you in solving the task.
+    </p>
     <div style="margin-top: 20px; padding: 15px; border: 1px solid #d0e7ff; border-radius: 8px; background-color: #f5fff0;">
         <h3 style="color: #0056b3;">📋 Rules</h3>
         <ul style="list-style: none; padding: 0;">
