@@ -130,8 +130,8 @@ SAMPLE_EASY_SEQUENCES = [
         "responses": [1, 9, 1, 4, 4, 4, 4],
     },
     {
-        "sequence": [1, 1, 1, 1, 1, 1, 9, 9],
-        "responses": [1, 1, 1, 1, 1, 4, 1],
+        "sequence": [1, 1, 1, 9, 1, 1, 1, 4],
+        "responses": [1, 1, 4, 9, 4, 9, 1],
     },
     {
         "sequence": [9, 9, 1, 9, 1, 4, 9, 9],
