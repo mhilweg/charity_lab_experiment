@@ -1,0 +1,121 @@
+{% block content %}
+    <div class="survey-container">
+        <h1 class="survey-title">Second Task Follow-Up</h1>
+        <p class="survey-question">
+            Based on your previous response, please answer the following follow-up questions.
+        </p>
+
+        <form method="post">
+            <div class="survey-answers">
+                {% if player.task_2_pattern_attempt == 'I tried to discover the hidden pattern and failed.' %}
+                    <label for="id_task_2_strategy" class="survey-label">
+                        What was your strategy to discover the pattern?
+                    </label>
+                    {{ form.task_2_strategy }}
+
+                {% elif player.task_2_pattern_attempt == 'I tried to discover the hidden pattern and succeeded.' %}
+                    <label for="id_task_2_strategy" class="survey-label">
+                        What was your strategy to discover the pattern?
+                    </label>
+                    {{ form.task_2_strategy }}
+
+                    <label for="id_task_2_guess_pattern" class="survey-label">
+                        Please describe your guess of the pattern.
+                    </label>
+                    {{ form.task_2_guess_pattern }}
+
+                {% elif player.task_2_pattern_attempt == 'I did not bother looking for the pattern; I focused on using the method provided.' %}
+                    <label for="id_task_2_reason_no_attempt" class="survey-label">
+                        Why did you not bother looking for the pattern?
+                    </label>
+                    {{ form.task_2_reason_no_attempt }}
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn-submit">Submit</button>
+        </form>
+    </div>
+
+    <style>
+        /* Survey container */
+        .survey-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 25px;
+            background-color: #e6f7ff;
+            border: 2px solid #6cb2eb;
+            border-radius: 16px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Title styling */
+        .survey-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #004085;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Question paragraph styling */
+        .survey-question {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #333;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* Answer section styling */
+        .survey-answers {
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        /* Labels for questions */
+        .survey-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 8px;
+        }
+
+        /* Input fields (textarea or text inputs) */
+        .survey-answers textarea,
+        .survey-answers input[type="text"] {
+            width: 100%;
+            max-width: 600px;
+            padding: 10px;
+            font-size: 1.2rem;
+            border: 1px solid #bbb;
+            border-radius: 8px;
+            line-height: 1.6;
+            box-sizing: border-box;
+        }
+
+        /* Submit button styling */
+        .btn-submit {
+            display: block;
+            width: 150px;
+            margin: 30px auto;
+            background-color: #007bff;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+        }
+
+        /* Button hover effect */
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}

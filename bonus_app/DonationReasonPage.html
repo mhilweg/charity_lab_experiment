@@ -1,0 +1,84 @@
+{% extends "global/ExitSurvey.html" %}
+
+{% block content %}
+    <div class="survey-container">
+        <h1 class="survey-title">Reflection on Your Donation Decision</h1>
+        <p class="survey-question">
+            We are interested in what was driving your donation decision. Please describe briefly the thoughts that came to your mind while making this decision, in the order they arose.
+        </p>
+        <p><em>Typical answers are 3 to 5 sentences long.</em></p>
+
+        <form method="post">
+            <div class="survey-answers">
+                {{ form.donation_decision_reason }}
+            </div>
+            <button type="submit" class="btn-submit">Submit</button>
+        </form>
+    </div>
+
+    <style>
+        /* General page container styling */
+        .survey-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 25px;
+            background-color: #e6f7ff; /* Softer light blue */
+            border: 2px solid #6cb2eb; /* Darker blue */
+            border-radius: 16px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Survey title */
+        .survey-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #004085; /* Dark blue for contrast */
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Survey question text */
+        .survey-question {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #333;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* Survey answer input field */
+        .survey-answers textarea {
+            width: 100%;
+            height: 180px;
+            padding: 15px;
+            font-size: 1.2rem;
+            border: 1px solid #bbb;
+            border-radius: 8px;
+            line-height: 1.6;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        /* Centered form submit button */
+        .btn-submit {
+            display: block;
+            width: 150px;
+            margin: 30px auto;
+            background-color: #007bff;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+        }
+
+        /* Button hover effect */
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}

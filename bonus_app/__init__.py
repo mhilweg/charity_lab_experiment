@@ -27,6 +27,38 @@ class Player(BasePlayer):
     entered_password = models.StringField(blank=True)  # Stores the password entered by the participant
 
 
+    # Page (i) responses
+    donation_decision_reason = models.LongStringField(label='What was driving your donation decision?')
+    deduction_decision_reason = models.LongStringField(label='What was driving your deduction decision?')
+
+    # Pages (ii) & (iii) task-related responses
+    task_1_pattern_attempt = models.StringField(
+        label='Did you try to discover the hidden pattern or did you only use the method provided?',
+        choices=[
+            'I tried to discover the hidden pattern and failed.',
+            'I tried to discover the hidden pattern and succeeded.',
+            'I did not bother looking for the pattern; I focused on using the method provided.'
+        ],
+        widget=widgets.RadioSelect
+    )
+    task_1_strategy = models.LongStringField(blank=True, label='What was your strategy to discover the pattern?')
+    task_1_guess_pattern = models.LongStringField(blank=True, label='Please describe your guess of the pattern.')
+    task_1_reason_no_attempt = models.LongStringField(blank=True, label='Why did you not bother looking for the pattern?')
+
+    task_2_pattern_attempt = models.StringField(
+        label='Did you try to discover the hidden pattern or did you only use the method provided?',
+        choices=[
+            'I tried to discover the hidden pattern and failed.',
+            'I tried to discover the hidden pattern and succeeded.',
+            'I did not bother looking for the pattern; I focused on using the method provided.'
+        ],
+        widget=widgets.RadioSelect
+    )
+    task_2_strategy = models.LongStringField(blank=True, label='What was your strategy to discover the pattern?')
+    task_2_guess_pattern = models.LongStringField(blank=True, label='Please describe your guess of the pattern.')
+    task_2_reason_no_attempt = models.LongStringField(blank=True, label='Why did you not bother looking for the pattern?')
+
+
 
 class BonusPage(Page):
     form_model = 'player'
@@ -137,7 +169,7 @@ class AnnouncementPage(Page):
     
     @staticmethod
     def before_next_page(player, timeout_happened):
-        valid_passwords = ["Victoria", "Michael"]
+        valid_passwords = ["Victoria!", "Michael!"]
         entered_password = player.field_maybe_none('entered_password')  # Safely access the field
 
         print(f"DEBUG: Entered password: {entered_password}")  # Debugging print
@@ -148,7 +180,8 @@ class AnnouncementPage(Page):
 
 class PaymentInfoDeductionPage(Page):
     form_model = 'player'
-    form_fields = ['deduct_donation']
+    form_fields = ['deduct_donation', 'entered_password']
+
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -182,10 +215,18 @@ class PaymentInfoDeductionPage(Page):
             'donated_amount': donated_amount,
             'reimbursement_amount': formatted_reimbursement_amount,
             'net_earnings_after_donation': formatted_net_earnings_after_donation,
+            'session_code': player.session.code,
+            'participant_code': player.participant.code,
+            'university': player.session.config.get('university', 'uni_wien'),
         }
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
+        valid_passwords = ["Victoria!", "Michael!"]
+        if player.entered_password not in valid_passwords:
+            raise ValueError("Invalid password entered! Please check with the experimenter.")
+        
+        # Existing logic for deduction update
         if player.deduct_donation:
             player.net_earnings_after_tax += player.reimbursement_amount
             print(f"Donation deducted. Net Earnings Updated: {player.net_earnings_after_tax}")
@@ -193,7 +234,66 @@ class PaymentInfoDeductionPage(Page):
             player.net_earnings_after_donation = player.net_earnings_after_tax - player.donated_amount
             print(f"No donation deduction. Net Earnings: {player.net_earnings_after_tax}")
 
+class DonationReasonPage(Page):
+    form_model = 'player'
+    form_fields = ['donation_decision_reason']
+
+class DeductionReasonPage(Page):
+    form_model = 'player'
+    form_fields = ['deduction_decision_reason']
+
+class FirstTaskSurveyPage(Page):
+    form_model = 'player'
+    form_fields = ['task_1_pattern_attempt']
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        return {'task_name': 'First Task'}
+
+class FirstTaskFollowUpPage(Page):
+    form_model = 'player'
+
+    @staticmethod
+    def get_form_fields(player: Player):
+        if player.task_1_pattern_attempt == 'I tried to discover the hidden pattern and failed.':
+            return ['task_1_strategy']
+        elif player.task_1_pattern_attempt == 'I tried to discover the hidden pattern and succeeded.':
+            return ['task_1_strategy', 'task_1_guess_pattern']
+        elif player.task_1_pattern_attempt == 'I did not bother looking for the pattern; I focused on using the method provided.':
+            return ['task_1_reason_no_attempt']
+
+class SecondTaskSurveyPage(Page):
+    form_model = 'player'
+    form_fields = ['task_2_pattern_attempt']
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        return {'task_name': 'Second Task'}
+
+class SecondTaskFollowUpPage(Page):
+    form_model = 'player'
+
+    @staticmethod
+    def get_form_fields(player: Player):
+        if player.task_2_pattern_attempt == 'I tried to discover the hidden pattern and failed.':
+            return ['task_2_strategy']
+        elif player.task_2_pattern_attempt == 'I tried to discover the hidden pattern and succeeded.':
+            return ['task_2_strategy', 'task_2_guess_pattern']
+        elif player.task_2_pattern_attempt == 'I did not bother looking for the pattern; I focused on using the method provided.':
+            return ['task_2_reason_no_attempt']
+
 class FarewellPage(Page):
     pass
 
-page_sequence = [BonusPage, AnnouncementPage, PaymentInfoDeductionPage, FarewellPage]
+page_sequence = [
+    BonusPage,
+    AnnouncementPage,
+    PaymentInfoDeductionPage,
+    DonationReasonPage,
+    DeductionReasonPage,
+    FirstTaskSurveyPage,
+    FirstTaskFollowUpPage,
+    SecondTaskSurveyPage,
+    SecondTaskFollowUpPage,
+    FarewellPage
+]

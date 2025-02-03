@@ -1,0 +1,235 @@
+{% block content %}
+<style>
+    /* General Section Styling */
+    .section-box {
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    /* Earnings Summary Section */
+    .payment-summary {
+        background-color: #f0f8ff; /* Light blue */
+    }
+
+    /* Deduction Options Section */
+    .deduction-options {
+        background-color: #e9f7ef; /* Very light green */
+    }
+
+    /* Payment Information Section */
+    .payment-info {
+        background-color: #f8f9fa; /* Very light gray */
+    }
+
+    /* Green Button Styling */
+    .btn-green {
+        background-color: #28a745; /* Green */
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .btn-green:hover {
+        background-color: #218838; /* Darker green on hover */
+    }
+
+    .btn-disabled {
+        pointer-events: none;
+        opacity: 0.65;
+    }
+
+    /* Input Label Alignment */
+    .form-group label {
+        text-align: left;
+        display: block;
+    }
+
+    /* Error Message Styling */
+    .error-message {
+        color: red;
+        font-size: 0.9rem;
+        display: none;
+    }
+
+    /* Initially hide the "Conclude Experiment" button */
+    #conclude-button {
+        display: none;
+    }
+</style>
+
+<div class="container mt-5">
+    <h2 class="text-center">Payment Information and Deduction</h2>
+    <hr>
+
+    <form method="post" id="payment-deduction-form">
+
+        <!-- Earnings Summary Section -->
+        <div class="section-box payment-summary">
+            <p>You earned (after donation): <strong>€{{ net_earnings_after_donation }}</strong>.</p>
+            <p>You donated: <strong>€{{ formatted_donated_amount }}</strong>.</p>
+            <p>If you choose to deduct your donation, you will be reimbursed: <strong>€{{ reimbursement_amount }}</strong>.</p>
+        </div>
+
+        <!-- Tax Deduction Section -->
+        <div class="section-box deduction-options">
+            <p>Would you like to deduct your donation for tax reimbursement?</p>
+            <div class="form-check form-check-inline">
+                <input 
+                    class="form-check-input" 
+                    type="radio" 
+                    name="deduct_donation" 
+                    id="deduct_yes" 
+                    value="1" 
+                    {% if donated_amount == 0 %}disabled{% endif %}>
+                <label class="form-check-label" for="deduct_yes">Yes</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input 
+                    class="form-check-input" 
+                    type="radio" 
+                    name="deduct_donation" 
+                    id="deduct_no" 
+                    value="0">
+                <label class="form-check-label" for="deduct_no">No</label>
+            </div>
+            <div id="deduction-error" class="error-message">Please make a deduction decision.</div>
+        </div>
+
+        <!-- Payment Information Section -->
+        <div class="section-box payment-info">
+            <h3 class="text-center">Provide Your Payment Information</h3>
+            <div class="form-group">
+                <label for="id_name">Full Name:</label>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="id_name" 
+                    name="name" 
+                    placeholder="Enter your full name" 
+                    required>
+                <div id="name-error" class="error-message">Please enter your full name.</div>
+            </div>
+            <div class="form-group">
+                <label for="id_iban">IBAN:</label>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="id_iban" 
+                    name="iban" 
+                    placeholder="Enter your IBAN" 
+                    required>
+                <div id="iban-error" class="error-message">Please enter a valid IBAN.</div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="text-center mt-3">
+            <button type="button" class="btn btn-green" id="validate-button">Validate</button>
+            <button type="submit" class="btn btn-green" id="conclude-button">Conclude Experiment</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Country-specific IBAN lengths (source: Official IBAN registry)
+    const ibanCountryLengths = {
+        AD: 24, AT: 20, BE: 16, BG: 22, CH: 21, CY: 28, CZ: 24, DE: 22, DK: 18,
+        EE: 20, ES: 24, FI: 18, FR: 27, GB: 22, GI: 23, GR: 27, HR: 21, HU: 28,
+        IE: 22, IS: 26, IT: 27, LI: 21, LT: 20, LU: 20, LV: 21, MC: 27, MT: 31,
+        NL: 18, NO: 15, PL: 28, PT: 25, RO: 24, SE: 24, SI: 19, SK: 24
+    };
+
+    // Validate IBAN using basic checks and modulus validation
+    function isValidIBAN(iban) {
+        iban = iban.replace(/\s+/g, '').toUpperCase(); // Remove spaces and convert to uppercase
+
+        // Basic structure check
+        const ibanRegex = /^[A-Z0-9]+$/;
+        if (!ibanRegex.test(iban) || iban.length < 15 || iban.length > 34) {
+            return false;
+        }
+
+        // Check country-specific IBAN length
+        const countryCode = iban.slice(0, 2);
+        const expectedLength = ibanCountryLengths[countryCode];
+        if (!expectedLength || iban.length !== expectedLength) {
+            return false;
+        }
+
+        // Rearrange and validate using modulus
+        const rearranged = iban.slice(4) + iban.slice(0, 4);
+        const numericIBAN = rearranged
+            .split('')
+            .map(char => (isNaN(char) ? char.charCodeAt(0) - 55 : char))
+            .join('');
+
+        try {
+            return BigInt(numericIBAN) % 97n === 1n;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // Form validation logic
+    function validateForm() {
+        let isValid = true;
+
+        // Validate name
+        const nameInput = document.getElementById('id_name');
+        const nameError = document.getElementById('name-error');
+        if (!nameInput.value.trim()) {
+            nameError.style.display = 'block';
+            isValid = false;
+        } else {
+            nameError.style.display = 'none';
+        }
+
+        // Validate IBAN
+        const ibanInput = document.getElementById('id_iban');
+        const ibanError = document.getElementById('iban-error');
+        if (!isValidIBAN(ibanInput.value)) {
+            ibanError.style.display = 'block';
+            isValid = false;
+        } else {
+            ibanError.style.display = 'none';
+        }
+
+        // Validate deduction decision
+        const deductYes = document.getElementById('deduct_yes');
+        const deductNo = document.getElementById('deduct_no');
+        const deductionError = document.getElementById('deduction-error');
+        if (!deductYes.checked && !deductNo.checked) {
+            deductionError.style.display = 'block';
+            isValid = false;
+        } else {
+            deductionError.style.display = 'none';
+        }
+
+        return isValid;
+    }
+
+    // Validate button logic
+    document.getElementById('validate-button').addEventListener('click', function () {
+        const isValid = validateForm();
+        const concludeButton = document.getElementById('conclude-button');
+
+        if (isValid) {
+            concludeButton.style.display = 'inline-block';
+        } else {
+            concludeButton.style.display = 'none';
+        }
+    });
+
+    // Final validation on form submission
+    document.getElementById('payment-deduction-form').addEventListener('submit', function (event) {
+        if (!validateForm()) {
+            event.preventDefault();
+        }
+    });
+</script>
+{% endblock %}
