@@ -46,7 +46,16 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, participation_fee=5.00, doc=""
 )
 
-PARTICIPANT_FIELDS = ['expiry', 'difficulty_order', 'final_round_correctness', 'final_round_correctness_task2']
+PARTICIPANT_FIELDS = [
+    'expiry',
+    'difficulty_order',
+    'final_round_correctness',
+    'final_round_correctness_task2',
+    'level_1_treatment',  # Anonymity or Observability
+    'level_2_treatment',  # Moral message or No message
+    'level_3_treatment',  # No freeze or Freeze
+    'difficulty_level', # stores difficulty level that is played first
+]
 SESSION_FIELDS = []
 
 # ISO-639 code
