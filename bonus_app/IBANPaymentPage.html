@@ -1,0 +1,139 @@
+{% block content %}
+<style>
+    /* General Section Styling */
+    .section-box {
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    /* Earnings Summary Section */
+    .payment-summary {
+        background-color: #f0f8ff; /* Light blue */
+        border: 1px solid #d0e7ff;
+    }
+
+    /* Deduction Options Section */
+    .deduction-options {
+        background-color: #e9f7ef; /* Very light green */
+        border: 1px solid #d8ffd0;
+    }
+
+    /* Green Button Styling */
+    .btn-green {
+        background-color: #28a745; /* Green */
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .btn-green:hover {
+        background-color: #218838; /* Darker green on hover */
+    }
+
+    /* ID and Link Display Section */
+    .id-link-display {
+        background-color: #fff8e1; /* Light yellow */
+        border: 1px solid #ffe082;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .copy-icon {
+        margin-left: 10px;
+        cursor: pointer;
+        color: #007bff;
+        font-size: 1.2rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 12px;
+        background-color: #f0f0f0;
+    }
+
+    .copy-icon:hover {
+        color: #0056b3;
+        background-color: #e0e0e0;
+    }
+
+    /* Password Input Styling */
+    .password-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .password-container input {
+        width: 50%;
+        padding: 10px;
+        font-size: 1rem;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+    }
+
+    .password-container .error {
+        color: red;
+        font-size: 0.9rem;
+    }
+</style>
+<div class="container mt-5">
+    <h2 class="text-center">Payment Instructions</h2>
+    <hr>
+
+    <div class="section-box id-link-display">
+        <h4><strong>Payment Identifiers</strong></h4>
+        <p>Session ID: <span id="session-id">{{ session_code }}</span> <i class="copy-icon" onclick="copyToClipboard('session-id')">📄</i></p>
+        <p>Participant ID: <span id="participant-id">{{ participant_code }}</span> <i class="copy-icon" onclick="copyToClipboard('participant-id')">📄</i></p>
+        <p>Click the button below to proceed to the payment tool.</p>
+
+        {% if university == 'uni_wien' %}
+            <a href="https://vcee.univie.ac.at/online-experiments/getting-your-payment/" class="btn btn-green" target="_blank">Proceed to Payment Tool</a>
+        {% elif university == 'wu_wien' %}
+            <a href="https://wu-payment-survey-239a632bf340.herokuapp.com/?session_id={{ session_code }}&participant_id={{ participant_code }}" class="btn btn-green" target="_blank">Proceed to Payment Survey</a>
+        {% endif %}
+    </div>
+
+    <div class="password-container">
+        <input type="text" id="password-input" name="entered_password" placeholder="Enter the password" required>
+        <div id="error-message" class="error" style="display: none;">Invalid password.</div>
+    </div>
+
+    <div class="text-center mt-3">
+        <button type="submit" class="btn btn-green" disabled>Submit</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const passwordInput = document.getElementById("password-input");
+        const submitButton = document.querySelector("button[type='submit']");
+        const errorMessage = document.getElementById("error-message");
+
+        const validPasswords = ["Victoria!", "Michael!"];
+
+        passwordInput.addEventListener("input", () => {
+            const enteredPassword = passwordInput.value.trim();
+            if (validPasswords.includes(enteredPassword)) {
+                submitButton.disabled = false;
+                errorMessage.style.display = "none";
+            } else {
+                submitButton.disabled = true;
+                errorMessage.style.display = "block";
+            }
+        });
+    });
+
+    function copyToClipboard(elementId) {
+        const text = document.getElementById(elementId).textContent;
+        navigator.clipboard.writeText(text).then(() => alert('Copied to clipboard!'));
+    }
+</script>
+{% endblock %}

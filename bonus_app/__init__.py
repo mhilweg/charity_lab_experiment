@@ -178,43 +178,39 @@ class AnnouncementPage(Page):
             raise ValueError("Invalid password entered!")  # Prevent navigation
         print(f"DEBUG: Valid password entered: {entered_password}")
 
-class PaymentInfoDeductionPage(Page):
+class DeductionDecisionPage(Page):
     form_model = 'player'
-    form_fields = ['deduct_donation', 'entered_password']
-
+    form_fields = ['deduct_donation']
 
     @staticmethod
     def vars_for_template(player: Player):
-        # Compute reimbursement amount if donation deduction is chosen
+        # Calculate and format monetary amounts
         net_earnings_after_donation = player.net_earnings_after_tax - player.donated_amount
-        donated_amount = round(float(player.donated_amount), 2)
-        reimbursement_amount = donated_amount * Constants.tax_rate
-
-        # Format monetary values to two decimal places
-        formatted_donated_amount = f"{donated_amount:.2f}"
-        formatted_reimbursement_amount = f"{reimbursement_amount:.2f}"
-        formatted_net_earnings_after_donation = f"{net_earnings_after_donation:.2f}"
-
-        # Store reimbursement in the player model
-        player.net_earnings_after_donation = net_earnings_after_donation
-        player.reimbursement_amount = reimbursement_amount
-
-        # Debugging information
-        print(f"Donation: {donated_amount}, Reimbursement: {reimbursement_amount}")
-        print(f"Net earnings after taxation: {player.net_earnings_after_tax}")
-        print(f"Net earnings after donation: {net_earnings_after_donation}")
-
-        print(f"Net earnings after tax (CurrencyField): {player.net_earnings_after_tax}")
-        print(f"Net earnings after tax (float): {float(player.net_earnings_after_tax)}")
-        print(f"Donation (float): {float(player.donated_amount)}")
-        print(f"Net earnings after donation (calculated): {net_earnings_after_donation}")
-        print(f"Net earnings after donation (stored): {player.net_earnings_after_donation}")
+        reimbursement_amount = player.donated_amount * Constants.tax_rate
 
         return {
-            'formatted_donated_amount': formatted_donated_amount,
-            'donated_amount': donated_amount,
-            'reimbursement_amount': formatted_reimbursement_amount,
-            'net_earnings_after_donation': formatted_net_earnings_after_donation,
+            'formatted_donated_amount': f"{player.donated_amount:.2f}",
+            'net_earnings_after_donation': f"{net_earnings_after_donation:.2f}",
+            'reimbursement_amount': f"{reimbursement_amount:.2f}",
+        }
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        # Update earnings if donation deduction is chosen
+        if player.deduct_donation:
+            player.reimbursement_amount = player.donated_amount * Constants.tax_rate
+            player.net_earnings_after_tax += player.reimbursement_amount
+        else:
+            player.net_earnings_after_donation = player.net_earnings_after_tax - player.donated_amount
+
+
+class IBANPaymentPage(Page):
+    form_model = 'player'
+    form_fields = ['entered_password']
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        return {
             'session_code': player.session.code,
             'participant_code': player.participant.code,
             'university': player.session.config.get('university', 'uni_wien'),
@@ -225,14 +221,7 @@ class PaymentInfoDeductionPage(Page):
         valid_passwords = ["Victoria!", "Michael!"]
         if player.entered_password not in valid_passwords:
             raise ValueError("Invalid password entered! Please check with the experimenter.")
-        
-        # Existing logic for deduction update
-        if player.deduct_donation:
-            player.net_earnings_after_tax += player.reimbursement_amount
-            print(f"Donation deducted. Net Earnings Updated: {player.net_earnings_after_tax}")
-        else:
-            player.net_earnings_after_donation = player.net_earnings_after_tax - player.donated_amount
-            print(f"No donation deduction. Net Earnings: {player.net_earnings_after_tax}")
+
 
 class DonationReasonPage(Page):
     form_model = 'player'
@@ -288,7 +277,8 @@ class FarewellPage(Page):
 page_sequence = [
     BonusPage,
     AnnouncementPage,
-    PaymentInfoDeductionPage,
+    DeductionDecisionPage,
+    IBANPaymentPage,
     DonationReasonPage,
     DeductionReasonPage,
     FirstTaskSurveyPage,

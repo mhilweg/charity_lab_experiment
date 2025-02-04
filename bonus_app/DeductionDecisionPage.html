@@ -21,6 +21,25 @@
         border: 1px solid #d8ffd0;
     }
 
+    /* Center Radio Buttons and Labels */
+    .centered-options {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        margin-top: 10px;
+        align-items: center;
+    }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .form-check-label {
+        font-size: 16px;
+    }
+
     /* Green Button Styling */
     .btn-green {
         background-color: #28a745; /* Green */
@@ -63,101 +82,41 @@
         color: #0056b3;
         background-color: #e0e0e0;
     }
-
-    /* Password Input Styling */
-    .password-container {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    .password-container input {
-        width: 50%;
-        padding: 10px;
-        font-size: 1rem;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        margin-bottom: 10px;
-    }
-
-    .password-container .error {
-        color: red;
-        font-size: 0.9rem;
-    }
 </style>
 
 <div class="container mt-5">
-    <h2 class="text-center">Payment Information and Deduction</h2>
+    <h2 class="text-center">Donation Deduction Decision</h2>
     <hr>
 
-    <form method="post" id="payment-deduction-form">
-
-        <!-- Earnings Summary Section -->
+    <form method="post" id="deduction-form">
         <div class="section-box payment-summary">
             <p>You earned (after donation): <strong>€{{ net_earnings_after_donation }}</strong>.</p>
             <p>You donated: <strong>€{{ formatted_donated_amount }}</strong>.</p>
             <p>If you choose to deduct your donation, you will be reimbursed: <strong>€{{ reimbursement_amount }}</strong>.</p>
         </div>
 
-        <!-- Tax Deduction Section -->
         <div class="section-box deduction-options">
             <p>Would you like to deduct your donation for tax reimbursement?</p>
-            <div class="form-check form-check-inline">
-                <input 
-                    class="form-check-input" 
-                    type="radio" 
-                    name="deduct_donation" 
-                    id="deduct_yes" 
-                    value="1" 
-                    {% if donated_amount == 0 %}disabled{% endif %}>
-                <label class="form-check-label" for="deduct_yes">Yes</label>
+            <div class="centered-options">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="deduct_donation" id="deduct_yes" value="1">
+                    <label class="form-check-label" for="deduct_yes">Yes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="deduct_donation" id="deduct_no" value="0">
+                    <label class="form-check-label" for="deduct_no">No</label>
+                </div>
             </div>
-            <div class="form-check form-check-inline">
-                <input 
-                    class="form-check-input" 
-                    type="radio" 
-                    name="deduct_donation" 
-                    id="deduct_no" 
-                    value="0">
-                <label class="form-check-label" for="deduct_no">No</label>
-            </div>
-            <div id="deduction-error" class="error-message">Please make a deduction decision.</div>
+            <div id="deduction-error" class="error-message">Please make a decision.</div>
         </div>
 
-        <!-- Merged Session and Participant IDs with Link Section -->
-        <div class="section-box id-link-display">
-            <h4><strong>Payment identifiers</strong></h4>
-            <p>Session ID: <span id="session-id">{{ session_code }}</span>
-                <i class="copy-icon" onclick="copyToClipboard('session-id')">📄</i>
-            </p>
-            <p>Participant ID: <span id="participant-id">{{ participant_code }}</span>
-                <i class="copy-icon" onclick="copyToClipboard('participant-id')">📄</i>
-            </p>
-
-            <p>Please click the button below to access the external payment survey or payment tool. There, you need to enter all payment-relevant details, including your IDs. Once you submit the survey, you can safely close the tab.</p>
-
-            {% if university == 'uni_wien' %}
-                <a href="https://vcee.univie.ac.at/online-experiments/getting-your-payment/" target="_blank" class="btn btn-green">
-                    Proceed to Payment Tool
-                </a>
-            {% elif university == 'wu_wien' %}
-                <a href="https://wu-payment-survey-239a632bf340.herokuapp.com/?session_id={{ session_code }}&participant_id={{ participant_code }}" target="_blank" class="btn btn-green">
-                    Proceed to Payment Survey
-                </a>
-            {% endif %}
-        </div>
-
-        <!-- Password Input Section -->
-        <div class="password-container">
-            <input type="text" id="password-input" name="entered_password" placeholder="Enter the password" required>
-            <div id="error-message" class="error" style="display: none;">Please remain seated until you are asked to go back to your assigned seat.</div>
-        </div>
-
-        <!-- Buttons -->
         <div class="text-center mt-3">
-            <button type="submit" class="btn btn-green" id="conclude-button" disabled>Continue Experiment</button>
+            <button type="submit" class="btn btn-green">Continue</button>
         </div>
     </form>
 </div>
+
+
 
 <script>
     function copyToClipboard(elementId) {
