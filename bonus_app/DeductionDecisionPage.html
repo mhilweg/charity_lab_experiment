@@ -40,6 +40,10 @@
         font-size: 16px;
     }
 
+    .form-check-input:disabled + .form-check-label {
+        color: #aaa; /* Gray out disabled option */
+    }
+
     /* Green Button Styling */
     .btn-green {
         background-color: #28a745; /* Green */
@@ -82,10 +86,16 @@
         color: #0056b3;
         background-color: #e0e0e0;
     }
+
+    .error-message {
+        color: red;
+        display: none;
+        margin-top: 10px;
+    }
 </style>
 
 <div class="container mt-5">
-    <h2 class="text-center">Donation Deduction Decision</h2>
+    <h2 class="text-center">Tax-deducting donation</h2>
     <hr>
 
     <form method="post" id="deduction-form">
@@ -116,48 +126,36 @@
     </form>
 </div>
 
-
-
 <script>
-    function copyToClipboard(elementId) {
-        const text = document.getElementById(elementId).textContent;
-        navigator.clipboard.writeText(text).then(() => {
-            alert('Copied to clipboard!');
-        });
-    }
-
     document.addEventListener("DOMContentLoaded", () => {
-        const passwordInput = document.getElementById("password-input");
-        const concludeButton = document.getElementById("conclude-button");
-        const errorMessage = document.getElementById("error-message");
+        // Get the donated amount directly from the template variable
+        const donatedAmountStr = "{{ formatted_donated_amount }}";
+        
+        // If the string is empty or evaluates to 0, we handle it as no donation
+        const donatedAmount = parseFloat(donatedAmountStr) || 0;
 
-        const validPasswords = ["Victoria!", "Michael!"];
-
-        passwordInput.addEventListener("input", () => {
-            const enteredPassword = passwordInput.value.trim();
-
-            if (validPasswords.includes(enteredPassword)) {
-                concludeButton.disabled = false; // Enable the button
-                errorMessage.style.display = "none"; // Hide error message
-            } else {
-                concludeButton.disabled = true; // Disable the button
-                errorMessage.style.display = "block"; // Show error message
-            }
-        });
-    });
-
-    // Validate deduction decision
-    document.getElementById('payment-deduction-form').addEventListener('submit', function (event) {
         const deductYes = document.getElementById('deduct_yes');
+        const yesLabel = document.querySelector('label[for="deduct_yes"]');
+
+        if (donatedAmount === 0) {
+            deductYes.disabled = true;
+            yesLabel.style.color = '#aaa';  // Gray out label
+        }
+
+        // Form validation
+        const deductionForm = document.getElementById('deduction-form');
         const deductNo = document.getElementById('deduct_no');
         const deductionError = document.getElementById('deduction-error');
 
-        if (!deductYes.checked && !deductNo.checked) {
-            deductionError.style.display = 'block';
-            event.preventDefault();
-        } else {
-            deductionError.style.display = 'none';
-        }
+        deductionForm.addEventListener('submit', function (event) {
+            if (!deductYes.checked && !deductNo.checked) {
+                deductionError.style.display = 'block';
+                event.preventDefault();
+            } else {
+                deductionError.style.display = 'none';
+            }
+        });
     });
 </script>
+
 {% endblock %}

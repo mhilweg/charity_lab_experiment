@@ -6,7 +6,7 @@ class Constants(BaseConstants):
     players_per_group = None
     num_rounds = 1  # Two pages: bonus calculation and deduction
     base_payment = 5  # Base payment
-    bonus_per_correct_answer = 0.15  # Bonus for each correct answer
+    bonus_per_correct_answer = 0.12  # Bonus for each correct answer
     tax_rate = 0.30  # Flat tax rate (30%)
 
 class Subsession(BaseSubsession):
@@ -85,8 +85,9 @@ class BonusPage(Page):
 
         # Apply tax
         tax_amount = bonus_before_tax * Constants.tax_rate
-        net_earnings_after_tax = bonus_before_tax - tax_amount
+        net_earnings_after_tax = bonus_before_tax *(1 - Constants.tax_rate)
         donated_amount = float(player.donated_amount)
+        net_earnings_after_donation = net_earnings_after_tax - player.donated_amount
 
         # Format all monetary amounts to two decimal places
         formatted_base_pay = f"{base_pay:.2f}"
@@ -96,12 +97,14 @@ class BonusPage(Page):
         formatted_tax_amount = f"{tax_amount:.2f}"
         formatted_net_earnings = f"{net_earnings_after_tax:.2f}"
         formatted_donated_amount = f"{donated_amount:.2f}"
+        formatted_net_earnings_after_donation = f"{net_earnings_after_donation:.2f}"
         
 
         # Store values in the player model
         player.total_correct = total_correct
         player.bonus_before_tax = bonus_before_tax
         player.net_earnings_after_tax = net_earnings_after_tax
+        player.net_earnings_after_donation = player.net_earnings_after_tax - player.donated_amount
         
         print(f"Donated amount: {player.donated_amount}")
 
@@ -109,6 +112,7 @@ class BonusPage(Page):
         print(f"Base Pay: {base_pay}, Bonus from Correct Answers: {bonus_from_correct_answers}")
         print(f"Total Correct: {total_correct}, Bonus Before Tax: {bonus_before_tax}, Tax: {tax_amount}, Net Earnings: {net_earnings_after_tax}")
         print(f"Bonus_per_correct: {bonus_per_correct}")
+        print(f"Formatted net earnings after tax: {formatted_net_earnings}")
         
         return {
             'first_level_correct': first_level_correct,
@@ -120,6 +124,7 @@ class BonusPage(Page):
             'net_earnings_after_tax': formatted_net_earnings,
             'bonus_per_correct': formatted_bonus_per_correct,
             'donated_amount': formatted_donated_amount,
+            'net_earnings_after_donation': formatted_net_earnings_after_donation,
             'base_pay': formatted_base_pay,
         }
     
@@ -150,12 +155,12 @@ class AnnouncementPage(Page):
         if level_1_treatment == 'Observability':
             #extra_content += """ <p>There will be a representative of the charity present in this adjacent room to assist you with inputting your information for accounting purposes.</p>
             #"""
-            observability_text = """ <p>A representative of the charity will be available in the adjacent room to assist you with entering your information for administrative purposes.</p>
+            observability_text = """ <p>A proctor will be available at the dedicated computer to assist you with entering your information.</p>
             """
 
         # Conditional content based on Level 2 treatment
         if level_2_treatment == 'Moral message':
-            moral_message = """ <p>Did you know? In a recent survey conducted in Austria <em>(Aman Hild & Hilweg-Waldeck, 2025)</em>, over <strong>80% of respondents</strong> indicated that they consider it morally appropriate to tax-deduct charitable donations.</p>
+            moral_message = """ <p>Did you know? In a recent survey conducted in Austria <em>(Aman Hild & Hilweg-Waldeck, WP)</em>, over <strong>80% of respondents</strong> indicated that they consider it morally appropriate to tax-deduct charitable donations.</p>
             """
 
 

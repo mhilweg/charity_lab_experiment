@@ -48,6 +48,11 @@ EASY_SEQUENCES = [
     [9, 9, 1, 1, 1, 1, 1, 9],
     [9, 4, 9, 4, 9, 9, 9, 4],
     [1, 1, 9, 1, 1, 1, 9, 4],
+    [9, 9, 9, 9, 4, 1, 4, 9],
+    [9, 9, 4, 4, 4, 4, 4, 9],
+    [1, 1, 4, 1, 1, 1, 4, 9],
+    [9, 9, 4, 9, 9, 9, 1, 9],
+    [4, 4, 4, 4, 1, 9, 9, 1],
 ]
 
 HARD_SEQUENCES_OLD = [
@@ -95,6 +100,11 @@ HARD_SEQUENCES = [
     [9, 1, 4, 1, 9, 1, 9, 9],
     [9, 1, 1, 4, 9, 9, 9, 4],
     [1, 4, 9, 9, 4, 1, 9, 1],
+    [4, 4, 1, 4, 1, 9, 1, 1],
+    [1, 1, 9, 9, 4, 4, 1, 1],
+    [9, 9, 4, 4, 1, 1, 4, 4],
+    [9, 1, 9, 9, 9, 1, 4, 1],
+    [1, 1, 4, 4, 1, 4, 1, 9]
 ]
 
 SAMPLE_EASY_SEQUENCES_OLD = [
@@ -173,15 +183,15 @@ class Constants(BaseConstants):
     easy_sequences = EASY_SEQUENCES
     hard_sequences = HARD_SEQUENCES
     easy_correct_responses_OLD = [1, 4, 9, 1, 4, 9, 1, 4, 9, 1] # only seventh responses in here.
-    easy_correct_responses = [1, 4, 9, 1, 9, 4, 1, 4, 1, 9, 9, 4, 1, 9, 4, 4, 1, 9, 1, 9, 1, 4, 4, 9, 1, 4, 9, 4, 1, 9, 1] # one extra sequence for storing reasons
+    easy_correct_responses = [1, 4, 9, 1, 9, 4, 1, 4, 1, 9, 9, 4, 1, 9, 4, 4, 1, 9, 1, 9, 1, 4, 4, 9, 1, 4, 9, 4, 1, 9, 1, 9, 4, 1, 9, 4] # one extra sequence for storing reasons
     hard_correct_responses_OLD = [9, 9, 9, 4, 1, 1, 1, 9, 4, 4]
-    hard_correct_responses = [1, 9, 4, 9, 1, 4, 9, 1, 4, 9, 4, 9, 1, 4, 9, 1, 9, 4, 9, 1, 9, 4, 1, 9, 1, 1, 4, 1, 4, 4, 9]
+    hard_correct_responses = [1, 9, 4, 9, 1, 4, 9, 1, 4, 9, 4, 9, 1, 4, 9, 1, 9, 4, 9, 1, 9, 4, 1, 9, 1, 1, 4, 1, 4, 4, 9, 4, 1, 9, 4, 1]
     sample_easy_sequences = SAMPLE_EASY_SEQUENCES
     sample_hard_sequences = SAMPLE_HARD_SEQUENCES
     total_time_seconds = 30  # 6 minutes per difficulty level
     freeze_time_seconds = 10  # 90 seconds freeze time duration
     bonus_per_correct_answer = 0.15
-    number_of_tasks = 30
+    number_of_tasks = 35
 
     task_instructions = f"""
     <h1>Welcome to the task! </h1>
@@ -209,7 +219,7 @@ class Constants(BaseConstants):
 
     <p>
     You will play two versions of this task. Each version
-    has a <strong>maximum of { number_of_tasks } sequences</strong>. Thus, you can earn a total bonus payment of up to 9.00€</. Please pay close attention to the rules, as they 
+    has a <strong>maximum of { number_of_tasks } sequences</strong>. Thus, you can earn a total bonus payment of up to 8.40€. Please pay close attention to the rules, as they 
     will guide you in solving the task.
     </p>
     <div style="margin-top: 20px; padding: 15px; border: 1px solid #d0e7ff; border-radius: 8px; background-color: #f5fff0;">
