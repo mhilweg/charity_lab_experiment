@@ -17,7 +17,7 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
     total_correct = models.IntegerField(initial=0)  # Total correct answers across tasks
-    bonus_before_tax = models.CurrencyField(initial=0)  # Bonus before taxation
+    bonus_before_tax = models.FloatField(initial=0)  # Bonus before taxation
     net_earnings_after_tax = models.FloatField(initial=0)  # Earnings after tax
     donated_amount = models.FloatField(initial=0.0)  # Amount donated with two decimal places
     reimbursement_amount = models.FloatField(initial=0.0)  # Tax reimbursement for donation
