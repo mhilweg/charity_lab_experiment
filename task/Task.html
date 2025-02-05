@@ -19,7 +19,7 @@
                     <div class="box invisible"></div> <!-- Placeholder for alignment -->
                     {% for i in range(1, 8) %}
                         <div class="box {% if i == 7 %}highlight{% endif %}">
-                            <input type="number" name="response_{{ i }}" id="response_{{ i }}" 
+                            <input type="number" name="response_{{ i }}" id="response_{{ i }}" min="1" max="9" maxlength="1" oninput="validateInput(this)" 
                                    {% if i == 7 %}required{% endif %}>
                         </div>
                     {% endfor %}
@@ -175,6 +175,15 @@
 </style>
 
 <script>
+    function validateInput(input) {
+        // Remove non-digit characters
+        input.value = input.value.replace(/[^1-9]/g, '');
+
+        // Limit input to a single character
+        if (input.value.length > 1) {
+            input.value = input.value.charAt(0);
+        }
+    }
     document.addEventListener("DOMContentLoaded", () => {
         const inputs = document.querySelectorAll('[id^="response_"]');
         const answersField = document.getElementById("answers_dict");

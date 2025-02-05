@@ -137,7 +137,7 @@ def assign_treatments(subsession):
 
     for group in subgroups_level_4.values():
         for p in group:
-            p.participant.level_3_treatment = 'No freeze' if random.random() < 0.15 else 'Freeze'
+            p.participant.level_3_treatment = 'No freeze' if random.random() < 0.80 else 'Freeze'
 
     # --- Debugging: Print Assignments ---
     print("\nLevel 1 Assignments:")

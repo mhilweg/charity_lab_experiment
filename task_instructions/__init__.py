@@ -6,7 +6,7 @@ class Constants(BaseConstants):
     players_per_group = None  
     num_rounds = 1  
     bonus_per_correct_answer = 0.12
-    number_of_tasks = 35
+    number_of_tasks = 25
     
 
     comprehension_questions = [

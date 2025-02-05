@@ -16,7 +16,7 @@ EASY_SEQUENCES_OLD = [
     [1, 1, 9, 4, 1, 9, 4, 1],
 ]
 
-EASY_SEQUENCES = [
+EASY_SEQUENCES_CORRECT = [
     [1, 4, 1, 1, 1, 4, 9, 1],
     [1, 4, 9, 4, 4, 4, 9, 4],
     [9, 9, 9, 9, 1, 4, 1, 9],
@@ -55,6 +55,35 @@ EASY_SEQUENCES = [
     [4, 4, 4, 4, 1, 9, 9, 1],
 ]
 
+EASY_SEQUENCES = [
+    [1, 4, 1, 1, 1, 4, 9, 1],
+    [1, 4, 9, 4, 4, 4, 9, 4],
+    [9, 9, 9, 9, 1, 4, 1, 9],
+    [1, 1, 4, 9, 1, 9, 1, 1],
+    [9, 9, 1, 9, 9, 9, 4, 9],
+    [1, 4, 4, 4, 4, 4, 9, 1],
+    [1, 1, 1, 4, 1, 1, 9, 4],
+    [4, 4, 4, 1, 4, 1, 4, 1],
+    [4, 1, 1, 1, 1, 4, 9, 1],
+    [9, 9, 1, 9, 1, 9, 9, 4],
+    [1, 9, 9, 1, 9, 9, 9, 1],
+    [4, 1, 4, 4, 9, 1, 4, 4],
+    [1, 9, 1, 1, 1, 9, 4, 1],
+    [4, 9, 9, 4, 9, 9, 9, 4],
+    [9, 4, 1, 4, 4, 4, 1, 4],
+    [4, 4, 1, 4, 4, 4, 1, 9],
+    [1, 1, 1, 9, 1, 1, 4, 9],
+    [4, 4, 9, 9, 9, 9, 1, 9],
+    [4, 1, 9, 1, 1, 1, 1, 4],
+    [1, 4, 9, 9, 9, 1, 9, 4],
+    [1, 1, 9, 4, 1, 4, 1, 1],
+    [4, 4, 9, 4, 4, 4, 9, 1],
+    [4, 9, 4, 4, 1, 9, 4, 4],
+    [1, 1, 9, 9, 9, 9, 4, 9],
+    [9, 1, 4, 1, 1, 1, 1, 9],
+    [4, 4, 4, 9, 4, 9, 4, 9],
+]
+
 HARD_SEQUENCES_OLD = [
     [1, 4, 9, 1, 4, 9, 1, 4],
     [1, 1, 4, 4, 9, 4, 9, 4],
@@ -68,7 +97,7 @@ HARD_SEQUENCES_OLD = [
     [1, 4, 1, 4, 1, 1, 4, 4],
 ]
 
-HARD_SEQUENCES = [
+HARD_SEQUENCES_CORRECT = [
     [4, 9, 1, 9, 4, 9, 4, 4],
     [1, 4, 9, 1, 4, 9, 1, 4],
     [4, 4, 1, 1, 9, 1, 4, 1],
@@ -104,7 +133,36 @@ HARD_SEQUENCES = [
     [1, 1, 9, 9, 4, 4, 1, 1],
     [9, 9, 4, 4, 1, 1, 4, 4],
     [9, 1, 9, 9, 9, 1, 4, 1],
-    [1, 1, 4, 4, 1, 4, 1, 9]
+    [1, 1, 4, 4, 1, 4, 1, 9],
+]
+
+HARD_SEQUENCES = [
+    [4, 9, 1, 9, 4, 9, 4, 4],
+    [1, 4, 9, 1, 4, 9, 1, 4],
+    [4, 4, 1, 1, 9, 1, 4, 1],
+    [4, 1, 4, 1, 9, 9, 1, 4],
+    [1, 1, 1, 4, 9, 4, 9, 9],
+    [1, 9, 4, 9, 1, 9, 1, 1],
+    [9, 9, 9, 1, 4, 1, 1, 1],
+    [4, 9, 9, 1, 4, 1, 9, 9],
+    [1, 9, 9, 4, 1, 1, 1, 4],
+    [1, 4, 1, 1, 9, 4, 4, 9],
+    [9, 1, 9, 1, 9, 4, 1, 1],
+    [9, 9, 4, 9, 1, 1, 4, 1],
+    [9, 4, 4, 1, 9, 4, 1, 9],
+    [4, 4, 4, 9, 1, 9, 1, 1],
+    [4, 1, 9, 9, 1, 4, 9, 4],
+    [1, 1, 9, 4, 4, 9, 9, 9],
+    [4, 1, 4, 4, 9, 1, 1, 9],
+    [4, 4, 4, 1, 9, 1, 9, 9],
+    [9, 9, 9, 4, 1, 4, 4, 4],
+    [9, 4, 4, 1, 9, 1, 4, 4],
+    [9, 9, 1, 9, 4, 4, 1, 4],
+    [4, 4, 9, 9, 1, 9, 4, 9],
+    [1, 1, 4, 9, 9, 4, 4, 4],
+    [4, 1, 9, 4, 1, 9, 4, 1],
+    [1, 1, 1, 9, 4, 9, 4, 4],
+    [4, 9, 9, 1, 4, 9, 1, 4],
 ]
 
 SAMPLE_EASY_SEQUENCES_OLD = [
@@ -183,15 +241,17 @@ class Constants(BaseConstants):
     easy_sequences = EASY_SEQUENCES
     hard_sequences = HARD_SEQUENCES
     easy_correct_responses_OLD = [1, 4, 9, 1, 4, 9, 1, 4, 9, 1] # only seventh responses in here.
-    easy_correct_responses = [1, 4, 9, 1, 9, 4, 1, 4, 1, 9, 9, 4, 1, 9, 4, 4, 1, 9, 1, 9, 1, 4, 4, 9, 1, 4, 9, 4, 1, 9, 1, 9, 4, 1, 9, 4] # one extra sequence for storing reasons
+    easy_correct_responses_correct = [1, 4, 9, 1, 9, 4, 1, 4, 1, 9, 9, 4, 1, 9, 4, 4, 1, 9, 1, 9, 1, 4, 4, 9, 1, 4, 9, 4, 1, 9, 1, 9, 4, 1, 9, 4] # one extra sequence for storing reasons
+    easy_correct_responses = [1, 4, 9, 1, 9, 4, 1, 4, 1, 9, 9, 4, 1, 9, 4, 4, 1, 9, 1, 9, 1, 4, 4, 9, 1, 4] # one extra sequence for storing reasons
     hard_correct_responses_OLD = [9, 9, 9, 4, 1, 1, 1, 9, 4, 4]
-    hard_correct_responses = [1, 9, 4, 9, 1, 4, 9, 1, 4, 9, 4, 9, 1, 4, 9, 1, 9, 4, 9, 1, 9, 4, 1, 9, 1, 1, 4, 1, 4, 4, 9, 4, 1, 9, 4, 1]
+    hard_correct_responses_correct = [1, 9, 4, 9, 1, 4, 9, 1, 4, 9, 4, 9, 1, 4, 9, 1, 9, 4, 9, 1, 9, 4, 1, 9, 1, 1, 4, 1, 4, 4, 9, 4, 1, 9, 4, 1]
+    hard_correct_responses = [1, 9, 4, 9, 1, 4, 9, 1, 4, 9, 4, 9, 1, 4, 9, 1, 9, 4, 9, 1, 9, 4, 1, 9, 1, 1]
     sample_easy_sequences = SAMPLE_EASY_SEQUENCES
     sample_hard_sequences = SAMPLE_HARD_SEQUENCES
     total_time_seconds = 360  # 6 minutes per difficulty level
     freeze_time_seconds = 90  # 90 seconds freeze time duration
     bonus_per_correct_answer = 0.12
-    number_of_tasks = 35
+    number_of_tasks = 25
 
     task_instructions = f"""
     <h1>Welcome to the task! </h1>
@@ -264,13 +324,13 @@ class Player(BasePlayer):
     round_correctness_task2 = models.LongStringField(initial=json.dumps({}))  # Tracks correctness for Task2
     num_attempted = models.IntegerField(initial=0)
 
-    response_1 = models.IntegerField(blank=True)
-    response_2 = models.IntegerField(blank=True)
-    response_3 = models.IntegerField(blank=True)
-    response_4 = models.IntegerField(blank=True)
-    response_5 = models.IntegerField(blank=True)
-    response_6 = models.IntegerField(blank=True)
-    response_7 = models.IntegerField(blank=False)  # Mandatory
+    response_1 = models.IntegerField(blank=True, max_value = 9)
+    response_2 = models.IntegerField(blank=True, max_value = 9)
+    response_3 = models.IntegerField(blank=True, max_value = 9)
+    response_4 = models.IntegerField(blank=True, max_value = 9)
+    response_5 = models.IntegerField(blank=True, max_value = 9)
+    response_6 = models.IntegerField(blank=True, max_value = 9)
+    response_7 = models.IntegerField(blank=False, max_value = 9)  # Mandatory
 
     answers_dict = models.LongStringField(initial="{}")  # Stores responses as a JSON string
     timestamps_dict = models.LongStringField(initial="{}")  # Stores timestamps as a JSON string
