@@ -94,12 +94,12 @@
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <!-- Proceed Without Donating -->
                         <button type="submit" name="button_pressed" value="proceed_without_donating" class="btn btn-link text-muted p-0" onclick="setButtonPressedValue('proceed_without_donating')">
-                            Proceed without Donating
+                            <!--Proceed without Donating-->
                         </button>
             
                         <!-- Donate Button -->
                         <button type="submit" name="button_pressed" value="donate" class="btn btn-donate"  onclick="setButtonPressedValue('donate')">
-                            Donate
+                            Donate indicated amount
                         </button>
                     </div>
                 </form>
@@ -133,12 +133,12 @@
         const value = parseFloat(input.value); // Current donation value
 
         // Validate the donation input for the "Donate" button
-        if (value > 0 && value <= max) {
+        if (value >= 0 && value <= max) {
             donateButton.disabled = false; // Enable Donate button if valid
             error.classList.add('d-none'); // Hide error message
         } else {
             donateButton.disabled = true; // Disable Donate button for invalid/0 inputs
-            if (value === 0 || isNaN(value)) {
+            if (isNaN(value)) {
                 error.classList.add('d-none'); // No error for 0 or blank inputs
             } else {
                 error.classList.remove('d-none'); // Show error for invalid inputs
@@ -159,9 +159,9 @@
         const input = document.getElementById('id_donated_amount');
         const value = parseFloat(input.value);
 
-        if (value === 0 || isNaN(value)) {
+        if (value < 0 || isNaN(value)) {
             event.preventDefault(); // Block form submission
-            alert('Donation amount must be greater than 0 to proceed with a donation.');
+            alert('Donation amount must be non-zero to proceed with a donation.');
         }
     });
 
