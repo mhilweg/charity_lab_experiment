@@ -259,7 +259,7 @@ class Constants(BaseConstants):
     sample_easy_sequences = SAMPLE_EASY_SEQUENCES
     sample_hard_sequences = SAMPLE_HARD_SEQUENCES
     total_time_seconds = 360  # 6 minutes per difficulty level
-    freeze_time_seconds = 30  # 90 seconds freeze time duration
+    freeze_time_seconds = 90  # 90 seconds freeze time duration
     bonus_per_correct_answer = 0.12
     number_of_tasks = 30
 
