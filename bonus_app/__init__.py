@@ -6,7 +6,7 @@ class Constants(BaseConstants):
     players_per_group = None
     num_rounds = 1  # Two pages: bonus calculation and deduction
     base_payment = 5  # Base payment
-    bonus_per_correct_answer = 0.12  # Bonus for each correct answer
+    bonus_per_correct_answer = 0.25  # Bonus for each correct answer
     tax_rate = 0.30  # Flat tax rate (30%)
 
 class Subsession(BaseSubsession):

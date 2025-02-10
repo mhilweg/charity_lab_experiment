@@ -5,7 +5,7 @@ class Constants(BaseConstants):
     name_in_url = 'comprehension_test'
     players_per_group = None  
     num_rounds = 1  
-    bonus_per_correct_answer = 0.12
+    bonus_per_correct_answer = 0.25
     number_of_tasks = 30
     
 
@@ -55,7 +55,7 @@ class Constants(BaseConstants):
     </div>
     <p>
     You will play two versions of this task. Each version
-    has a <strong>maximum of { number_of_tasks } sequences</strong>. Thus, you can earn a total bonus payment of up to 8.40 EUR. Please pay close attention to the rules, as they 
+    has a <strong>maximum of { number_of_tasks } sequences</strong>. Thus, you can earn a total bonus payment of up to 15.00 EUR. Please pay close attention to the rules, as they 
     will guide you in solving the task.
     </p>
     <div style="margin-top: 20px; padding: 15px; border: 1px solid #d0e7ff; border-radius: 8px; background-color: #f5fff0;">
