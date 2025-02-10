@@ -174,7 +174,10 @@ class AnnouncementPage(Page):
     
     @staticmethod
     def before_next_page(player, timeout_happened):
-        valid_passwords = ["Victoria!", "Michael!"]
+        valid_passwords = ["Victoria!", "Michael!", "Johannes!", "Joanna!", "Jonathan", 
+                           "Jakob!", "Felix!", "Jan!","Markus!", "Peter!", "Jim!", "Stefan!",
+                             "Gabriel!", "Mariia!", "Sophie!", "Selina!", "Divena!", 
+                             "Ascher!", "Default!"]
         entered_password = player.field_maybe_none('entered_password')  # Safely access the field
 
         print(f"DEBUG: Entered password: {entered_password}")  # Debugging print
@@ -223,7 +226,10 @@ class IBANPaymentPage(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        valid_passwords = ["Victoria!", "Michael!"]
+        valid_passwords = ["Victoria!", "Michael!", "Johannes!", "Joanna!", "Jonathan", 
+                           "Jakob!", "Felix!", "Jan!","Markus!", "Peter!", "Jim!", "Stefan!",
+                             "Gabriel!", "Mariia!", "Sophie!", "Selina!", "Divena!", 
+                             "Ascher!", "Default!"]
         if player.entered_password not in valid_passwords:
             raise ValueError("Invalid password entered! Please check with the experimenter.")
 
