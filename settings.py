@@ -21,12 +21,13 @@ SESSION_CONFIGS = [
         'num_demo_participants': 1,  # Set this to the desired number of participants
         'app_sequence': ['disclaimer_consent', 'task_instructions', 'task', 'bonus_app'],
         'level_1_treatment': 'Observability',
-        'university': 'wu_wien', # uni_wien or wu_wien
+        'university': 'uni_wien', # uni_wien or wu_wien
     },
 ]
 
 ROOMS = [
     dict( name = 'Study', display_name = 'Study'),
+    dict(name='VCEEroom', display_name='VCEE Room'),
 ]
 
 INSTALLED_APPS = [
