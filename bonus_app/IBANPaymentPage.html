@@ -91,7 +91,8 @@
     <div class="section-box id-link-display">
         <h4><strong>Payment Identifiers</strong></h4>
         <p>Session ID: <span id="session-id">{{ session_code }}</span> <i class="copy-icon" onclick="copyToClipboard('session-id')">📄</i></p>
-        <p>Participant ID: <span id="participant-id">{{ participant_code }}</span> <i class="copy-icon" onclick="copyToClipboard('participant-id')">📄</i></p>
+        <p>Participant code: <span id="participant-id">{{ participant_code }}</span> <i class="copy-icon" onclick="copyToClipboard('participant-id')">📄</i></p>
+        <p>Experiment code: <span id="experiment-id">2025_001</span> <i class="copy-icon" onclick="copyToClipboard('experiment-id')">📄</i></p>
         <p>Click the button below to proceed to the payment tool.</p>
 
         {% if university == 'uni_wien' %}
