@@ -26,16 +26,16 @@ class Player(BasePlayer):
     button_pressed = models.StringField(choices=["Proceed without Donating", "Donate"], blank=True)
     entered_password = models.StringField(blank=True)  # Stores the password entered by the participant
 
-   # belief_donation_percentage = models.FloatField(
-    #    label="What percentage of participants do you think donated?",
-     #   min=0,
-      #  max=100
-    #)
-    #belief_deduction_percentage = models.FloatField(
-     #   label="What percentage of donors do you think deducted their donation?",
-      #  min=0,
-       # max=100
-    #)
+    belief_donation_percentage = models.FloatField(
+        label="What percentage of participants do you think donated?",
+        min=0,
+        max=100
+    )
+    belief_deduction_percentage = models.FloatField(
+        label="What percentage of donors do you think deducted their donation?",
+        min=0,
+        max=100
+    )
 
 
     # Page (i) responses
@@ -317,7 +317,7 @@ page_sequence = [
     BonusPage,
     AnnouncementPage,
     DeductionDecisionPage,
-   # BeliefEstimationPage,
+    BeliefEstimationPage,
     IBANPaymentPage,
     DonationReasonPage,
     DeductionReasonPage,
