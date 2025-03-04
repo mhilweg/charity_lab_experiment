@@ -2,20 +2,6 @@ from otree.api import *
 import time, json
 
 
-
-EASY_SEQUENCES_OLD = [
-    [1, 1, 4, 9, 1, 4, 9, 1],
-    [4, 4, 9, 1, 4, 9, 1, 4],
-    [9, 9, 1, 4, 9, 1, 4, 9],
-    [1, 1, 9, 4, 1, 9, 4, 1],
-    [4, 4, 1, 9, 4, 1, 9, 4],
-    [9, 9, 4, 1, 9, 4, 1, 9],
-    [1, 1, 4, 9, 1, 4, 9, 1],
-    [4, 4, 9, 1, 4, 9, 1, 4],
-    [9, 9, 1, 4, 9, 1, 4, 9],
-    [1, 1, 9, 4, 1, 9, 4, 1],
-]
-
 EASY_SEQUENCES_CORRECT = [
     [1, 4, 1, 1, 1, 4, 9, 1],
     [1, 4, 9, 4, 4, 4, 9, 4],
@@ -87,19 +73,6 @@ EASY_SEQUENCES = [
     [9, 9, 1, 1, 1, 1, 1, 9],
     [9, 4, 9, 4, 9, 9, 9, 4],
     [1, 1, 9, 1, 1, 1, 9, 4],
-]
-
-HARD_SEQUENCES_OLD = [
-    [1, 4, 9, 1, 4, 9, 1, 4],
-    [1, 1, 4, 4, 9, 4, 9, 4],
-    [9, 1, 1, 1, 4, 9, 9, 1],
-    [4, 9, 9, 9, 1, 1, 4, 1],
-    [1, 4, 4, 4, 9, 4, 9, 9],
-    [9, 4, 1, 1, 4, 9, 9, 4],
-    [4, 4, 9, 9, 1, 1, 4, 9],
-    [9, 4, 4, 1, 4, 9, 9, 1],
-    [4, 4, 4, 9, 1, 1, 4, 1],
-    [1, 4, 1, 4, 1, 1, 4, 4],
 ]
 
 HARD_SEQUENCES_CORRECT = [
@@ -175,28 +148,7 @@ HARD_SEQUENCES = [
     [1, 4, 9, 9, 4, 1, 9, 1],
 ]
 
-SAMPLE_EASY_SEQUENCES_OLD = [
-    {
-        "sequence": [1, 1, 4, 9, 1, 4, 9, 1],
-        "responses": [1, 9, 9, 4, 4, 1, 1],
-    },
-    {
-        "sequence": [4, 4, 9, 1, 4, 9, 1, 4],
-        "responses": [4, 1, 1, 9, 9, 4, 4],
-    },
-    {
-        "sequence": [9, 9, 1, 4, 9, 1, 4, 9],
-        "responses": [9, 4, 4, 1, 1, 9, 9],
-    },
-    {
-        "sequence": [1, 1, 9, 4, 1, 9, 4, 1],
-        "responses": [1, 4, 4, 9, 9, 1, 1],
-    },
-    {
-        "sequence": [4, 4, 1, 9, 4, 1, 9, 4],
-        "responses": [4, 9, 9, 1, 1, 4, 4],
-    },
-]
+
 
 SAMPLE_EASY_SEQUENCES = [
     {
@@ -250,11 +202,7 @@ class Constants(BaseConstants):
     num_rounds = len(EASY_SEQUENCES) + len(HARD_SEQUENCES)
     easy_sequences = EASY_SEQUENCES
     hard_sequences = HARD_SEQUENCES
-    #easy_correct_responses_OLD = [1, 4, 9, 1, 4, 9, 1, 4, 9, 1] # only seventh responses in here.
-    #easy_correct_responses_correct = [1, 4, 9, 1, 9, 4, 1, 4, 1, 9, 9, 4, 1, 9, 4, 4, 1, 9, 1, 9, 1, 4, 4, 9, 1, 4, 9, 4, 1, 9, 1, 9, 4, 1, 9, 4] # one extra sequence for storing reasons
     easy_correct_responses = [1, 4, 9, 1, 9, 4, 1, 4, 1, 9, 9, 4, 1, 9, 4, 4, 1, 9, 1, 9, 1, 4, 4, 9, 1, 4, 9, 4, 1, 9, 1] # one extra sequence for storing reasons
-    #hard_correct_responses_OLD = [9, 9, 9, 4, 1, 1, 1, 9, 4, 4]
-    #hard_correct_responses_correct = [1, 9, 4, 9, 1, 4, 9, 1, 4, 9, 4, 9, 1, 4, 9, 1, 9, 4, 9, 1, 9, 4, 1, 9, 1, 1, 4, 1, 4, 4, 9, 4, 1, 9, 4, 1]
     hard_correct_responses = [1, 9, 4, 9, 1, 4, 9, 1, 4, 9, 4, 9, 1, 4, 9, 1, 9, 4, 9, 1, 9, 4, 1, 9, 1, 1, 4, 1, 4, 4, 9]
     sample_easy_sequences = SAMPLE_EASY_SEQUENCES
     sample_hard_sequences = SAMPLE_HARD_SEQUENCES
