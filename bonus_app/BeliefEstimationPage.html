@@ -1,0 +1,91 @@
+{% block content %}
+    <div class="survey-container">
+        <h1 class="survey-title">Your Estimations</h1>
+        <p class="survey-question">
+            We would like to know your perception of donation and deduction behavior in this study.
+            Please provide your best estimate for the following two questions:
+        </p>
+
+        <form method="post">
+            <div class="survey-answers">
+                <label for="donation_percentage">
+                    What percentage of participants do you think donated? (0-100%)
+                </label>
+                <input type="number" id="donation_percentage" name="donation_percentage" min="0" max="100" step="0.01" required>
+
+                <label for="deduction_percentage">
+                    What percentage of donors do you think deducted their donation? (0-100%)
+                </label>
+                <input type="number" id="deduction_percentage" name="deduction_percentage" min="0" max="100" step="0.01" required>
+            </div>
+
+            <button type="submit" class="btn-submit">Submit</button>
+        </form>
+    </div>
+
+    <style>
+        /* Styling similar to existing survey pages */
+        .survey-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 25px;
+            background-color: #e6f7ff;
+            border: 2px solid #6cb2eb;
+            border-radius: 16px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .survey-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #004085;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .survey-question {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #333;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .survey-answers label {
+            font-size: 1.1rem;
+            font-weight: 500;
+            display: block;
+            margin-top: 15px;
+        }
+
+        .survey-answers input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2rem;
+            border: 1px solid #bbb;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .btn-submit {
+            display: block;
+            width: 150px;
+            margin: 30px auto;
+            background-color: #007bff;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}

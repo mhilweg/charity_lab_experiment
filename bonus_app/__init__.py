@@ -26,6 +26,17 @@ class Player(BasePlayer):
     button_pressed = models.StringField(choices=["Proceed without Donating", "Donate"], blank=True)
     entered_password = models.StringField(blank=True)  # Stores the password entered by the participant
 
+    belief_donation_percentage = models.FloatField(
+        label="What percentage of participants do you think donated?",
+        min=0,
+        max=100
+    )
+    belief_deduction_percentage = models.FloatField(
+        label="What percentage of donors do you think deducted their donation?",
+        min=0,
+        max=100
+    )
+
 
     # Page (i) responses
     donation_decision_reason = models.LongStringField(label='What was driving your donation decision?')
@@ -242,6 +253,23 @@ class DeductionReasonPage(Page):
     form_model = 'player'
     form_fields = ['deduction_decision_reason']
 
+class BeliefEstimationPage(Page):
+    form_model = 'player'
+    form_fields = ['belief_donation_percentage', 'belief_deduction_percentage']
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        return {
+            'info_text': "We would like to know your perception of donation and deduction behavior in this study."
+        }
+
+    @staticmethod
+    def error_message(player, values):
+        if not (0 <= values['belief_donation_percentage'] <= 100):
+            return "Please enter a percentage between 0 and 100 for donation percentage."
+        if not (0 <= values['belief_deduction_percentage'] <= 100):
+            return "Please enter a percentage between 0 and 100 for deduction percentage."
+
 class FirstTaskSurveyPage(Page):
     form_model = 'player'
     form_fields = ['task_1_pattern_attempt']
@@ -289,6 +317,7 @@ page_sequence = [
     BonusPage,
     AnnouncementPage,
     DeductionDecisionPage,
+   # BeliefEstimationPage,
     IBANPaymentPage,
     DonationReasonPage,
     DeductionReasonPage,
