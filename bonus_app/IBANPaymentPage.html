@@ -93,12 +93,18 @@
         <p>Session ID: <span id="session-id">{{ session_code }}</span> <i class="copy-icon" onclick="copyToClipboard('session-id')">📄</i></p>
         <p>Participant code: <span id="participant-id">{{ participant_code }}</span> <i class="copy-icon" onclick="copyToClipboard('participant-id')">📄</i></p>
         <p>Experiment code: <span id="experiment-id">2025_001</span> <i class="copy-icon" onclick="copyToClipboard('experiment-id')">📄</i></p>
-        <p>Click the button below to proceed to the payment tool.</p>
+        <!--<p>Click the button below to proceed to the payment tool.</p>
 
         {% if university == 'uni_wien' %}
             <a href="https://vcee.univie.ac.at/online-experiments/getting-your-payment/" class="btn btn-green" target="_blank">Proceed to Payment Tool</a>
         {% elif university == 'wu_wien' %}
             <a href="https://wu-payment-survey-239a632bf340.herokuapp.com/?session_id={{ session_code }}&participant_id={{ participant_code }}" class="btn btn-green" target="_blank">Proceed to Payment Survey</a>
+        {% endif %}-->
+        {% if university == 'wu_wien' %}
+        <p>Click the button below to proceed to the payment tool.</p>
+        <a href="https://wu-payment-survey-239a632bf340.herokuapp.com/?session_id={{ session_code }}&participant_id={{ participant_code }}" class="btn btn-green" target="_blank">Proceed to Payment Survey</a>
+        {% elif university == 'uni_wien' %}
+            <p><strong>Wait for the research assistant to give you further instructions.</strong></p> 
         {% endif %}
     </div>
 

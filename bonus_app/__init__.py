@@ -180,6 +180,8 @@ class AnnouncementPage(Page):
             'level_2_treatment': level_2_treatment,
             'observability_text': observability_text,
             'moral_message': moral_message,
+            'participant_code': player.participant.code,
+            'university': player.session.config.get('university', 'uni_wien'),
 
         }
     
@@ -317,8 +319,8 @@ page_sequence = [
     BonusPage,
     AnnouncementPage,
     DeductionDecisionPage,
-    BeliefEstimationPage,
     IBANPaymentPage,
+    BeliefEstimationPage,
     DonationReasonPage,
     DeductionReasonPage,
     FirstTaskSurveyPage,
