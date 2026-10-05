@@ -20,8 +20,9 @@ SESSION_CONFIGS = [
         'display_name': 'Study',
         'num_demo_participants': 1,  # Set this to the desired number of participants
         'app_sequence': ['disclaimer_consent', 'task_instructions', 'task', 'bonus_app'],
-        'level_1_treatment': 'Observability',
         'university': 'wu_wien', # uni_wien or wu_wien
+        # Base URL of the WU payment survey app (used to verify that non-donors submitted their payment data)
+        'payment_survey_url': 'https://wu-payment-survey-239a632bf340.herokuapp.com',
     },
 ]
 
@@ -52,12 +53,15 @@ PARTICIPANT_FIELDS = [
     'difficulty_order',
     'final_round_correctness',
     'final_round_correctness_task2',
-    'level_1_treatment',  # Anonymity or Observability
-    'level_2_treatment',  # Moral message or No message
-    'level_3_treatment',  # No freeze or Freeze
+    'gender',  # copied from the demographics page; used as stratum for treatment assignment
+    'level_1_treatment',  # Anonymity or Observability (assigned to donors after the donation decision)
+    'level_2_treatment',  # Moral message or No message (assigned to donors after the donation decision)
+    'level_3_treatment',  # No freeze or Freeze (feature disabled: always 'No freeze')
     'difficulty_level', # stores difficulty level that is played first
 ]
-SESSION_FIELDS = []
+SESSION_FIELDS = [
+    'deduction_treatment_blocks',  # per-gender permuted blocks for sequential treatment assignment of donors
+]
 
 # ISO-639 code
 # for example: de, fr, ja, ko, zh-hans

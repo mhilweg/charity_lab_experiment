@@ -60,96 +60,50 @@ class Demographics(Page):
     form_model = 'player'
     form_fields = ['gender', 'field_of_studies', 'age', 'degree']
 
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        # Make gender available to later apps (stratum for the deduction-treatment assignment in bonus_app)
+        player.participant.gender = player.gender
+
 
 class RandomizationWaitPage(WaitPage):
     after_all_players_arrive = 'assign_treatments'
 
 
 def assign_treatments(subsession):
-    session = subsession.session
+    """
+    Assigns everything that must be fixed BEFORE the task starts.
+
+    - Difficulty order (easy-first vs. hard-first): stratified by gender, balanced within session.
+    - Freeze: feature disabled, everybody gets 'No freeze' (field kept for data compatibility).
+
+    The deduction treatments (Anonymity/Observability and Moral message/No message) are NOT assigned
+    here anymore. They are assigned to donors only, right after the donation decision, in
+    bonus_app.assign_deduction_treatments(). Until then they hold the placeholder 'Pending'.
+    """
     participants = subsession.get_players()
 
-    # --- Level-1 Assignment: Anonymity/Observability (Stratified by Gender) ---
+    for p in participants:
+        p.participant.level_1_treatment = 'Pending'
+        p.participant.level_2_treatment = 'Pending'
+        p.participant.level_3_treatment = 'No freeze'
+
+    # --- Difficulty order: easy/hard first (stratified by gender) ---
     males = [p for p in participants if p.gender == 'Male']
     females = [p for p in participants if p.gender == 'Female']
 
     for group in [males, females]:
-        random.shuffle(group)  # Shuffle participants to randomize assignment order
+        random.shuffle(group)
         group_size = len(group)
 
         for i, p in enumerate(group):
             if group_size % 2 == 0 or i < group_size - 1:  # Even group or all except the last in odd group
-                p.participant.level_1_treatment = 'Anonymity' if i < group_size // 2 else 'Observability'
-            else:  # Last participant in an odd-sized group
-                p.participant.level_1_treatment = 'Anonymity' if random.random() < 0.5 else 'Observability'
-
-    # --- Level-2 Assignment: Moral Message/No Message (Stratified by Gender and Level-1) ---
-    subgroups_level_2 = {
-        ('Male', 'Anonymity'): [p for p in males if p.participant.level_1_treatment == 'Anonymity'],
-        ('Male', 'Observability'): [p for p in males if p.participant.level_1_treatment == 'Observability'],
-        ('Female', 'Anonymity'): [p for p in females if p.participant.level_1_treatment == 'Anonymity'],
-        ('Female', 'Observability'): [p for p in females if p.participant.level_1_treatment == 'Observability'],
-    }
-
-    for group in subgroups_level_2.values():
-        random.shuffle(group)
-        group_size = len(group)
-
-        for i, p in enumerate(group):
-            if group_size % 2 == 0 or i < group_size - 1:
-                p.participant.level_2_treatment = 'Moral message' if i < group_size // 2 else 'No message'
-            else:
-                p.participant.level_2_treatment = 'Moral message' if random.random() < 0.5 else 'No message'
-
-    # --- Level-3 Assignment: Easy/Hard (Stratified by Gender, Level-1, and Level-2) ---
-    subgroups_level_3 = {
-        ('Male', 'Anonymity', 'Moral message'): [p for p in males if p.participant.level_1_treatment == 'Anonymity' and p.participant.level_2_treatment == 'Moral message'],
-        ('Male', 'Anonymity', 'No message'): [p for p in males if p.participant.level_1_treatment == 'Anonymity' and p.participant.level_2_treatment == 'No message'],
-        ('Male', 'Observability', 'Moral message'): [p for p in males if p.participant.level_1_treatment == 'Observability' and p.participant.level_2_treatment == 'Moral message'],
-        ('Male', 'Observability', 'No message'): [p for p in males if p.participant.level_1_treatment == 'Observability' and p.participant.level_2_treatment == 'No message'],
-        ('Female', 'Anonymity', 'Moral message'): [p for p in females if p.participant.level_1_treatment == 'Anonymity' and p.participant.level_2_treatment == 'Moral message'],
-        ('Female', 'Anonymity', 'No message'): [p for p in females if p.participant.level_1_treatment == 'Anonymity' and p.participant.level_2_treatment == 'No message'],
-        ('Female', 'Observability', 'Moral message'): [p for p in females if p.participant.level_1_treatment == 'Observability' and p.participant.level_2_treatment == 'Moral message'],
-        ('Female', 'Observability', 'No message'): [p for p in females if p.participant.level_1_treatment == 'Observability' and p.participant.level_2_treatment == 'No message'],
-    }
-
-    for group in subgroups_level_3.values():
-        random.shuffle(group)
-        group_size = len(group)
-
-        for i, p in enumerate(group):
-            if group_size % 2 == 0 or i < group_size - 1:
                 p.participant.difficulty_level = 'easy' if i < group_size // 2 else 'hard'
-            else:
+            else:  # Last participant in an odd-sized group
                 p.participant.difficulty_level = 'easy' if random.random() < 0.5 else 'hard'
 
-    # --- Level-4 Assignment: No Freeze/Freeze (Stratified by Gender, Level-1, Level-2, and Level-3) ---
-    subgroups_level_4 = {
-        (gender, level_1, level_2, difficulty): [p for p in participants if p.gender == gender
-                                                 and p.participant.level_1_treatment == level_1
-                                                 and p.participant.level_2_treatment == level_2
-                                                 and p.participant.difficulty_level == difficulty]
-        for gender in ['Male', 'Female']
-        for level_1 in ['Anonymity', 'Observability']
-        for level_2 in ['Moral message', 'No message']
-        for difficulty in ['easy', 'hard']
-    }
-
-    for group in subgroups_level_4.values():
-        for p in group:
-            p.participant.level_3_treatment = 'No freeze' if random.random() < 0.80 else 'Freeze'
-
     # --- Debugging: Print Assignments ---
-    print("\nLevel 1 Assignments:")
-    print([p.participant.level_1_treatment for p in participants])
-
-    print("\nLevel 2 Assignments:")
-    print([(p.id_in_group, p.participant.level_2_treatment) for p in participants])
-
-    print("\nLevel 3 Assignments:")
+    print("Difficulty order assignments:")
     print([(p.id_in_group, p.participant.difficulty_level) for p in participants])
-
-    print("\nLevel 4 Assignments:")
-    print([(p.id_in_group, p.participant.level_3_treatment) for p in participants])
 
 page_sequence = [Disclaimer, Demographics, RandomizationWaitPage]

@@ -83,28 +83,69 @@
         color: red;
         font-size: 0.9rem;
     }
+
+    .password-container .hint {
+        color: #888;
+        font-size: 0.8rem;
+    }
+
+    .status-ok {
+        color: #155724;
+        margin-top: 15px;
+    }
 </style>
 <div class="container mt-5">
     <h2 class="text-center">Payment Instructions</h2>
     <hr>
 
+    {% if verify_payment %}
+    <!-- ===== Non-donors at WU: stay on their own terminal. The payment survey opens in this tab and
+         returns here; the server verifies with the survey app that the data has arrived. ===== -->
     <div class="section-box id-link-display">
         <h4><strong>Payment Identifiers</strong></h4>
         <p>Session ID: <span id="session-id">{{ session_code }}</span> <i class="copy-icon" onclick="copyToClipboard('session-id')">📄</i></p>
         <p>Participant code: <span id="participant-id">{{ participant_code }}</span> <i class="copy-icon" onclick="copyToClipboard('participant-id')">📄</i></p>
         <p>Experiment code: <span id="experiment-id">2025_001</span> <i class="copy-icon" onclick="copyToClipboard('experiment-id')">📄</i></p>
-        <!--<p>Click the button below to proceed to the payment tool.</p>
 
-        {% if university == 'uni_wien' %}
-            <a href="https://vcee.univie.ac.at/online-experiments/getting-your-payment/" class="btn btn-green" target="_blank">Proceed to Payment Tool</a>
-        {% elif university == 'wu_wien' %}
-            <a href="https://wu-payment-survey-239a632bf340.herokuapp.com/?session_id={{ session_code }}&participant_id={{ participant_code }}" class="btn btn-green" target="_blank">Proceed to Payment Survey</a>
-        {% endif %}-->
+        {% if payment_status == 'received' %}
+            <p class="status-ok"><strong>✅ We have received your payment information.</strong> Click Submit to continue.</p>
+        {% elif payment_status == 'missing' %}
+            <p>Click the button below to proceed to the payment survey. After submitting your information you will be brought back to this page.</p>
+            <a id="survey-link" href="#" class="btn btn-green">Proceed to Payment Survey</a>
+            <p class="mt-3"><small>Already submitted your information? <a href="#" onclick="window.location.reload(); return false;">Check again</a>.</small></p>
+        {% else %}
+            <p><strong>We could not verify your payment information automatically.</strong>
+            If you have not done so yet, please fill in the payment survey via the button below. Afterwards, raise your hand and wait for the experimenter.</p>
+            <a id="survey-link" href="#" class="btn btn-green">Proceed to Payment Survey</a>
+        {% endif %}
+    </div>
+
+    {% if payment_status == 'received' %}
+        <input type="hidden" name="entered_password" value="">
+    {% else %}
+        <div class="password-container">
+            <input type="text" id="password-input" name="entered_password" placeholder="">
+            <div class="hint">For the experimenter only.</div>
+            <div id="error-message" class="error" style="display: none;">Please proceed to the payment survey.</div>
+        </div>
+    {% endif %}
+
+    <div class="text-center mt-3">
+        <button type="submit" class="btn btn-green" id="submit-button" {% if payment_status == 'received' %}{% else %}disabled{% endif %}>Submit</button>
+    </div>
+
+    {% else %}
+    <!-- ===== Donors and Uni Wien (paper-based IBAN): unchanged flow, released by the experimenter ===== -->
+    <div class="section-box id-link-display">
+        <h4><strong>Payment Identifiers</strong></h4>
+        <p>Session ID: <span id="session-id">{{ session_code }}</span> <i class="copy-icon" onclick="copyToClipboard('session-id')">📄</i></p>
+        <p>Participant code: <span id="participant-id">{{ participant_code }}</span> <i class="copy-icon" onclick="copyToClipboard('participant-id')">📄</i></p>
+        <p>Experiment code: <span id="experiment-id">2025_001</span> <i class="copy-icon" onclick="copyToClipboard('experiment-id')">📄</i></p>
         {% if university == 'wu_wien' %}
         <p>Click the button below to proceed to the payment tool.</p>
-        <a href="https://wu-payment-survey-239a632bf340.herokuapp.com/?session_id={{ session_code }}&participant_id={{ participant_code }}" class="btn btn-green" target="_blank">Proceed to Payment Survey</a>
+        <a href="{{ payment_survey_url }}/?session_id={{ session_code }}&participant_id={{ participant_code }}" class="btn btn-green" target="_blank">Proceed to Payment Survey</a>
         {% elif university == 'uni_wien' %}
-            <p><strong>Wait for the research assistant to give you further instructions.</strong></p> 
+            <p><strong>Wait for the research assistant to give you further instructions.</strong></p>
         {% endif %}
     </div>
 
@@ -114,31 +155,42 @@
     </div>
 
     <div class="text-center mt-3">
-        <button type="submit" class="btn btn-green" disabled>Submit</button>
+        <button type="submit" class="btn btn-green" id="submit-button" disabled>Submit</button>
     </div>
+    {% endif %}
 </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const passwordInput = document.getElementById("password-input");
-        const submitButton = document.querySelector("button[type='submit']");
+        const submitButton = document.getElementById("submit-button");
         const errorMessage = document.getElementById("error-message");
+        const validPasswords = js_vars.valid_passwords;
 
-        const validPasswords = ["Victoria!", "Michael!", "Johannes!", "Joanna!", "Jonathan", 
-                           "Jakob!", "Felix!", "Jan!","Markus!", "Peter!", "Jim!", "Stefan!",
-                             "Gabriel!", "Mariia!", "Sophie!", "Selina!", "Divena!", 
-                             "Ascher!", "Default!"];
+        // Non-donor branch: build the survey link so that the survey returns to this very page
+        const surveyLink = document.getElementById("survey-link");
+        if (surveyLink) {
+            const params = new URLSearchParams({
+                session_id: js_vars.session_code,
+                participant_id: js_vars.participant_code,
+                return_url: window.location.href,
+            });
+            surveyLink.href = js_vars.payment_survey_url.replace(/\/+$/, "") + "/?" + params.toString();
+        }
 
-        passwordInput.addEventListener("input", () => {
-            const enteredPassword = passwordInput.value.trim();
-            if (validPasswords.includes(enteredPassword)) {
-                submitButton.disabled = false;
-                errorMessage.style.display = "none";
-            } else {
-                submitButton.disabled = true;
-                errorMessage.style.display = "block";
-            }
-        });
+        // Experimenter password (donors always; non-donors only as a fallback)
+        if (passwordInput) {
+            passwordInput.addEventListener("input", () => {
+                const enteredPassword = passwordInput.value.trim();
+                if (validPasswords.includes(enteredPassword)) {
+                    submitButton.disabled = false;
+                    errorMessage.style.display = "none";
+                } else {
+                    submitButton.disabled = true;
+                    errorMessage.style.display = "block";
+                }
+            });
+        }
     });
 
     function copyToClipboard(elementId) {

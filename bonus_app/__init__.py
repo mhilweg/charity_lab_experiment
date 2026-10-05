@@ -1,5 +1,9 @@
 from otree.api import *
 import json
+import random
+import urllib.request
+import urllib.parse
+import urllib.error
 
 class Constants(BaseConstants):
     name_in_url = 'bonus_app'
@@ -8,6 +12,22 @@ class Constants(BaseConstants):
     base_payment = 5  # Base payment
     bonus_per_correct_answer = 0.25  # Bonus for each correct answer
     tax_rate = 0.30  # Flat tax rate (30%)
+
+    # 2x2 deduction-treatment cells, assigned to donors only (see assign_deduction_treatments)
+    deduction_treatment_cells = [
+        ['Anonymity', 'Moral message'],
+        ['Anonymity', 'No message'],
+        ['Observability', 'Moral message'],
+        ['Observability', 'No message'],
+    ]
+    not_applicable = 'Not applicable'  # treatment value for non-donors
+
+    # Passwords typed by the experimenter / research assistant to release gated pages
+    valid_passwords = ["Victoria!", "Michael!", "Johannes!", "Joanna!", "Jonathan",
+                       "Jakob!", "Felix!", "Jan!", "Markus!", "Peter!", "Jim!", "Stefan!",
+                       "Gabriel!", "Mariia!", "Sophie!", "Selina!", "Divena!",
+                       "Ascher!", "Default!"]
+    payment_status_timeout_seconds = 5
 
 class Subsession(BaseSubsession):
     pass
@@ -69,6 +89,76 @@ class Player(BasePlayer):
     task_2_guess_pattern = models.LongStringField(blank=True, label='Please describe your guess of the pattern.')
     task_2_reason_no_attempt = models.LongStringField(blank=True, label='Why did you not bother looking for the pattern?')
 
+
+
+def is_donor(player: Player) -> bool:
+    return player.donated_amount > 0
+
+
+def assign_deduction_treatments(player: Player):
+    """
+    Assigns the Anonymity/Observability and Moral message/No message treatments.
+
+    Called right after the donation decision. Only donors are assigned, because only donors can
+    deduct. Assignment is sequential but balanced: within each gender stratum, the session keeps a
+    shuffled block of the four 2x2 cells and hands out one cell per donor; when a block is used up a
+    freshly shuffled block is drawn. This guarantees near-perfect balance among donors within a
+    session without anyone having to wait for other participants.
+
+    Non-donors receive 'Not applicable' in both fields.
+    """
+    participant = player.participant
+
+    if not is_donor(player):
+        participant.level_1_treatment = Constants.not_applicable
+        participant.level_2_treatment = Constants.not_applicable
+        return
+
+    current = participant.vars.get('level_1_treatment')
+    if current not in (None, 'Pending', Constants.not_applicable):
+        # Already assigned (e.g. page re-submitted); do not consume another slot.
+        return
+
+    session = player.session
+    stratum = participant.vars.get('gender') or 'Unknown'
+
+    blocks = session.vars.get('deduction_treatment_blocks') or {}
+    queue = list(blocks.get(stratum) or [])
+    if not queue:
+        queue = [list(cell) for cell in Constants.deduction_treatment_cells]
+        random.shuffle(queue)
+
+    level_1, level_2 = queue.pop(0)
+    blocks[stratum] = queue
+    session.vars['deduction_treatment_blocks'] = blocks  # re-assign so the change is persisted
+
+    participant.level_1_treatment = level_1
+    participant.level_2_treatment = level_2
+    print(f"Deduction treatments assigned to {participant.code} (stratum={stratum}): {level_1} / {level_2}")
+
+
+def payment_submitted(player: Player):
+    """
+    Asks the WU payment survey app whether this participant has submitted payment information.
+
+    Returns True / False, or None if the survey app could not be reached (caller should fall back
+    to the experimenter password).
+    """
+    base_url = player.session.config.get('payment_survey_url')
+    if not base_url:
+        return None
+    query = urllib.parse.urlencode({
+        'session_id': player.session.code,
+        'participant_id': player.participant.code,
+    })
+    url = f"{base_url.rstrip('/')}/api/status?{query}"
+    try:
+        with urllib.request.urlopen(url, timeout=Constants.payment_status_timeout_seconds) as response:
+            data = json.loads(response.read().decode('utf-8'))
+            return bool(data.get('submitted'))
+    except (urllib.error.URLError, ValueError, OSError) as exc:
+        print(f"Payment status check failed for {player.participant.code}: {exc}")
+        return None
 
 
 class BonusPage(Page):
@@ -149,6 +239,9 @@ class BonusPage(Page):
         print(f"Button pressed: {player.button_pressed}")
         print(f"Donation: {player.donated_amount}, Reimbursement: {player.reimbursement_amount}")
 
+        # Deduction treatments are assigned here, i.e. after the donation decision and only to donors
+        assign_deduction_treatments(player)
+
 class AnnouncementPage(Page):
     form_model = 'player'
     form_fields = ['entered_password']
@@ -182,22 +275,23 @@ class AnnouncementPage(Page):
             'moral_message': moral_message,
             'participant_code': player.participant.code,
             'university': player.session.config.get('university', 'uni_wien'),
-
+            'is_donor': is_donor(player),
         }
-    
+
     @staticmethod
-    def before_next_page(player, timeout_happened):
-        valid_passwords = ["Victoria!", "Michael!", "Johannes!", "Joanna!", "Jonathan", 
-                           "Jakob!", "Felix!", "Jan!","Markus!", "Peter!", "Jim!", "Stefan!",
-                             "Gabriel!", "Mariia!", "Sophie!", "Selina!", "Divena!", 
-                             "Ascher!", "Default!"]
-        entered_password = player.field_maybe_none('entered_password')  # Safely access the field
+    def js_vars(player):
+        return {'valid_passwords': Constants.valid_passwords}
 
-        print(f"DEBUG: Entered password: {entered_password}")  # Debugging print
-
-        if not entered_password or entered_password not in valid_passwords:
-            raise ValueError("Invalid password entered!")  # Prevent navigation
-        print(f"DEBUG: Valid password entered: {entered_password}")
+    @staticmethod
+    def error_message(player, values):
+        # Donors are released by the experimenter (password) when it is their turn at the dedicated
+        # computer. Non-donors continue on their own terminal and need no password.
+        if not is_donor(player):
+            return None
+        entered_password = values.get('entered_password')
+        if not entered_password or entered_password not in Constants.valid_passwords:
+            return "Please remain seated until you are asked to go to the dedicated computer."
+        return None
 
 class DeductionDecisionPage(Page):
     form_model = 'player'
@@ -213,6 +307,7 @@ class DeductionDecisionPage(Page):
             'formatted_donated_amount': f"{player.donated_amount:.2f}",
             'net_earnings_after_donation': f"{net_earnings_after_donation:.2f}",
             'reimbursement_amount': f"{reimbursement_amount:.2f}",
+            'is_donor': is_donor(player),
         }
 
     @staticmethod
@@ -231,20 +326,53 @@ class IBANPaymentPage(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
+        university = player.session.config.get('university', 'uni_wien')
+        donor = is_donor(player)
+
+        # Non-donors at WU stay on their own terminal: instead of the experimenter password we verify
+        # with the payment-survey app that their payment information has arrived.
+        verify_payment = (not donor) and university == 'wu_wien'
+        payment_status = 'not_checked'
+        if verify_payment:
+            received = payment_submitted(player)
+            payment_status = {True: 'received', False: 'missing', None: 'unavailable'}[received]
+
         return {
             'session_code': player.session.code,
             'participant_code': player.participant.code,
-            'university': player.session.config.get('university', 'uni_wien'),
+            'university': university,
+            'is_donor': donor,
+            'verify_payment': verify_payment,
+            'payment_status': payment_status,  # received / missing / unavailable (survey app unreachable) / not_checked
+            'payment_survey_url': player.session.config.get('payment_survey_url', ''),
         }
 
     @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-        valid_passwords = ["Victoria!", "Michael!", "Johannes!", "Joanna!", "Jonathan", 
-                           "Jakob!", "Felix!", "Jan!","Markus!", "Peter!", "Jim!", "Stefan!",
-                             "Gabriel!", "Mariia!", "Sophie!", "Selina!", "Divena!", 
-                             "Ascher!", "Default!"]
-        if player.entered_password not in valid_passwords:
-            raise ValueError("Invalid password entered! Please check with the experimenter.")
+    def js_vars(player):
+        return {
+            'valid_passwords': Constants.valid_passwords,
+            'payment_survey_url': player.session.config.get('payment_survey_url', ''),
+            'session_code': player.session.code,
+            'participant_code': player.participant.code,
+        }
+
+    @staticmethod
+    def error_message(player: Player, values):
+        entered_password = values.get('entered_password')
+        password_ok = bool(entered_password) and entered_password in Constants.valid_passwords
+        if password_ok:
+            return None
+
+        university = player.session.config.get('university', 'uni_wien')
+        if not is_donor(player) and university == 'wu_wien':
+            # Authoritative server-side check; the page's Submit button is only enabled after the same
+            # check succeeded on page load, but we never trust the browser alone.
+            if payment_submitted(player):
+                return None
+            return ("We have not received your payment information yet. Please complete the payment "
+                    "survey first, then return to this page.")
+
+        return "Invalid password entered! Please check with the experimenter."
 
 
 class DonationReasonPage(Page):

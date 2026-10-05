@@ -100,13 +100,23 @@
 
     <form method="post" id="deduction-form">
         <div class="section-box payment-summary">
+            {% if is_donor %}
             <p>You earned (after donation): <strong>€{{ net_earnings_after_donation }}</strong>.</p>
             <p>You donated: <strong>€{{ formatted_donated_amount }}</strong>.</p>
             <p>If you choose to deduct your donation, you will be reimbursed: <strong>€{{ reimbursement_amount }}</strong>.</p>
+            {% else %}
+            <p>You earned (after tax): <strong>€{{ net_earnings_after_donation }}</strong>.</p>
+            <p>You donated: <strong>€{{ formatted_donated_amount }}</strong>.</p>
+            <p>Since you did not donate, there is no donation that could be deducted.</p>
+            {% endif %}
         </div>
 
         <div class="section-box deduction-options">
+            {% if is_donor %}
             <p>Would you like to deduct your donation for tax reimbursement?</p>
+            {% else %}
+            <p>Would you like to deduct your donation for tax reimbursement? <em>(Not possible without a donation. Please select "No" to continue.)</em></p>
+            {% endif %}
             <div class="centered-options">
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="deduct_donation" id="deduct_yes" value="1">

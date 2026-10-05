@@ -87,25 +87,41 @@
   <!-- Announcement Section -->
   <div class="section-box announcement-section">
     <h1>📢 Important Announcement</h1>
-    
+
+    {% if is_donor %}
+    <!-- Donors: released by the experimenter (password) -->
     {% if university == "uni_wien" %}
         <p><strong>Your participant ID: {{ participant_code }}</strong>. Please write it down on your IBAN sheet.</p>
     {% endif %}
     <p>This is the final page you will see on this terminal. </p>
 
-    <p>To conclude the experiment, please proceed to the dedicated computer <strong>when it is your turn</strong>. 
+    <p>To conclude the experiment, please proceed to the dedicated computer <strong>when it is your turn</strong>.
     At the dedicated computer, you will make a final decision about whether to claim a deduction for your donation.
-    
+
     {% if university == "wu_wien" %}
         Further, you will input your IBAN credentials there.
     {% endif %}</p>
-    
+
     <p><strong>Stay at your place until you are asked to go to the dedicated computer.</strong></p>
     <hr>
     <p>As a participant, you have the option to <strong>deduct your donation </strong>from the tax pool. Here's how it works:</p>
     <span class="icon">💰</span> <strong>Reimbursement Rate:</strong> You can recover 30% of your donation as a reimbursement.<br>
     <span class="icon">🏦</span> <strong>Tax Pool Contribution:</strong> The reimbursement is funded by contributions to the tax pool from all participants.<br>
     <span class="icon">🤝</span> <strong>Voluntary Choice:</strong> Deciding to claim the deduction is entirely your choice and does not affect your donation amount.
+
+    {% else %}
+    <!-- Non-donors: continue on their own terminal, no password gate -->
+    {% if university == "uni_wien" %}
+        <p><strong>Your participant ID: {{ participant_code }}</strong>. Please write it down on your IBAN sheet.</p>
+    {% endif %}
+    <p>On the following pages, you will answer a few more questions and provide your payment information.
+    Please continue on this terminal.</p>
+    <hr>
+    <p>Participants who donated have the option to <strong>deduct their donation</strong> from the tax pool. Here's how it works:</p>
+    <span class="icon">💰</span> <strong>Reimbursement Rate:</strong> Donors can recover 30% of their donation as a reimbursement.<br>
+    <span class="icon">🏦</span> <strong>Tax Pool Contribution:</strong> The reimbursement is funded by contributions to the tax pool from all participants.<br>
+    <span class="icon">🤝</span> <strong>Voluntary Choice:</strong> Deciding to claim the deduction is entirely the donor's choice and does not affect the donation amount.
+    {% endif %}
   </div>
 
   <!-- Observability Section -->
@@ -126,10 +142,12 @@
 </div>
 
 <form method="post" id="announcement-form">
+    {% if is_donor %}
     <div class="password-container">
         <input type="text" id="password-input" name="entered_password" placeholder="" required>
         <div id="error-message" class="error" style="display: none;">This will be filled in by the experimenter for you.</div>
     </div>
+    {% endif %}
 
     <div class="text-center">
         <button type="submit" class="btn btn-primary" id="next-button">Next</button>
@@ -142,10 +160,13 @@
         const nextButton = document.getElementById("next-button");
         const errorMessage = document.getElementById("error-message");
 
-        const validPasswords = ["Victoria!", "Michael!", "Johannes!", "Joanna!", "Jonathan", 
-                           "Jakob!", "Felix!", "Jan!","Markus!", "Peter!", "Jim!", "Stefan!",
-                             "Gabriel!", "Mariia!", "Sophie!", "Selina!", "Divena!", 
-                             "Ascher!", "Default!"];
+        if (!passwordInput) {
+            // Non-donor: no password gate, the Next button is always active
+            return;
+        }
+
+        const validPasswords = js_vars.valid_passwords;
+        nextButton.disabled = true;
 
         passwordInput.addEventListener("input", () => {
             const enteredPassword = passwordInput.value.trim();
