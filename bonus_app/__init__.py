@@ -95,6 +95,15 @@ def is_donor(player: Player) -> bool:
     return player.donated_amount > 0
 
 
+def uses_payment_survey(university: str) -> bool:
+    """
+    Sites where payment data is collected electronically via the payment survey app (as opposed to the
+    paper-based IBAN sheet at Uni Wien). HU Berlin follows the WU flow; the survey additionally asks
+    for the tax identification number there.
+    """
+    return university in ('wu_wien', 'hu_berlin')
+
+
 def assign_deduction_treatments(player: Player):
     """
     Assigns the Anonymity/Observability and Moral message/No message treatments.
@@ -275,6 +284,7 @@ class AnnouncementPage(Page):
             'moral_message': moral_message,
             'participant_code': player.participant.code,
             'university': player.session.config.get('university', 'uni_wien'),
+            'uses_payment_survey': uses_payment_survey(player.session.config.get('university', 'uni_wien')),
             'is_donor': is_donor(player),
         }
 
@@ -329,9 +339,9 @@ class IBANPaymentPage(Page):
         university = player.session.config.get('university', 'uni_wien')
         donor = is_donor(player)
 
-        # Non-donors at WU stay on their own terminal: instead of the experimenter password we verify
-        # with the payment-survey app that their payment information has arrived.
-        verify_payment = (not donor) and university == 'wu_wien'
+        # Non-donors at WU / HU Berlin stay on their own terminal: instead of the experimenter password we
+        # verify with the payment-survey app that their payment information has arrived.
+        verify_payment = (not donor) and uses_payment_survey(university)
         payment_status = 'not_checked'
         if verify_payment:
             received = payment_submitted(player)
@@ -341,6 +351,7 @@ class IBANPaymentPage(Page):
             'session_code': player.session.code,
             'participant_code': player.participant.code,
             'university': university,
+            'uses_payment_survey': uses_payment_survey(university),
             'is_donor': donor,
             'verify_payment': verify_payment,
             'payment_status': payment_status,  # received / missing / unavailable (survey app unreachable) / not_checked
@@ -354,6 +365,7 @@ class IBANPaymentPage(Page):
             'payment_survey_url': player.session.config.get('payment_survey_url', ''),
             'session_code': player.session.code,
             'participant_code': player.participant.code,
+            'university': player.session.config.get('university', 'uni_wien'),
         }
 
     @staticmethod
@@ -364,7 +376,7 @@ class IBANPaymentPage(Page):
             return None
 
         university = player.session.config.get('university', 'uni_wien')
-        if not is_donor(player) and university == 'wu_wien':
+        if not is_donor(player) and uses_payment_survey(university):
             # Authoritative server-side check; the page's Submit button is only enabled after the same
             # check succeeded on page load, but we never trust the browser alone.
             if payment_submitted(player):

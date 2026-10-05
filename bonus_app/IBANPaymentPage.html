@@ -141,9 +141,9 @@
         <p>Session ID: <span id="session-id">{{ session_code }}</span> <i class="copy-icon" onclick="copyToClipboard('session-id')">📄</i></p>
         <p>Participant code: <span id="participant-id">{{ participant_code }}</span> <i class="copy-icon" onclick="copyToClipboard('participant-id')">📄</i></p>
         <p>Experiment code: <span id="experiment-id">2025_001</span> <i class="copy-icon" onclick="copyToClipboard('experiment-id')">📄</i></p>
-        {% if university == 'wu_wien' %}
+        {% if uses_payment_survey %}
         <p>Click the button below to proceed to the payment tool.</p>
-        <a href="{{ payment_survey_url }}/?session_id={{ session_code }}&participant_id={{ participant_code }}" class="btn btn-green" target="_blank">Proceed to Payment Survey</a>
+        <a href="{{ payment_survey_url }}/?session_id={{ session_code }}&participant_id={{ participant_code }}&university={{ university }}" class="btn btn-green" target="_blank">Proceed to Payment Survey</a>
         {% elif university == 'uni_wien' %}
             <p><strong>Wait for the research assistant to give you further instructions.</strong></p>
         {% endif %}
@@ -173,6 +173,7 @@
             const params = new URLSearchParams({
                 session_id: js_vars.session_code,
                 participant_id: js_vars.participant_code,
+                university: js_vars.university,
                 return_url: window.location.href,
             });
             surveyLink.href = js_vars.payment_survey_url.replace(/\/+$/, "") + "/?" + params.toString();

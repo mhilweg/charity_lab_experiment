@@ -20,7 +20,7 @@ SESSION_CONFIGS = [
         'display_name': 'Study',
         'num_demo_participants': 1,  # Set this to the desired number of participants
         'app_sequence': ['disclaimer_consent', 'task_instructions', 'task', 'bonus_app'],
-        'university': 'wu_wien', # uni_wien or wu_wien
+        'university': 'wu_wien', # uni_wien, wu_wien or hu_berlin (hu_berlin = wu_wien flow + tax ID field in the survey)
         # Base URL of the WU payment survey app (used to verify that non-donors submitted their payment data)
         'payment_survey_url': 'https://wu-payment-survey-239a632bf340.herokuapp.com',
     },
