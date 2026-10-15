@@ -45,7 +45,7 @@ class Disclaimer(Page):
     def vars_for_template(player):
         return {
             'disclaimer_message': (
-                "This study is conducted by the University of Mannheim and Masaryk University. All data collected will "
+                "This study is conducted by Humboldt University Berlin and Julius-Maximilians University Würzburg. All data collected will "
                 "be anonymized and used exclusively for research purposes. Your participation is "
                 "entirely voluntary, and you may withdraw at any time without penalty."
             ),
