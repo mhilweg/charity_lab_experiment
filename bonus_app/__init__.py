@@ -98,8 +98,7 @@ def is_donor(player: Player) -> bool:
 def uses_payment_survey(university: str) -> bool:
     """
     Sites where payment data is collected electronically via the payment survey app (as opposed to the
-    paper-based IBAN sheet at Uni Wien). HU Berlin follows the WU flow; the survey additionally asks
-    for the tax identification number there.
+    paper-based IBAN sheet at Uni Wien). HU Berlin uses the same flow as WU.
     """
     return university in ('wu_wien', 'hu_berlin')
 
