@@ -72,6 +72,9 @@ class Player(BasePlayer):
         ],
         widget=widgets.RadioSelect
     )
+    # Open-text follow-ups on pattern detection. The pages asking them were removed for the
+    # 2026 Berlin/Innsbruck wave (served only the Freeze task-learning project, which has no arm
+    # in this wave). Fields are kept so the database schema and the export columns stay unchanged.
     task_1_strategy = models.LongStringField(blank=True, label='What was your strategy to discover the pattern?')
     task_1_guess_pattern = models.LongStringField(blank=True, label='Please describe your guess of the pattern.')
     task_1_reason_no_attempt = models.LongStringField(blank=True, label='Why did you not bother looking for the pattern?')
@@ -419,18 +422,6 @@ class FirstTaskSurveyPage(Page):
     def vars_for_template(player: Player):
         return {'task_name': 'First Task'}
 
-class FirstTaskFollowUpPage(Page):
-    form_model = 'player'
-
-    @staticmethod
-    def get_form_fields(player: Player):
-        if player.task_1_pattern_attempt == 'I tried to discover the hidden pattern and failed.':
-            return ['task_1_strategy']
-        elif player.task_1_pattern_attempt == 'I tried to discover the hidden pattern and succeeded.':
-            return ['task_1_strategy', 'task_1_guess_pattern']
-        elif player.task_1_pattern_attempt == 'I did not bother looking for the pattern; I focused on using the method provided.':
-            return ['task_1_reason_no_attempt']
-
 class SecondTaskSurveyPage(Page):
     form_model = 'player'
     form_fields = ['task_2_pattern_attempt']
@@ -438,18 +429,6 @@ class SecondTaskSurveyPage(Page):
     @staticmethod
     def vars_for_template(player: Player):
         return {'task_name': 'Second Task'}
-
-class SecondTaskFollowUpPage(Page):
-    form_model = 'player'
-
-    @staticmethod
-    def get_form_fields(player: Player):
-        if player.task_2_pattern_attempt == 'I tried to discover the hidden pattern and failed.':
-            return ['task_2_strategy']
-        elif player.task_2_pattern_attempt == 'I tried to discover the hidden pattern and succeeded.':
-            return ['task_2_strategy', 'task_2_guess_pattern']
-        elif player.task_2_pattern_attempt == 'I did not bother looking for the pattern; I focused on using the method provided.':
-            return ['task_2_reason_no_attempt']
 
 class FarewellPage(Page):
     pass
@@ -463,8 +442,6 @@ page_sequence = [
     DonationReasonPage,
     DeductionReasonPage,
     FirstTaskSurveyPage,
-    FirstTaskFollowUpPage,
     SecondTaskSurveyPage,
-    SecondTaskFollowUpPage,
     FarewellPage
 ]
