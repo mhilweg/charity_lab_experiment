@@ -106,6 +106,18 @@ def uses_payment_survey(university: str) -> bool:
     return university in ('wu_wien', 'hu_berlin')
 
 
+def set_monitor_label(participant, level_1: str):
+    """
+    Make the observability treatment readable on the oTree Monitor page, whose only free-text
+    column is the participant label. The room bookmark sets the label to the computer name
+    (e.g. "PC03"); for donors we append the treatment: "PC03 | Observed" / "PC03 | Not observed".
+    Non-donors keep the plain computer label. Idempotent: an existing suffix is replaced.
+    """
+    base = (participant.label or "").split(" | ")[0].strip()
+    suffix = "Observed" if level_1 == "Observability" else "Not observed"
+    participant.label = f"{base} | {suffix}" if base else suffix
+
+
 def assign_deduction_treatments(player: Player):
     """
     Assigns the Anonymity/Observability and Moral message/No message treatments.
@@ -145,6 +157,7 @@ def assign_deduction_treatments(player: Player):
 
     participant.level_1_treatment = level_1
     participant.level_2_treatment = level_2
+    set_monitor_label(participant, level_1)
     print(f"Deduction treatments assigned to {participant.code} (stratum={stratum}): {level_1} / {level_2}")
 
 
