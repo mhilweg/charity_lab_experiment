@@ -26,7 +26,7 @@ class Constants(BaseConstants):
     valid_passwords = ["Victoria!", "Michael!", "Johannes!", "Joanna!", "Jonathan",
                        "Jakob!", "Felix!", "Jan!", "Markus!", "Peter!", "Jim!", "Stefan!",
                        "Gabriel!", "Mariia!", "Sophie!", "Selina!", "Divena!",
-                       "Ascher!", "Default!"]
+                       "Ascher!", "Zehra!", "Paul!", "Default!"]
     payment_status_timeout_seconds = 5
 
 class Subsession(BaseSubsession):
