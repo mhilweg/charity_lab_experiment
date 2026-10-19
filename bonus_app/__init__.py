@@ -62,8 +62,13 @@ class Player(BasePlayer):
     donation_decision_reason = models.LongStringField(label='What was driving your donation decision?')
     deduction_decision_reason = models.LongStringField(label='What was driving your deduction decision?')
 
-    # Pages (ii) & (iii) task-related responses
+    # Task-related exit questions on pattern detection. None of these are asked any more:
+    # the open-text follow-up pages and, after the discussion with Paul (2026-10-19), the radio
+    # question per task were removed for the 2026 Berlin/Innsbruck wave (they served only the Freeze
+    # task-learning project, which has no arm in this wave). Fields are kept so the database schema
+    # and the export columns stay unchanged.
     task_1_pattern_attempt = models.StringField(
+        blank=True,
         label='Did you try to discover the hidden pattern or did you only use the method provided?',
         choices=[
             'I tried to discover the hidden pattern and failed.',
@@ -72,14 +77,12 @@ class Player(BasePlayer):
         ],
         widget=widgets.RadioSelect
     )
-    # Open-text follow-ups on pattern detection. The pages asking them were removed for the
-    # 2026 Berlin/Innsbruck wave (served only the Freeze task-learning project, which has no arm
-    # in this wave). Fields are kept so the database schema and the export columns stay unchanged.
     task_1_strategy = models.LongStringField(blank=True, label='What was your strategy to discover the pattern?')
     task_1_guess_pattern = models.LongStringField(blank=True, label='Please describe your guess of the pattern.')
     task_1_reason_no_attempt = models.LongStringField(blank=True, label='Why did you not bother looking for the pattern?')
 
     task_2_pattern_attempt = models.StringField(
+        blank=True,
         label='Did you try to discover the hidden pattern or did you only use the method provided?',
         choices=[
             'I tried to discover the hidden pattern and failed.',
@@ -427,22 +430,6 @@ class BeliefEstimationPage(Page):
         if not (0 <= values['belief_deduction_percentage'] <= 100):
             return "Please enter a percentage between 0 and 100 for deduction percentage."
 
-class FirstTaskSurveyPage(Page):
-    form_model = 'player'
-    form_fields = ['task_1_pattern_attempt']
-
-    @staticmethod
-    def vars_for_template(player: Player):
-        return {'task_name': 'First Task'}
-
-class SecondTaskSurveyPage(Page):
-    form_model = 'player'
-    form_fields = ['task_2_pattern_attempt']
-
-    @staticmethod
-    def vars_for_template(player: Player):
-        return {'task_name': 'Second Task'}
-
 class FarewellPage(Page):
     pass
 
@@ -454,7 +441,5 @@ page_sequence = [
     IBANPaymentPage,
     DonationReasonPage,
     DeductionReasonPage,
-    FirstTaskSurveyPage,
-    SecondTaskSurveyPage,
     FarewellPage
 ]
