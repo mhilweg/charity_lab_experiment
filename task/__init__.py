@@ -478,8 +478,10 @@ class Task(Page):
         sequence = sequences[player.round_number - 1]
 
         history = []
-        for i in range(player.round_number - 1):
-            round_player = player.in_round(i + 1)
+        # One query for all previous rounds (rounds 1 .. round_number-1, ascending) instead of
+        # one in_round() query per round; the page runs under oTree's global request lock.
+        previous_players = player.in_rounds(1, player.round_number - 1)
+        for i, round_player in enumerate(previous_players):
             current_sequence = sequences[i]
             correct_response = correct_responses[i]  # Retrieve pre-stored correct response
 
@@ -783,9 +785,10 @@ class Task2(Page):
 
         # Prepare history
         history = []
-        for i in range(completed_rounds_in_task1, player.round_number):
-            #round_player = player.in_round(i + 1)
-            round_player = player.in_round(i)
+        # One query for all previous Task2 rounds (completed_rounds_in_task1 .. round_number-1,
+        # ascending) instead of one in_round() query per round.
+        previous_players = player.in_rounds(completed_rounds_in_task1, player.round_number - 1)
+        for i, round_player in zip(range(completed_rounds_in_task1, player.round_number), previous_players):
 
             # Correct sequence index for Task2
             sequence_task2_index = i - completed_rounds_in_task1
