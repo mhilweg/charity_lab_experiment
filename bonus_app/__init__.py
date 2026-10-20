@@ -413,6 +413,11 @@ class DeductionReasonPage(Page):
     form_model = 'player'
     form_fields = ['deduction_decision_reason']
 
+    @staticmethod
+    def is_displayed(player: Player):
+        # Only donors made a deduction decision; non-donors go straight to the farewell page.
+        return is_donor(player)
+
 class BeliefEstimationPage(Page):
     form_model = 'player'
     form_fields = ['belief_donation_percentage', 'belief_deduction_percentage']
